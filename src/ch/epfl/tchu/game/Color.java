@@ -13,23 +13,7 @@ public enum Color {
     RED,
     WHITE;
 
-//    test
-//    test
-//
-//    public test getTest() {
-//        testtets
-//                tets
-//
-//    }
-
-
-//    add add
-
     public static final List<Color> ALL = List.of(Color.values());
     public static final int COUNT = ALL.size();
-
-//    test
-//            retest
-
 
 }
