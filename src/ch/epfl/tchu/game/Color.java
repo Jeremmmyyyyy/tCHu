@@ -22,6 +22,9 @@ public enum Color {
 //
 //    }
 
+
+//    add add
+
     public static final List<Color> ALL = List.of(Color.values());
     public static final int COUNT = ALL.size();
 
