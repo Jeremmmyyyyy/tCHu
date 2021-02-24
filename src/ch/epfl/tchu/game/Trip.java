@@ -31,7 +31,7 @@ public final class Trip {
      * @param points points of the trip
      * @return Trip List of all the possible connections
      */
-    public static List<Trip>all (List<Station> from, List<Station> to, int points){
+    public static List<Trip> all (List<Station> from, List<Station> to, int points){
         Objects.requireNonNull(from);
         Objects.requireNonNull(to);
         Preconditions.checkArgument(points<0);
