@@ -7,4 +7,11 @@ public interface StationConnectivity {
      * @return true if stations are connected by one player
      */
     boolean connected(Station s1, Station s2);
+
+    /**
+     * zeyjyfvaizmlfvpiar
+     * areytaigvfràa
+     * aoiuryfgoafg
+     * agrgareg
+     */
 }
