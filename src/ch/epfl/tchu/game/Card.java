@@ -26,10 +26,11 @@ public enum Card {
     }
 
     /**
+     * The type of the train card BLACK (from de enum CARD) matches with the color BLACK (from enum type Color)
+     * If null returns null
      * @param color Color of the card
      * @return The type of the Card
-     * the type of the train card BLACK (from de enum CARD) matches with the color BLACK (from enum type Color)
-     * if null returns null
+     *
      */
     public static Card of (Color color){
         for (Card card : CARS) {
