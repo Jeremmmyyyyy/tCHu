@@ -4,23 +4,62 @@ import java.util.List;
 
 public enum Card {
 
-    BLACK("BLACK"),
-    VIOLET("VIOLET"),
-    BLUE("BLUE"),
-    GREEN("GREEN"),
-    YELLOW("YELLOW"),
-    ORANGE("ORANGE"),
-    RED("RED"),
-    WHITE("WHITE"),
-    LOCOMOTIVE("null");
-    
-    //blablabla
+    BLACK(Color.BLACK),
+    VIOLET(Color.VIOLET),
+    BLUE(Color.BLUE),
+    GREEN(Color.GREEN),
+    YELLOW(Color.YELLOW),
+    ORANGE(Color.ORANGE),
+    RED(Color.RED),
+    WHITE(Color.WHITE),
+    LOCOMOTIVE(null);
+
+    private final Color color;
 
     public static final List<Card> ALL = List.of(Card.values());
     public static final int COUNT = ALL.size();
-    public final static List<Card> CARS = ALL.subList(0, ALL.size()-1);
+    public final static List<Card> CARS = ALL.subList(0, COUNT-1);
 
-    Card(Object color) {
-//        this.toString();
+
+    Card(Color color) {
+        this.color = color;
+    }
+
+    /**
+     * @param color Color of the card
+     * @return The type of the Card
+     * the type of the train card BLACK (from de enum CARD) matches with the color BLACK (from enum type Color)
+     * if null returns null
+     */
+    public static Card of (Color color){
+        for (Card card : CARS) {
+            if (color.equals(card.color)) {
+                return card;
+            }
+        }
+        return null;
+    }
+
+//    public static Card of (Color color){
+//        for (int i = 0; i < CARS.size(); i++) {
+//            if(color.equals(CARS.get(i))){
+//                return CARS.get(i);
+//            }
+//        }
+//        return null;
+//    }
+
+    /**
+     * @return Color
+     * Card.BLACK.color() returns Color.BLACK
+     * Card.LOCOMOTIVE.color() returns null
+     */
+    public Color color(){
+        for (Card card : CARS) {
+            if (color.equals(card.color)) {
+                return card.color();
+            }
+        }
+        return null;
     }
 }
