@@ -8,10 +8,4 @@ public interface StationConnectivity {
      */
     boolean connected(Station s1, Station s2);
 
-    /**
-     * zeyjyfvaizmlfvpiar
-     * areytaigvfràa
-     * aoiuryfgoafg
-     * agrgareg
-     */
 }
