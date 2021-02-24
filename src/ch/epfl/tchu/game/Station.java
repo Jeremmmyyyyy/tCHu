@@ -25,5 +25,4 @@ public final class Station {
     public String toString(){
         return name;
     }
-
 }
