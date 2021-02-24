@@ -41,14 +41,6 @@ public enum Card {
         return null;
     }
 
-//    public static Card of (Color color){
-//        for (int i = 0; i < CARS.size(); i++) {
-//            if(color.equals(CARS.get(i))){
-//                return CARS.get(i);
-//            }
-//        }
-//        return null;
-//    }
 
     /**
      * @return Color
