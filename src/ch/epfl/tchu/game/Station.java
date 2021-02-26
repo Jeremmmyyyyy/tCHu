@@ -3,9 +3,9 @@ package ch.epfl.tchu.game;
 import ch.epfl.tchu.Preconditions;
 
 /**
- * Train station
+ * A train station.
  *
- * @author Jérémy Barghorn (328403)
+ * @author Yann Ennassih (329978)
  */
 public final class Station {
 
@@ -16,7 +16,7 @@ public final class Station {
      * Constructor of the Station class
      * @param id unique id of the station
      * @param name name of the station
-     * @throws IllegalArgumentException if the id is negative or 0
+     * @throws IllegalArgumentException if id is a negative integer
      */
     public Station(int id, String name) {
         Preconditions.checkArgument(id >= 0);
@@ -25,24 +25,24 @@ public final class Station {
     }
 
     /**
-     * getter for the id of the station
-     * @return the id
+     * Getter for the attribute id
+     * @return the id of the station this
      */
     public int id(){
         return id;
     }
 
     /**
-     * getter for teh name of the station
-     * @return name
+     * Getter for the attribute name
+     * @return the name of the station this
      */
     public String name(){
         return name;
     }
 
     /**
-     * Override of the toString functioçn so that the name of the station is returned
-     * @return name
+     * Redefinition of the toString() method
+     * @return the attribute name of the station
      */
     @Override
     public String toString(){
