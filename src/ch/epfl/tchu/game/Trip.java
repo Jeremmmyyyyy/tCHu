@@ -44,11 +44,11 @@ public final class Trip {
         return allPossibleConnections;
     }
 
-    public Station getFrom() {
+    public Station from() {
         return from;
     }
 
-    public Station getTo() {
+    public Station to() {
         return to;
     }
 

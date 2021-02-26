@@ -34,18 +34,20 @@ public final class Ticket implements Comparable<Ticket> {
 
     @Override
     public int compareTo(Ticket that) {
-        return this.compareTo(that);
+
+        return 0;
     }
+
 
     private static String computeText(List<Trip> trips) {
         Trip firstTrip = trips.get(0);
-        String from = String.format("%s - ", firstTrip.getFrom().getName());
+        String from = String.format("%s - ", firstTrip.from().getName());
         if (trips.size() == 1) {
-            return from + String.format("%s (%s)", firstTrip.getTo().getName(), firstTrip.getPoints());
+            return from + String.format("%s (%s)", firstTrip.to().getName(), firstTrip.getPoints());
         }
         TreeSet<String> orderedDestinations = new TreeSet<>();
         for(Trip trip: trips){
-            orderedDestinations.add(String.format("%s (%s)", trip.getTo().getName(), trip.getPoints()));
+            orderedDestinations.add(String.format("%s (%s)", trip.to().getName(), trip.getPoints()));
         }
         return from + String.format("{%s}", String.join(", ",orderedDestinations));
     }
