@@ -43,13 +43,13 @@ public final class Ticket implements Comparable<Ticket> {
 
     private static String computeText(List<Trip> trips) {
         Trip firstTrip = trips.get(0);
-        String from = String.format("%s - ", firstTrip.from().getName());
+        String from = String.format("%s - ", firstTrip.from().name());
         if (trips.size() == 1) {
-            return from + String.format("%s (%s)", firstTrip.to().getName(), firstTrip.getPoints());
+            return from + String.format("%s (%s)", firstTrip.to().name(), firstTrip.points());
         }
         TreeSet<String> orderedDestinations = new TreeSet<>();
         for(Trip trip: trips){
-            orderedDestinations.add(String.format("%s (%s)", trip.to().getName(), trip.getPoints()));
+            orderedDestinations.add(String.format("%s (%s)", trip.to().name(), trip.points()));
         }
         return from + String.format("{%s}", String.join(", ",orderedDestinations));
     }

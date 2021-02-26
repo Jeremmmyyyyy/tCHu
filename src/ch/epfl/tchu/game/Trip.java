@@ -52,7 +52,7 @@ public final class Trip {
         return to;
     }
 
-    public int getPoints() {
+    public int points() {
         return points;
     }
 
