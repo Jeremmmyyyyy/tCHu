@@ -15,7 +15,7 @@ public final class Ticket implements Comparable<Ticket> {
      * Creates a ticket with multiple trips
      */
     public Ticket(List<Trip> trips){
-        Preconditions.checkArgument(trips.equals(null));
+        Preconditions.checkArgument(!trips.equals(null));
         boolean sameDeparture = true;
         String departure = trips.get(0).from().name();
         for(Trip trip: trips){
