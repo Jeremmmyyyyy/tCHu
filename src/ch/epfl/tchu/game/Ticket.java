@@ -48,6 +48,21 @@ public final class Ticket implements Comparable<Ticket> {
     }
 
     public int points(StationConnectivity connectivity){
+        int max = 0, min = 0;
+        for(Trip trip: trips){
+            if(trip.points() > 0 && trip.points() > max){
+                max = trip.points();
+            }
+            if(trip.points() < 0 && trip.points() < min){
+                min = trip.points();
+            }
+        }
+        if(max != 0){
+            return max;
+        }
+        else {
+            return min;
+        }
 
     }
 
