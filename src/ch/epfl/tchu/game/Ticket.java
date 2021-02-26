@@ -34,10 +34,12 @@ public final class Ticket implements Comparable<Ticket> {
 
     @Override
     public int compareTo(Ticket that) {
-
-        return 0;
+        return this.compareTo(that);
     }
 
+    public int points(StationConnectivity connectivity){
+
+    }
 
     private static String computeText(List<Trip> trips) {
         Trip firstTrip = trips.get(0);
