@@ -48,11 +48,6 @@ public enum Card {
      * Card.LOCOMOTIVE.color() returns null
      */
     public Color color(){
-        for (Card card : CARS) {
-            if (color.equals(card.color)) {
-                return card.color();
-            }
-        }
-        return null;
+        return this.color;
     }
 }
