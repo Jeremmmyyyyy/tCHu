@@ -26,7 +26,7 @@ public enum Card {
      */
     public static final List<Card> ALL = List.of(Card.values());
     /**
-     * size of the ALL list
+     * size of the ALL list : number of all the Cards
      */
     public static final int COUNT = ALL.size();
     /**
