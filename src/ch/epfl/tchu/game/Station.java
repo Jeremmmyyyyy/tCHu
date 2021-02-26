@@ -12,7 +12,7 @@ public final class Station {
      * @param id unique id of the station
      * @param name name of the station
      */
-    Station(int id, String name) {
+    public Station(int id, String name) {
         Preconditions.checkArgument(id >= 0);
         this.id = id;
         this.name = name;
