@@ -18,6 +18,8 @@ public final class Ticket implements Comparable<Ticket> {
     /**
      * Creates a ticket with multiple trips
      * @param trips list of the trips
+     * @throws IllegalArgumentException when the list is empty
+     * or when at least two trips have different departure stations
      */
     public Ticket(List<Trip> trips){
         Preconditions.checkArgument(!trips.equals(List.of()));
@@ -40,10 +42,14 @@ public final class Ticket implements Comparable<Ticket> {
      * @param to destination of the trip
      * @param points value of the trip
      */
-    public Ticket(Station from, Station to, int points) { //TODO a revoir
+    public Ticket(Station from, Station to, int points) {
         this(List.of(new Trip(from, to, points)));
     }
 
+    /**
+     * Getter for the attribute text
+     * @return the attribute text
+     */
     public String text(){
         return text;
     }
@@ -52,7 +58,7 @@ public final class Ticket implements Comparable<Ticket> {
      * Creates the textual representation of the ticket
      * @param trips list of the trips
      * @return From - To (Points) for single trip ticket
-     * @return From - {To (Points), ..., To (Points)} for multiple trip ticket
+     * or From - {To (Points), ..., To (Points)} for multiple trips ticket
      */
     private static String computeText(List<Trip> trips) {
         Trip firstTrip = trips.get(0);
@@ -68,8 +74,9 @@ public final class Ticket implements Comparable<Ticket> {
     }
 
     /**
-     * Actual points of the player owning the ticket this
+     * Current points of the player owning the ticket this
      * @param connectivity of the player
+     * @return the current points of the player owning the ticket this
      */
     public int points(StationConnectivity connectivity){
         int max = 0, min = trips.get(0).points(connectivity);
@@ -91,16 +98,20 @@ public final class Ticket implements Comparable<Ticket> {
 
     /**
      * Compares the textual representation of the tickets this and that
-     * @param that
-     * @return positive random integer if this > that
-     * @return negative random integer if this < that
-     * @return 0 if this = that
+     * @param that ticket to be compared with this
+     * @return positive random integer if this > that (in the sense of the lexicoraphical order)
+     * or negative random integer if this < that
+     * or 0 if this = that
      */
     @Override
     public int compareTo(Ticket that) {
         return text.compareTo(that.text);
     }
 
+    /**
+     * Redefinition of the toString() method
+     * @return the attribute text of the station
+     */
     @Override
     public String toString(){
         return text;
