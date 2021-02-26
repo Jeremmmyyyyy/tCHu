@@ -5,6 +5,11 @@ import ch.epfl.tchu.Preconditions;
 import java.util.TreeSet;
 import java.util.List;
 
+/**
+ * A ticket with trips.
+ *
+ * @author Yann Ennassih (329978)
+ */
 public final class Ticket implements Comparable<Ticket> {
 
     private final List<Trip> trips;
