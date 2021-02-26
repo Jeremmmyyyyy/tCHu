@@ -4,7 +4,6 @@ import ch.epfl.tchu.Preconditions;
 
 import java.util.TreeSet;
 import java.util.List;
-import java.util.Objects;
 
 public final class Ticket implements Comparable<Ticket> {
 
@@ -15,7 +14,7 @@ public final class Ticket implements Comparable<Ticket> {
      * Creates a ticket with multiple trips
      */
     public Ticket(List<Trip> trips){
-        Preconditions.checkArgument(!trips.equals(null));
+        Preconditions.checkArgument(trips.equals(null));
         boolean sameDeparture = true;
         String departure = trips.get(0).from().name();
         for(Trip trip: trips){
