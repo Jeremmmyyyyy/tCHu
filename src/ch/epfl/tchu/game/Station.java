@@ -7,6 +7,11 @@ public final class Station {
     private final int id;
     private final String name;
 
+    /**
+     * Constructor of the Station class
+     * @param id unique id of the station
+     * @param name name of the station
+     */
     Station(int id, String name) {
         Preconditions.checkArgument(id >= 0);
         this.id = id;
