@@ -1,5 +1,10 @@
 package ch.epfl.tchu.game;
 
+/**
+ * Interface StationConnectivity
+ *
+ * @author Jérémy Barghorn (328403)
+ */
 public interface StationConnectivity {
     /**
      * @param s1 Station number 1

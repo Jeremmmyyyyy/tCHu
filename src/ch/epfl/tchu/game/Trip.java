@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The trip with origin destination and points
+ *
+ * @author Jérémy Barghorn (328403)
+ */
 public final class Trip {
 
     private final Station from;
@@ -17,6 +22,7 @@ public final class Trip {
      * @param from Origin Station
      * @param to Destination Station
      * @param points of the trip
+     * @throws IllegalArgumentException if points is 0 or negative
      */
     public Trip(Station from, Station to, int points){
         Preconditions.checkArgument(points>0);
@@ -46,14 +52,26 @@ public final class Trip {
         return allPossibleConnections;
     }
 
+    /**
+     * getter of the origin of the trip
+     * @return the origin from
+     */
     public Station from() {
         return from;
     }
 
+    /**
+     * getter for the destination of the trip
+     * @return the destination to
+     */
     public Station to() {
         return to;
     }
 
+    /**
+     * getter for the points of a trip
+     * @return the number of points
+     */
     public int points() {
         return points;
     }

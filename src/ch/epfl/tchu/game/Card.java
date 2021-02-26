@@ -3,6 +3,11 @@ package ch.epfl.tchu.game;
 
 import java.util.List;
 
+/**
+ * Enum of all the cards and their color
+ *
+ * @author Jérémy Barghorn (328403)
+ */
 public enum Card {
 
     BLACK(Color.BLACK),
@@ -16,9 +21,17 @@ public enum Card {
     LOCOMOTIVE(null);
 
     private final Color color;
-
+    /**
+     * List containing all the colors of the Cards and null if it's a locomotive
+     */
     public static final List<Card> ALL = List.of(Card.values());
+    /**
+     * size of the ALL list
+     */
     public static final int COUNT = ALL.size();
+    /**
+     * List of all the Cards by color that are not a locomotive
+     */
     public final static List<Card> CARS = ALL.subList(0, COUNT-1);
 
 
