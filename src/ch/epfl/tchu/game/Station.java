@@ -13,11 +13,11 @@ public final class Station {
         this.name = name;
     }
 
-    public int getId(){
+    public int id(){
         return id;
     }
 
-    public String getName(){
+    public String name(){
         return name;
     }
 
