@@ -1,5 +1,7 @@
 package ch.epfl.tchu.game;
 
+import ch.epfl.tchu.Preconditions;
+
 import java.util.TreeSet;
 import java.util.List;
 import java.util.Objects;
@@ -13,8 +15,16 @@ public final class Ticket implements Comparable<Ticket> {
      * Creates a ticket with multiple trips
      */
     public Ticket(List<Trip> trips){
-        //TODO ajouter une deuxieme condition, avec IllegalArgumentException
-        this.trips = Objects.requireNonNull(trips);
+        Preconditions.checkArgument(trips.equals(null));
+        boolean sameDeparture = true;
+        String departure = trips.get(0).from().name();
+        for(Trip trip: trips){
+            if(!trip.from().name().equals(departure)){
+                sameDeparture = false;
+            }
+        }
+        Preconditions.checkArgument(sameDeparture);
+        this.trips = trips;
         text = computeText(this.trips);
     }
 
