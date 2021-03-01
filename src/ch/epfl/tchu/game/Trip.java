@@ -37,11 +37,15 @@ public final class Trip {
      * @param to List of destination Station
      * @param points points of the trip
      * @return Trip List of all the possible connections
+     * @throws IllegalArgumentException if from is an empty list
+     * @throws IllegalArgumentException if to is an empty list
+     * @throws IllegalArgumentException if points are negative or 0
      */
     public static List<Trip> all (List<Station> from, List<Station> to, int points){
-        Objects.requireNonNull(from);
-        Objects.requireNonNull(to);
-        Preconditions.checkArgument(points>=0);
+        Preconditions.checkArgument(from.equals(List.of()));
+        Preconditions.checkArgument(to.equals(List.of()));
+
+        Preconditions.checkArgument(points>0);
         List<Trip> allPossibleConnections = new ArrayList<Trip>();
 
         for (Station fromStation : from) {
