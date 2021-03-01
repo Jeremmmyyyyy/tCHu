@@ -6,7 +6,7 @@ import ch.epfl.tchu.SortedBag;
 import java.util.*;
 
 /**
- * A ticket with trips.
+ * A Route between two stations
  *
  * @author Yann Ennassih (329978)
  * @author Jérémy Barghorn (328403)
@@ -20,7 +20,7 @@ public final class Route {
 
     public enum Level{
         OVERGROUND,
-        UNDERGROUND;
+        UNDERGROUND
     }
 
     /**
@@ -104,6 +104,11 @@ public final class Route {
         return List.of(station1, station2);
     }
 
+    /**
+     *
+     * @param station
+     * @return
+     */
     public Station stationOpposite(Station station){
         if(station.equals(station1)){
             return station2;
