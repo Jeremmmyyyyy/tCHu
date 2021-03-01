@@ -13,11 +13,11 @@ import java.util.List;
  * @author Jérémy Barghorn (328403)
  */
 public final class Route{
-    private String id;
-    private Station station1, station2;
-    private int length;
-    private Level level;
-    private Color color;
+    private final String id;
+    private final Station station1, station2;
+    private final int length;
+    private final Level level;
+    private final Color color;
 
     public enum Level{
         OVERGROUND,
@@ -38,6 +38,7 @@ public final class Route{
         this.station1 = station1;
         this.station2 = station2;
         this.length = length;
+        this.level = level;
         this.color = color;
         Preconditions.checkArgument(!station1.equals(station2) & length>=Constants.MIN_ROUTE_LENGTH & length<=Constants.MAX_ROUTE_LENGTH);
         if(station1.equals(null) || station2.equals(null) || id.equals(null) || level.equals(null)){
