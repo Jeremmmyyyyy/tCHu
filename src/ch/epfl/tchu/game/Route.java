@@ -1,6 +1,11 @@
 package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.Preconditions;
+import ch.epfl.tchu.SortedBag;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A ticket with trips.
  *
@@ -40,30 +45,76 @@ public final class Route{
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String id() {
         return id;
     }
 
+    /**
+     *
+     * @return
+     */
     public Station station1() {
         return station1;
     }
 
+    /**
+     *
+     * @return
+     */
     public Station station2() {
         return station2;
     }
 
+    /**
+     *
+     * @return
+     */
     public int length() {
         return length;
     }
 
+    /**
+     *
+     * @return
+     */
     public Level level() {
         return level;
     }
 
+    /**
+     *
+     * @return
+     */
     public Color color() {
         if(color.equals(null)){
             return null;
         }
         return color;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<Station> stations(){
+        return List.of(station1, station2);
+    }
+
+    public Station stationOpposite(Station station){
+        if(station.equals(station1)){
+            return station2;
+        }else if(station.equals(station2)){
+            return station1;
+        }else{
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public List<SortedBag<Card>> possibleClaimCards(){
+
     }
 }
