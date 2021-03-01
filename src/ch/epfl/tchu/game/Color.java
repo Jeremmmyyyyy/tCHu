@@ -26,5 +26,4 @@ public enum Color {
      * size of the ALL list : number of all the colors
      */
     public static final int COUNT = ALL.size();
-
 }
