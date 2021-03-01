@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * enum for the colors
  *
- * @author Jérémy Barghorn (328403)
+ * @author Yann Ennassih (329978)
  */
 public enum Color {
 
