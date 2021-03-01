@@ -114,6 +114,10 @@ public final class Route {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public List<SortedBag<Card>> possibleClaimCards() {
         List<SortedBag<Card>> possibleClaimCards = new ArrayList<>();
         if(level.equals(Level.OVERGROUND) && !color.equals(null)) {
@@ -133,8 +137,37 @@ public final class Route {
         }
     }
 
+    /**
+     *
+     * @param claimCards
+     * @param drawnCards
+     * @return
+     */
     public int additionnalClaimCards(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
-
+        Preconditions.checkArgument(level.equals(Level.UNDERGROUND));
+        Preconditions.checkArgument(drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
+        int numberOfAdditionnalClaimCards = 0;
+        for(Card drawnCard: drawnCards){
+            if(drawnCard.equals(Card.LOCOMOTIVE)){
+                numberOfAdditionnalClaimCards += 1;
+            }else{
+                for(Card claimCard: claimCards){
+                    if(drawnCard.equals(claimCard)){
+                        numberOfAdditionnalClaimCards += 1;
+                    }
+                }
+            }
+        }
+        return numberOfAdditionnalClaimCards;
     }
+
+    /**
+     *
+     * @return
+     */
+    public int claimPoints() {
+        return Constants.ROUTE_CLAIM_POINTS.get(length);
+    }
+
 
 }
