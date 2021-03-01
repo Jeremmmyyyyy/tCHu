@@ -15,11 +15,7 @@ public final class  Trail {
 
     public static Trail longest(List<Route> routes){
         while(!routes.isEmpty()){
-            List<Route> temp = new ArrayList<>();
-            for(Route route : routes){
-                Route route1 = route;
-                Station[] station1 = new Station[]{route1.station1(), route1.station2()};
-            }
+
         }
         return null;
     }
