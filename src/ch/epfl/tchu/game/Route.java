@@ -3,8 +3,7 @@ package ch.epfl.tchu.game;
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * A ticket with trips.
@@ -12,7 +11,7 @@ import java.util.List;
  * @author Yann Ennassih (329978)
  * @author Jérémy Barghorn (328403)
  */
-public final class Route{
+public final class Route {
     private final String id;
     private final Station station1, station2;
     private final int length;
@@ -115,7 +114,27 @@ public final class Route{
         }
     }
 
-    public List<SortedBag<Card>> possibleClaimCards(){
+    public List<SortedBag<Card>> possibleClaimCards() {
+        List<SortedBag<Card>> possibleClaimCards = new ArrayList<>();
+        if(level.equals(Level.OVERGROUND) && !color.equals(null)) {
+            return List.of(SortedBag.of(length, Card.of(color)));
+        }else if(level.equals(Level.UNDERGROUND) && !color.equals(null)) {
+            for (int i = 0; i < length; ++i) {
+                possibleClaimCards.add(SortedBag.of(length - i, Card.of(color), i, Card.LOCOMOTIVE));
+            }
+            return possibleClaimCards;
+        }else{
+            for (int i = 0; i < length; ++i) {
+                for(Card card: Card.CARS) {
+                    possibleClaimCards.add(SortedBag.of(length - i, Card.of(color), i, card));
+                }
+            }
+            return possibleClaimCards;
+        }
+    }
+
+    public int additionnalClaimCards(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
 
     }
+
 }
