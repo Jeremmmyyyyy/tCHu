@@ -12,6 +12,21 @@ public final class  Trail {
     private int length;
     private Station station1;
     private Station station2;
+    private List<Route> routes;
+
+    /**
+     * Private constructor of the class
+     * @param station1 first station of the trail
+     * @param station2 last station of the trail
+     * @param routes that compose the trail
+     * @param length of the trail
+     */
+    private Trail(Station station1, Station station2, List<Route> routes, int length) {
+        this.station1 = station1;
+        this.station2 = station2;
+        this.routes = routes;
+        this.length = length;
+    }
 
     /**
      * Creates the longest trail with a given list of routes
