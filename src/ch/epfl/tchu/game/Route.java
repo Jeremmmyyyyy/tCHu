@@ -153,19 +153,19 @@ public final class Route {
     public int additionalClaimCards(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
         Preconditions.checkArgument(level.equals(Level.UNDERGROUND));
         Preconditions.checkArgument(drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
-        int numberOfAdditionnalClaimCards = 0;
+        int numberOfAdditionalClaimCards = 0;
         for(Card drawnCard: drawnCards){
             if(drawnCard.equals(Card.LOCOMOTIVE)){
-                numberOfAdditionnalClaimCards += 1;
+                numberOfAdditionalClaimCards += 1;
             }else{
                 for(Card claimCard: claimCards){
                     if(drawnCard.equals(claimCard)){
-                        numberOfAdditionnalClaimCards += 1;
+                        numberOfAdditionalClaimCards += 1;
                     }
                 }
             }
         }
-        return numberOfAdditionnalClaimCards;
+        return numberOfAdditionalClaimCards;
     }
 
     /**
