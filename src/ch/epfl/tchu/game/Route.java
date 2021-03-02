@@ -24,13 +24,15 @@ public final class Route {
     }
 
     /**
-     *
-     * @param id
-     * @param station1
-     * @param station2
-     * @param length
-     * @param level
-     * @param color
+     * Create a route with id start station, end station, length, Overground or Underground, and color
+     * @param id of the route id form : "Station1(first three letters)_Station2_(first three letters)_1or2(depending on multiplicity of the route)
+     * @param station1 first station of the route
+     * @param station2 second station of the route
+     * @param length length of the route in blocks
+     * @param level Overground or underground route
+     * @param color if a color is already set for the route else null
+     * @throws IllegalArgumentException if station1 and 2 are the same, or if the length is greater than 6, or if the length is shorter than 1
+     * @throws NullPointerException if the Station1 is null, if station2 is nul, if the id is null or if the level is null
      */
     public Route(String id, Station station1, Station station2, int length, Level level, Color color){
         this.id = id;
@@ -39,55 +41,55 @@ public final class Route {
         this.length = length;
         this.level = level;
         this.color = color;
-        Preconditions.checkArgument(!station1.equals(station2) & length>=Constants.MIN_ROUTE_LENGTH & length<=Constants.MAX_ROUTE_LENGTH);
+        Preconditions.checkArgument(!station1.equals(station2) && length>=Constants.MIN_ROUTE_LENGTH && length<=Constants.MAX_ROUTE_LENGTH);
         if(station1.equals(null) || station2.equals(null) || id.equals(null) || level.equals(null)){
             throw new NullPointerException();
         }
     }
 
     /**
-     *
-     * @return
+     * return the id of the station
+     * @return the id of the station
      */
     public String id() {
         return id;
     }
 
     /**
-     *
-     * @return
+     * return the first station of the route
+     * @return the first station of the route
      */
     public Station station1() {
         return station1;
     }
 
     /**
-     *
-     * @return
+     * return the second station of the route
+     * @return the second station of the route
      */
     public Station station2() {
         return station2;
     }
 
     /**
-     *
-     * @return
+     * return the length of the route
+     * @return the length of the route
      */
     public int length() {
         return length;
     }
 
     /**
-     *
-     * @return
+     * return the level of the route
+     * @return the level of the route
      */
     public Level level() {
         return level;
     }
 
     /**
-     *
-     * @return
+     * return the color of the route
+     * @return the color of the route
      */
     public Color color() {
         if(color.equals(null)){
@@ -97,17 +99,17 @@ public final class Route {
     }
 
     /**
-     *
-     * @return
+     * return a list that contains the two stations of the route
+     * @return a list that contains the two stations of the route
      */
     public List<Station> stations(){
         return List.of(station1, station2);
     }
 
     /**
-     *
-     * @param station
-     * @return
+     * return the other station of the route
+     * @param station of the route
+     * @return the other station of the route
      */
     public Station stationOpposite(Station station){
         if(station.equals(station1)){
@@ -120,8 +122,8 @@ public final class Route {
     }
 
     /**
-     *
-     * @return
+     * returns a list of all the cards that could be played to take a route sorted by increasing order of locomotives and colors
+     * @return a list of all the cards that could be played to take a route
      */
     public List<SortedBag<Card>> possibleClaimCards() {
         List<SortedBag<Card>> possibleClaimCards = new ArrayList<>();
@@ -143,10 +145,10 @@ public final class Route {
     }
 
     /**
-     *
-     * @param claimCards
-     * @param drawnCards
-     * @return
+     * Compare the cards the player put on the table with the drawn cards and gives the amount of additional cards the player has to play
+     * @param claimCards the cards the player put on the table
+     * @param drawnCards the 3 cards that are drawn
+     * @return the amount of cards the player must additionally play
      */
     public int additionnalClaimCards(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
         Preconditions.checkArgument(level.equals(Level.UNDERGROUND));
@@ -167,8 +169,8 @@ public final class Route {
     }
 
     /**
-     *
-     * @return
+     * returns the amount of points of a route
+     * @return the amount of points of a route
      */
     public int claimPoints() {
         return Constants.ROUTE_CLAIM_POINTS.get(length);
