@@ -150,7 +150,7 @@ public final class Route {
      * @param drawnCards the 3 cards that are drawn
      * @return the amount of cards the player must additionally play
      */
-    public int additionalClaimCards(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
+    public int additionalClaimCardsCount(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
         Preconditions.checkArgument(level.equals(Level.UNDERGROUND));
         Preconditions.checkArgument(drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
         int numberOfAdditionalClaimCards = 0;
