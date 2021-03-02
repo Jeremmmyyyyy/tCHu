@@ -42,7 +42,7 @@ public final class Route {
         this.level = level;
         this.color = color;
         Preconditions.checkArgument(!station1.equals(station2) && length>=Constants.MIN_ROUTE_LENGTH && length<=Constants.MAX_ROUTE_LENGTH);
-        if(station1.equals(null) || station2.equals(null) || id.equals(null) || level.equals(null)){
+        if(station1.equals(null) || station2.equals(null) || id.equals(null) || level.equals(null)){ //TODO
             throw new NullPointerException();
         }
     }
@@ -92,7 +92,7 @@ public final class Route {
      * @return the color of the route
      */
     public Color color() {
-        if(color.equals(null)){
+        if(color.equals(null)){  //TODO
             return null;
         }
         return color;
@@ -127,9 +127,9 @@ public final class Route {
      */
     public List<SortedBag<Card>> possibleClaimCards() {
         List<SortedBag<Card>> possibleClaimCards = new ArrayList<>();
-        if(level.equals(Level.OVERGROUND) && !color.equals(null)) {
+        if(level.equals(Level.OVERGROUND) && !color.equals(null)) {  //TODO
             return List.of(SortedBag.of(length, Card.of(color)));
-        }else if(level.equals(Level.UNDERGROUND) && !color.equals(null)) {
+        }else if(level.equals(Level.UNDERGROUND) && !color.equals(null)) { //TODO
             for (int i = 0; i < length; ++i) {
                 possibleClaimCards.add(SortedBag.of(length - i, Card.of(color), i, Card.LOCOMOTIVE));
             }
