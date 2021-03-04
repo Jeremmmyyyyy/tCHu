@@ -33,7 +33,7 @@ public final class  Trail {
      * @param routes list of routes
      * @return the longest trail constructed by the given routes
      * If routes is empty, returns a 0-long trail, with station 1 and station2 null
-     * If they are multiple longest trails, returns an arbitrary one
+     * If they are multiple longest trails, returns the length of an arbitrary one
      */
     public static Trail longest(List<Route> routes){
         List<Trail> listOfTrailsToExtend = new ArrayList<>();
