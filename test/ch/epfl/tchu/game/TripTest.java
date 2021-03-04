@@ -1,6 +1,7 @@
 package ch.epfl.tchu.game;
 
-import ch.epfl.test.TestRandomizer;
+
+import ch.epfl.tchu.TestRandomizer;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,7 +94,7 @@ class TripTest {
     }
 
     private static final class FullConnectivity implements StationConnectivity {
-        @Override
+//        @Override
         public boolean connected(Station s1, Station s2) {
             return true;
         }
