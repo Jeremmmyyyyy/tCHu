@@ -1,7 +1,10 @@
 package ch.epfl.tchu.game;
 
+import ch.epfl.tchu.SortedBag;
+import ch.epfl.test.ChMapPublic;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,6 +61,7 @@ public class RouteTest {
 
     @Test
     void possibleClaimCards(){
-
+        Route route = ChMapPublic.ALL_ROUTES.get(3); //new Route("BAD_OLT_1", ChMapPublic.BAD, ChMapPublic.OLT, 2, Route.Level.OVERGROUND, Color.VIOLET);
+        assertEquals(2,route.length());
     }
 }
