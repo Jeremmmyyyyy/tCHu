@@ -126,32 +126,24 @@ public final class Route {
      */
     public List<SortedBag<Card>> possibleClaimCards() {
         List<SortedBag<Card>> possibleClaimCards = new ArrayList<>();
-        if(level.equals(Level.OVERGROUND) && color != null) {  //TODO
-            return List.of(SortedBag.of(length, Card.of(color)));
-        }else if(level.equals(Level.UNDERGROUND) && color != null) { //TODO si tunnel et longueur 1 renvoyer la couleur*1 et locomotive*1
-            for (int i = 0; i < length; ++i) {
+        int locomotiveAmount;
+        if (level.equals(Level.OVERGROUND)) {
+            locomotiveAmount = 0;
+        } else {
+            locomotiveAmount = length;
+        }
+        for (int i = 0; i <= locomotiveAmount; i++) {
+            if (color == null) {
+                for (Card card : Card.CARS) {
+                    if(!possibleClaimCards.contains(SortedBag.of(locomotiveAmount, Card.LOCOMOTIVE))){
+                        possibleClaimCards.add(SortedBag.of(length - i, card, i, Card.LOCOMOTIVE));
+                    }
+                }
+            } else {
                 possibleClaimCards.add(SortedBag.of(length - i, Card.of(color), i, Card.LOCOMOTIVE));
             }
-            if(length==1){
-                possibleClaimCards.add(SortedBag.of(length, Card.LOCOMOTIVE));
-            }
-            return possibleClaimCards;
-        }else if(level.equals((Level.UNDERGROUND)) && color == null){ //TODO always true ?
-            for (int i = 0; i < length; ++i) {
-                for(Card card: Card.CARS){
-                    possibleClaimCards.add(SortedBag.of(length - i, card, i, Card.LOCOMOTIVE));
-                }
-            }
-            possibleClaimCards.add(SortedBag.of(length, Card.LOCOMOTIVE)); //TODO retourne qu'une seule fois les locomotives
-            return possibleClaimCards;
-        }else{
-            for (int i = 0; i < length; ++i) {
-                for(Card card: Card.CARS) {
-                    possibleClaimCards.add(SortedBag.of(length, card));
-                }
-            }
-            return possibleClaimCards;
         }
+        return possibleClaimCards;
     }
 
     /**
