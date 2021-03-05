@@ -63,10 +63,10 @@ public final class Ticket implements Comparable<Ticket> {
     private static String computeText(List<Trip> trips) {
         Trip firstTrip = trips.get(0);
         String from = String.format("%s - ", firstTrip.from().name());
-        if (trips.size() == 1) {
+        if (trips.size() == 1) { //in case of a single ticket
             return from + String.format("%s (%s)", firstTrip.to().name(), firstTrip.points());
         }
-        TreeSet<String> orderedDestinations = new TreeSet<>();
+        TreeSet<String> orderedDestinations = new TreeSet<>(); //to avoid repetition and work on a sorted list
         for(Trip trip: trips){
             orderedDestinations.add(String.format("%s (%s)", trip.to().name(), trip.points()));
         }
@@ -78,22 +78,14 @@ public final class Ticket implements Comparable<Ticket> {
      * @param connectivity of the player
      * @return the current points of the player owning the ticket this
      */
-    public int points(StationConnectivity connectivity){ // TODO renvoyer juste le max
-        int max = 0, min = trips.get(0).points(connectivity);
-        for(Trip trip: trips){
-            if(trip.points(connectivity) > 0 && trip.points(connectivity) > max){
+    public int points(StationConnectivity connectivity){
+        int max = Integer.MIN_VALUE;
+        for (Trip trip : trips) {
+            if (trip.points(connectivity) > max) {
                 max = trip.points(connectivity);
             }
-            else if(trip.points(connectivity) < 0 && trip.points(connectivity) > min){
-                min = trip.points(connectivity);
-            }
         }
-        if(max != 0){
-            return max;
-        }
-        else {
-            return min;
-        }
+        return max;
     }
 
     /**

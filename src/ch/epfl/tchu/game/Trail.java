@@ -37,13 +37,15 @@ public final class  Trail {
      */
     public static Trail longest(List<Route> routes){
         List<Trail> listOfTrailsToExtend = new ArrayList<>();
+        List<Trail> memory = new ArrayList<>();
         for(Route route : routes){
             listOfTrailsToExtend.add(new Trail(route.station1(), route.station2(), List.of(route), route.length()));
             listOfTrailsToExtend.add(new Trail(route.station2(), route.station1(), List.of(route), route.length()));
         }
         Trail longestTrail = listOfTrailsToExtend.get(0);
         while(!listOfTrailsToExtend.isEmpty()){
-            longestTrail = listOfTrailsToExtend.get(0); //stores a trail of the last non-empty listOfTrailsToExtend
+            memory.clear();
+//            longestTrail = listOfTrailsToExtend.get(0); //stores a trail of the last non-empty listOfTrailsToExtend
             List<Trail> newListOfTrailsToExtend = new ArrayList<>();
             for (Trail trailToExtend : listOfTrailsToExtend) {
                 List<Route> prolongations = trailToExtend.possibleProlongations(routes);
@@ -59,12 +61,40 @@ public final class  Trail {
                             prolongation.stationOpposite(trailToExtend.station2()),
                             listOfRoutesInTheTrail,
                             trailToExtend.length() + prolongation.length()));
-
                 }
+            }
+            for (Trail trail : listOfTrailsToExtend) { //stores the last non-empty listOfTrailsToExtend
+                memory.add(trail);
             }
             listOfTrailsToExtend = newListOfTrailsToExtend;
         }
+        //Last step = find a trail of maximal length thanks to the list memory
+        int maxLength = 0;
+        for (Trail trail : memory) {
+            if (trail.length > maxLength) {
+                longestTrail = trail;
+            }
+        }
         return longestTrail;
+    }
+
+    private Trail longestTrail(List<Trail> trails) {
+        int max = 0;
+        Trail longestTrail = trails.get(0);
+        for (Trail trail : trails) {
+            if (trail.length > max) {
+                longestTrail = trail;
+            }
+        }
+        return longestTrail;
+    }
+
+    private List<Trail> clone(List<Trail> toClone) { //TODO
+        List<Trail> clone = new ArrayList<>();
+        for (Trail trail : toClone) {
+            clone.add(trail);
+        }
+        return clone;
     }
 
     /**
@@ -95,7 +125,7 @@ public final class  Trail {
         routesOfTrailString.add(station1.toString());
         Station previousStation = station1;
         for (Route route : routesOfTrail) {
-            Station nextStation = route.stationOpposite(station1);
+            Station nextStation = route.stationOpposite(previousStation);
             routesOfTrailString.add(nextStation.toString());
             previousStation = nextStation;
         }
