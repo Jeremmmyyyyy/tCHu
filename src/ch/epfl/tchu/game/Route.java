@@ -1,5 +1,6 @@
 package ch.epfl.tchu.game;
 
+
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 
@@ -41,7 +42,7 @@ public final class Route {
         this.length = length;
         this.level = level;
         this.color = color;
-        Preconditions.checkArgument(!station1.equals(station2) && length>=Constants.MIN_ROUTE_LENGTH && length<=Constants.MAX_ROUTE_LENGTH);
+        Preconditions.checkArgument(!station1.equals(station2) && length<=Constants.MIN_ROUTE_LENGTH && length>=Constants.MAX_ROUTE_LENGTH);
         if(station1.equals(null) || station2.equals(null) || id.equals(null) || level.equals(null)){ //TODO
             throw new NullPointerException();
         }
