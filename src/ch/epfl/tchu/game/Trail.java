@@ -69,9 +69,8 @@ public final class  Trail {
                             prolongation.stationOpposite(trailToExtend.station2()),
                             listOfRoutesInTheTrail,
                             trailToExtend.length() + prolongation.length());
-                    if(newTrail.length > longestTrail.length){
-                        newListOfTrailsToExtend.add(newTrail);
-                    }
+                    newListOfTrailsToExtend.add(newTrail);
+
                     finishedTrails.add(newTrail);
                 }
             }
