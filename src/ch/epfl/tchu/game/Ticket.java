@@ -79,21 +79,13 @@ public final class Ticket implements Comparable<Ticket> {
      * @return the current points of the player owning the ticket this
      */
     public int points(StationConnectivity connectivity){
-        int max = 0, min = trips.get(0).points(connectivity);
-        for(Trip trip: trips){
-            if(trip.points(connectivity) > 0 && trip.points(connectivity) > max){
+        int max = Integer.MIN_VALUE;
+        for (Trip trip : trips) {
+            if (trip.points(connectivity) > max) {
                 max = trip.points(connectivity);
             }
-            else if(trip.points(connectivity) < 0 && trip.points(connectivity) > min){
-                min = trip.points(connectivity);
-            }
         }
-        if(max != 0){
-            return max;
-        }
-        else {
-            return min;
-        }
+        return max;
     }
 
     /**

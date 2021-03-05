@@ -11,7 +11,8 @@ class TrailTest {
 
     @Test
     void longestCheck() {
-        assertEquals(5, Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(64), ChMapPublic.ALL_ROUTES.get(23), ChMapPublic.ALL_ROUTES.get(55))).length());
+        assertEquals(9, Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(64), ChMapPublic.ALL_ROUTES.get(23), ChMapPublic.ALL_ROUTES.get(55))).length());
+        assertEquals(9, Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(64), ChMapPublic.ALL_ROUTES.get(23), ChMapPublic.ALL_ROUTES.get(55))).length());
     }
 
     @Test
@@ -19,15 +20,12 @@ class TrailTest {
         System.out.println(Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(64),
                 ChMapPublic.ALL_ROUTES.get(23), ChMapPublic.ALL_ROUTES.get(55),
                 ChMapPublic.ALL_ROUTES.get(20), ChMapPublic.ALL_ROUTES.get(15),
-                ChMapPublic.ALL_ROUTES.get(13), ChMapPublic.ALL_ROUTES.get(44))).station1() + " " + Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(64),
-                ChMapPublic.ALL_ROUTES.get(23), ChMapPublic.ALL_ROUTES.get(55),
-                ChMapPublic.ALL_ROUTES.get(20), ChMapPublic.ALL_ROUTES.get(15),
-                ChMapPublic.ALL_ROUTES.get(13), ChMapPublic.ALL_ROUTES.get(44))).station2());
+                ChMapPublic.ALL_ROUTES.get(13), ChMapPublic.ALL_ROUTES.get(44))));
     }
 
     @Test
     void length() {
-
+        assertEquals(9, Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(64), ChMapPublic.ALL_ROUTES.get(23), ChMapPublic.ALL_ROUTES.get(55))).length());
     }
 
     @Test

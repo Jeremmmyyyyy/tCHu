@@ -95,7 +95,7 @@ public final class  Trail {
         routesOfTrailString.add(station1.toString());
         Station previousStation = station1;
         for (Route route : routesOfTrail) {
-            Station nextStation = route.stationOpposite(station1);
+            Station nextStation = route.stationOpposite(previousStation);
             routesOfTrailString.add(nextStation.toString());
             previousStation = nextStation;
         }
