@@ -36,16 +36,14 @@ public final class Route {
      * @throws NullPointerException if the Station1 is null, if station2 is nul, if the id is null or if the level is null
      */
     public Route(String id, Station station1, Station station2, int length, Level level, Color color){
-        this.id = id;
-        this.station1 = station1;
-        this.station2 = station2;
+        Preconditions.checkArgument(!station1.equals(station2));
+        Preconditions.checkArgument(length>=Constants.MIN_ROUTE_LENGTH && length<=Constants.MAX_ROUTE_LENGTH);
+        this.id = Objects.requireNonNull(id);
+        this.station1 = Objects.requireNonNull(station1);
+        this.station2 = Objects.requireNonNull(station2);
         this.length = length;
-        this.level = level;
+        this.level = Objects.requireNonNull(level);
         this.color = color;
-        Preconditions.checkArgument(!station1.equals(station2) && length<=Constants.MIN_ROUTE_LENGTH && length>=Constants.MAX_ROUTE_LENGTH);
-        if(station1.equals(null) || station2.equals(null) || id.equals(null) || level.equals(null)){ //TODO
-            throw new NullPointerException();
-        }
     }
 
     /**
@@ -93,7 +91,7 @@ public final class Route {
      * @return the color of the route
      */
     public Color color() {
-        if(color.equals(null)){  //TODO
+        if(color==null){  //TODO
             return null;
         }
         return color;
