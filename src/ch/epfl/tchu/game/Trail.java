@@ -39,9 +39,12 @@ public final class  Trail {
     public static Trail longest(List<Route> routes){
 
         List<Trail> listOfTrailsToExtend = new ArrayList<>();
+        List<Trail> finishedTrails = new ArrayList<>();
         for(Route route : routes){
             listOfTrailsToExtend.add(new Trail(route.station1(), route.station2(), List.of(route), route.length()));
             listOfTrailsToExtend.add(new Trail(route.station2(), route.station1(), List.of(route), route.length()));
+            finishedTrails.add(new Trail(route.station1(), route.station2(), List.of(route), route.length()));
+            finishedTrails.add(new Trail(route.station2(), route.station1(), List.of(route), route.length()));
         }
         Trail longestTrail = listOfTrailsToExtend.get(0);
         while(!listOfTrailsToExtend.isEmpty()){
@@ -69,9 +72,15 @@ public final class  Trail {
                     if(newTrail.length > longestTrail.length){
                         newListOfTrailsToExtend.add(newTrail);
                     }
+                    finishedTrails.add(newTrail);
                 }
             }
             listOfTrailsToExtend = newListOfTrailsToExtend;
+        }
+        for (Trail trail : finishedTrails) {
+            if(trail.length > longestTrail.length) {
+                longestTrail = trail;
+            }
         }
         return longestTrail;
     }
