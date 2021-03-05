@@ -36,7 +36,8 @@ class TrailTest {
                 ChMapPublic.ALL_ROUTES.get(3), ChMapPublic.ALL_ROUTES.get(2), ChMapPublic.ALL_ROUTES.get(60),
                 ChMapPublic.ALL_ROUTES.get(7), ChMapPublic.ALL_ROUTES.get(68), ChMapPublic.ALL_ROUTES.get(82),
                 ChMapPublic.ALL_ROUTES.get(83))));
-        System.out.println(Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(54))));
+        System.out.println(Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(77),ChMapPublic.ALL_ROUTES.get(78))));
+        System.out.println(Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(77), ChMapPublic.ALL_ROUTES.get(78), ChMapPublic.ALL_ROUTES.get(30))));
     }
 
     @Test
