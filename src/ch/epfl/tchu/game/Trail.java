@@ -70,6 +70,23 @@ public final class  Trail {
     }
 
     /**
+     * Creates textual representation of the trail according to the following format :
+     * @return Station1 - Station2 - ... - StationN (length)
+     */
+    @Override
+    public String toString() {
+        List<String> routesOfTrailString = new ArrayList<>();
+        routesOfTrailString.add(station1.toString());
+        Station previousStation = station1;
+        for (Route route : routesOfTrail) {
+            Station nextStation = route.stationOpposite(station1);
+            routesOfTrailString.add(nextStation.toString());
+            previousStation = nextStation;
+        }
+        return String.join(" - ", routesOfTrailString) + String.format(" (%s)", length);
+    }
+
+    /**
      * Getter for the attribute length
      * @return the attribute length
      */
