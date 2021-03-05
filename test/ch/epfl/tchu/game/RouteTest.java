@@ -3,10 +3,7 @@ package ch.epfl.tchu.game;
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.test.ChMapPublic;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RouteTest {
@@ -61,26 +58,44 @@ public class RouteTest {
 
     @Test
     void possibleClaimCards(){
-        Route route = ChMapPublic.ALL_ROUTES.get(0);
+        // tester avec tous les cas : 0 , 2 , 15 , 16
+        Route route = ChMapPublic.ALL_ROUTES.get(16);
         List<SortedBag<Card>> test = route.possibleClaimCards();
         for (int i = 0; i < test.size(); i++) {
             System.out.println(test.get(i));
         }
     }
 
-//    @Test
-//    void drawnCardsFailsWithIllegalArgument(){
-//        Route route = ChMapPublic.ALL_ROUTES.get(0);
-//        List<SortedBag<Card>> drawnCards = new ArrayList<SortedBag<Card>>();
-//        List<SortedBag<Card>> claimCards = new ArrayList<SortedBag<Card>>();
-//        drawnCards.add(Card.LOCOMOTIVE);
-//
-//        assertThrows(IllegalArgumentException.class, () ->{
-//            route.additionalClaimCardsCount(drawnCards, claimCards);
-//        });
-//    }
+    @Test
+    void drawnCardsFailsWithIllegalArgument(){
+        Route route = ChMapPublic.ALL_ROUTES.get(3);
 
-    // faire les exceptions
+        SortedBag<Card> drawnCards = SortedBag.of(Card.BLUE);
+        SortedBag<Card> claimCards = SortedBag.of(Card.BLUE);
+
+        assertThrows(IllegalArgumentException.class, () ->{
+            route.additionalClaimCardsCount(drawnCards, claimCards);
+        });
+    }
+
+    @Test
+    void drawnCardsFailsWithEmptyDrawn(){
+        Route route = ChMapPublic.ALL_ROUTES.get(0);
+
+        SortedBag<Card> drawnCards = SortedBag.of(1, Card.BLUE, 1, Card.BLACK);
+        SortedBag<Card> claimCards = SortedBag.of(1, Card.BLUE,1,Card.BLACK);
+
+        assertThrows(IllegalArgumentException.class, () ->{
+            route.additionalClaimCardsCount(drawnCards, claimCards);
+        });
+    }
+
+    @Test
+    void drawnCardsGiveTheCorrectAmount(){
+        Route route = ChMapPublic.ALL_ROUTES.get(57);
+        SortedBag<Card> drawnCards = SortedBag.of(1, Card.BLUE, 1, Card.BLACK);
+        SortedBag<Card> claimCards = SortedBag.of(1, Card.BLUE,1,Card.BLACK);
+    }
 
     @Test
     void claimPoints(){
@@ -97,10 +112,5 @@ public class RouteTest {
         assertEquals(7, route3.claimPoints());
         assertEquals(10, route4.claimPoints());
         assertEquals(15, route5.claimPoints());
-
-//        Route routeNull = new Route("Test", ChMapPublic.BAD, ChMapPublic.OLT, -5, Route.Level.OVERGROUND, Color.WHITE);
-//        assertEquals(0, routeNull.claimPoints()); // TODO vu qu'une route de longueur 0 ne peut être construite comment tester que claim points renvoie Integer.MIN_VALUE pour une longeur 0
-
-
     }
 }

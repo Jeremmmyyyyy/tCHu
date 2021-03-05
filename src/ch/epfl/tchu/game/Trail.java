@@ -174,9 +174,6 @@ public final class  Trail {
      * else null if the station1 is null
      */
     public Station station1(){
-        if(station1 == null){ //TODO
-            return null;
-        }
         return station1;
     }
 
@@ -186,9 +183,6 @@ public final class  Trail {
      * else null if the station2 is null
      */
     public Station station2(){
-        if(station2 == null){ //TODO
-            return null;
-        }
         return station2;
     }
 }
