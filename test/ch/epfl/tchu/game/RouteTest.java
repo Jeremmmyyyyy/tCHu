@@ -25,7 +25,7 @@ public class RouteTest {
     void constructorFailsWithIllegalArgumentException(){
         Station station = new Station(0, "");
         assertThrows(IllegalArgumentException.class, ()->{
-            Route route = new Route("test", station, station, 4, Route.Level.UNDERGROUND, null);
+            Route route = new Route("test", new Station(0, "Test"), station, 4, Route.Level.UNDERGROUND, null);
         });
         assertThrows(IllegalArgumentException.class, ()->{
             Route route = new Route("test", new Station(0, "Test"), new Station(1, "Test"), 1, Route.Level.UNDERGROUND, null);
