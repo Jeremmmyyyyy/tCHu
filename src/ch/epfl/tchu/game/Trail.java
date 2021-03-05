@@ -43,30 +43,65 @@ public final class  Trail {
         }
         Trail longestTrail = listOfTrailsToExtend.get(0);
         while(!listOfTrailsToExtend.isEmpty()){
-            longestTrail = listOfTrailsToExtend.get(0);
+            longestTrail = listOfTrailsToExtend.get(0); //stores a trail of the last non-empty listOfTrailsToExtend
             List<Trail> newListOfTrailsToExtend = new ArrayList<>();
             for (Trail trailToExtend : listOfTrailsToExtend) {
-                List<Route> prolongations = new ArrayList<>();
-                for(Route possibleProlongation : routes) {
-                    if(possibleProlongation.stations().contains(trailToExtend.station2)
-                            && !trailToExtend.routesOfTrail.contains(possibleProlongation)){
+                List<Route> prolongations = trailToExtend.possibleProlongations(routes);
 
-                        prolongations.add(possibleProlongation);
-                    }
-                }
+//                List<Route> prolongations = new ArrayList<>();
+//                for(Route possibleProlongation : routes) {
+//                    if(possibleProlongation.stations().contains(trailToExtend.station2)
+//                            && !trailToExtend.routesOfTrail.contains(possibleProlongation)){
+//
+//                        prolongations.add(possibleProlongation);
+//                    }
+//                }
+
                 for(Route prolongation : prolongations){
-                    List<Route> listOfRoutesInTheTrail = trailToExtend.routesOfTrail;
-                    listOfRoutesInTheTrail.add(prolongation);
-                    assert trailToExtend.station2() != null;
+//                    List<Route> listOfRoutesInTheTrail = trailToExtend.routesOfTrail;
+//                    listOfRoutesInTheTrail.add(prolongation); //extends the list of routes of the current trail
+//                    //constructs a new trail from the extended list of routes
+//                    newListOfTrailsToExtend.add(new Trail(trailToExtend.station1(),
+//                                                prolongation.stationOpposite(trailToExtend.station2()),
+//                                                listOfRoutesInTheTrail,
+//                                                trailToExtend.length() + prolongation.length()));
+
+
+                    List<Route> listOfRoutesInTheTrail = new ArrayList<>();
+                    //trailToExtend.routesOfTrail is final, hence the for loop to copy its content
+                    for(Route route: trailToExtend.routesOfTrail){
+                        listOfRoutesInTheTrail.add(route);
+                    }
+                    listOfRoutesInTheTrail.add(prolongation); //extends the list of routes of the current trail
+                    //constructs a new trail from the extended list of routes
                     newListOfTrailsToExtend.add(new Trail(trailToExtend.station1(),
-                                                prolongation.stationOpposite(trailToExtend.station2()),
-                                                listOfRoutesInTheTrail,
-                                                trailToExtend.length()+prolongation.length()));
+                            prolongation.stationOpposite(trailToExtend.station2()),
+                            listOfRoutesInTheTrail,
+                            trailToExtend.length() + prolongation.length()));
+
                 }
             }
             listOfTrailsToExtend = newListOfTrailsToExtend;
         }
         return longestTrail;
+    }
+
+    /**
+     * Intermediate method for longest(...) method
+     * Creates a list of possible prolongations for the current trail, given a list of routes
+     * @param routes list of routes to test as possible prolongations
+     * @return list of possible prolongations for the current trail
+     */
+    private List<Route> possibleProlongations(List<Route> routes) {
+        List<Route> prolongations = new ArrayList<>();
+        for(Route possibleProlongation : routes) {
+            if(possibleProlongation.stations().contains(station2)  //looks for a possible link between stations
+                    && !routesOfTrail.contains(possibleProlongation)){
+
+                prolongations.add(possibleProlongation);
+            }
+        }
+        return prolongations;
     }
 
     /**
