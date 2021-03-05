@@ -157,7 +157,7 @@ public final class ChMapPublic {
             new Route("NEU_SOL_1", NEU, SOL, 4, Level.OVERGROUND, Color.GREEN), //65
             new Route("NEU_YVE_1", NEU, YVE, 2, Level.OVERGROUND, Color.BLACK), //66
             new Route("OLT_SOL_1", OLT, SOL, 1, Level.OVERGROUND, Color.BLUE), //67
-            new Route("OLT_ZUR_1", OLT, ZUR, 3, Level.OVERGROUND, Color.WHITE), //68
+            new Route("OLT_ZUR_1", OLT, ZUR, 3, Level.OVERGROUND, Color .WHITE), //68
             new Route("PFA_SAR_1", PFA, SAR, 3, Level.UNDERGROUND, Color.YELLOW), //69
             new Route("PFA_SCZ_1", PFA, SCZ, 1, Level.OVERGROUND, Color.VIOLET), //70
             new Route("PFA_STG_1", PFA, STG, 3, Level.OVERGROUND, Color.ORANGE), //71
