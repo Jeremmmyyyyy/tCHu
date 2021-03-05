@@ -47,26 +47,7 @@ public final class  Trail {
             List<Trail> newListOfTrailsToExtend = new ArrayList<>();
             for (Trail trailToExtend : listOfTrailsToExtend) {
                 List<Route> prolongations = trailToExtend.possibleProlongations(routes);
-
-//                List<Route> prolongations = new ArrayList<>();
-//                for(Route possibleProlongation : routes) {
-//                    if(possibleProlongation.stations().contains(trailToExtend.station2)
-//                            && !trailToExtend.routesOfTrail.contains(possibleProlongation)){
-//
-//                        prolongations.add(possibleProlongation);
-//                    }
-//                }
-
                 for(Route prolongation : prolongations){
-//                    List<Route> listOfRoutesInTheTrail = trailToExtend.routesOfTrail;
-//                    listOfRoutesInTheTrail.add(prolongation); //extends the list of routes of the current trail
-//                    //constructs a new trail from the extended list of routes
-//                    newListOfTrailsToExtend.add(new Trail(trailToExtend.station1(),
-//                                                prolongation.stationOpposite(trailToExtend.station2()),
-//                                                listOfRoutesInTheTrail,
-//                                                trailToExtend.length() + prolongation.length()));
-
-
                     List<Route> listOfRoutesInTheTrail = new ArrayList<>();
                     //trailToExtend.routesOfTrail is final, hence the for loop to copy its content
                     for(Route route: trailToExtend.routesOfTrail){
