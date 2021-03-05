@@ -37,15 +37,18 @@ public final class  Trail {
      */
     public static Trail longest(List<Route> routes){
         List<Trail> listOfTrailsToExtend = new ArrayList<>();
-        List<Trail> memory = new ArrayList<>();
         for(Route route : routes){
             listOfTrailsToExtend.add(new Trail(route.station1(), route.station2(), List.of(route), route.length()));
             listOfTrailsToExtend.add(new Trail(route.station2(), route.station1(), List.of(route), route.length()));
         }
         Trail longestTrail = listOfTrailsToExtend.get(0);
         while(!listOfTrailsToExtend.isEmpty()){
-            memory.clear();
-//            longestTrail = listOfTrailsToExtend.get(0); //stores a trail of the last non-empty listOfTrailsToExtend
+            //refreshes the longestTrail at each step
+            for (Trail trail : listOfTrailsToExtend) {
+                if (trail.length > longestTrail.length) {
+                    longestTrail = trail;
+                }
+            }
             List<Trail> newListOfTrailsToExtend = new ArrayList<>();
             for (Trail trailToExtend : listOfTrailsToExtend) {
                 List<Route> prolongations = trailToExtend.possibleProlongations(routes);
@@ -57,25 +60,58 @@ public final class  Trail {
                     }
                     listOfRoutesInTheTrail.add(prolongation); //extends the list of routes of the current trail
                     //constructs a new trail from the extended list of routes
-                    newListOfTrailsToExtend.add(new Trail(trailToExtend.station1(),
+                    Trail newTrail = new Trail(trailToExtend.station1(),
                             prolongation.stationOpposite(trailToExtend.station2()),
                             listOfRoutesInTheTrail,
-                            trailToExtend.length() + prolongation.length()));
+                            trailToExtend.length() + prolongation.length());
+                    if(newTrail.length > longestTrail.length){
+                        newListOfTrailsToExtend.add(newTrail);
+                    }
                 }
-            }
-            for (Trail trail : listOfTrailsToExtend) { //stores the last non-empty listOfTrailsToExtend
-                memory.add(trail);
             }
             listOfTrailsToExtend = newListOfTrailsToExtend;
         }
-        //Last step = find a trail of maximal length thanks to the list memory
-        int maxLength = 0;
-        for (Trail trail : memory) {
-            if (trail.length > maxLength) {
-                longestTrail = trail;
-            }
-        }
         return longestTrail;
+
+//        List<Trail> listOfTrailsToExtend = new ArrayList<>();
+//        List<Trail> memory = new ArrayList<>();
+//        for(Route route : routes){
+//            listOfTrailsToExtend.add(new Trail(route.station1(), route.station2(), List.of(route), route.length()));
+//            listOfTrailsToExtend.add(new Trail(route.station2(), route.station1(), List.of(route), route.length()));
+//        }
+//        Trail longestTrail = listOfTrailsToExtend.get(0);
+//        while(!listOfTrailsToExtend.isEmpty()){
+//            memory.clear();
+//            List<Trail> newListOfTrailsToExtend = new ArrayList<>();
+//            for (Trail trailToExtend : listOfTrailsToExtend) {
+//                List<Route> prolongations = trailToExtend.possibleProlongations(routes);
+//                for(Route prolongation : prolongations){
+//                    List<Route> listOfRoutesInTheTrail = new ArrayList<>();
+//                    //trailToExtend.routesOfTrail is final, hence the for loop to copy its content
+//                    for(Route route: trailToExtend.routesOfTrail){
+//                        listOfRoutesInTheTrail.add(route);
+//                    }
+//                    listOfRoutesInTheTrail.add(prolongation); //extends the list of routes of the current trail
+//                    //constructs a new trail from the extended list of routes
+//                    newListOfTrailsToExtend.add(new Trail(trailToExtend.station1(),
+//                            prolongation.stationOpposite(trailToExtend.station2()),
+//                            listOfRoutesInTheTrail,
+//                            trailToExtend.length() + prolongation.length()));
+//                }
+//            }
+//            for (Trail trail : listOfTrailsToExtend) { //stores the last non-empty listOfTrailsToExtend
+//                memory.add(trail);
+//            }
+//            listOfTrailsToExtend = newListOfTrailsToExtend;
+//        }
+//        //Last step = find a trail of maximal length thanks to the list memory
+//        int maxLength = 0;
+//        for (Trail trail : memory) {
+//            if (trail.length > maxLength) {
+//                longestTrail = trail;
+//            }
+//        }
+//        return longestTrail;
     }
 
     private Trail longestTrail(List<Trail> trails) {
@@ -87,14 +123,6 @@ public final class  Trail {
             }
         }
         return longestTrail;
-    }
-
-    private List<Trail> clone(List<Trail> toClone) { //TODO
-        List<Trail> clone = new ArrayList<>();
-        for (Trail trail : toClone) {
-            clone.add(trail);
-        }
-        return clone;
     }
 
     /**
