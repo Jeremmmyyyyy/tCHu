@@ -3,11 +3,12 @@ package ch.epfl.tchu.game;
 import ch.epfl.tchu.Preconditions;
 
 import java.util.List;
+import java.util.Objects;
 
-public final class PublicCardState {
+public class PublicCardState { //TODO une classe immuable a des attributs finaux mais peut ne pas être finale
 
-    public List<Card> faceUpCards;
-    public int deckSize, discardSize; // TODO PUBLIQUE ?
+    public final List<Card> faceUpCards;
+    public final int deckSize, discardSize; // TODO PUBLIQUE ?
 
     public PublicCardState(List<Card> faceUpCards, int deckSize, int discardSize){
         Preconditions.checkArgument(faceUpCards.size() > 5);
@@ -27,9 +28,7 @@ public final class PublicCardState {
     }
 
     public Card faceUpCard(int slot){
-        if(slot < 0 || slot >= 5){
-            throw new IndexOutOfBoundsException("!");
-        }
+        Objects.checkIndex(slot, 5);
         return faceUpCards.get(slot);
     }
 
