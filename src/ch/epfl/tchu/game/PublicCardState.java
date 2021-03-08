@@ -24,7 +24,7 @@ public class PublicCardState { //TODO une classe immuable a des attributs finaux
     }
 
     public List<Card> faceUpCards(){
-        return faceUpCards;
+        return List.copyOf(faceUpCards);
     }
 
     public Card faceUpCard(int slot){
