@@ -9,7 +9,6 @@ import java.util.*;
 /**
  * A Route between two stations
  *
- * @author Yann Ennassih (329978)
  * @author Jérémy Barghorn (328403)
  */
 public final class Route {
