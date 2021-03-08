@@ -30,7 +30,8 @@ public final class CardState extends PublicCardState{
         Objects.checkIndex(slot, 5);
         List.copyOf(faceUpCards).set(slot, deck.topCard()); // TODO Copy nécessaire
         deck = deck.withoutTopCard();
-        // TODO faut il ajouter 1 à la pioche ?
+        // deckSize = deckSize() - 1;
+        // TODO faut il enlever 1 à la pioche ?
         return this;
     }
 
