@@ -69,7 +69,6 @@ public final class  Trail {
                             listOfRoutesInTheTrail,
                             trailToExtend.length() + prolongation.length());
                     newListOfTrailsToExtend.add(newTrail);
-
                     finishedTrails.add(newTrail);
                 }
             }
