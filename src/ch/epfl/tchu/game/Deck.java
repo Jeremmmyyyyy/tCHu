@@ -16,6 +16,10 @@ public final class Deck<C extends Comparable<C>> {
 
     private List<C> cards;
 
+    /**
+     * Private constructor of the class Deck
+     * @param cards list of cards composing the deck
+     */
     private Deck(List<C> cards){
         this.cards = cards;
     }
