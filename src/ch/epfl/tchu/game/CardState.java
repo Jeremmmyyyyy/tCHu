@@ -45,11 +45,14 @@ public final class CardState extends PublicCardState{
      */
     public CardState withDrawnFaceUpCard(int slot){
         Objects.checkIndex(slot, 5);
-        List.copyOf(faceUpCards).set(slot, deck.topCard()); // TODO Copy nécessaire ?
-        deck = deck.withoutTopCard();
-        // deckSize = deckSize() - 1;
-        // TODO faut il enlever 1 à la pioche ?
-        return this;
+        List<Card> faceUpCard = List.copyOf(faceUpCards);
+        faceUpCard.set(slot, deck.topCard()); // TODO alerte immutable object is modified
+        //TODO renvoyer ,un new cardstate et non this ?
+        return new CardState(faceUpCard,
+                deck.withoutTopCard(),
+                SortedBag.of(),
+                deckSize()-1,
+                disCardSize()+1);
     }
 
     /**
@@ -68,9 +71,11 @@ public final class CardState extends PublicCardState{
      */
     public CardState withoutTopDeckCard(){
         Preconditions.checkArgument(!deck.isEmpty());
-        deck = deck.withoutTopCard();
-        // TODO faut il ajouter 1 à la pioche ?
-        return this;
+        return new CardState(faceUpCards,
+                deck.withoutTopCard(),
+                SortedBag.of(),
+                deckSize(), // TODO bien vérif que les bonnes tailles sont renvoyées
+                disCardSize());
     }
 
     /**
@@ -81,10 +86,11 @@ public final class CardState extends PublicCardState{
      */
     public CardState withDeckRecreatedFromDiscard(Random rng){
         Preconditions.checkArgument(deck.isEmpty());
-        deck = Deck.of(discard, rng);
-        discard = SortedBag.of();
-        // TODO faut il ajouter 1 à la pioche ?
-        return this;
+        return new CardState(faceUpCards,
+                Deck.of(discard, rng),
+                SortedBag.of(),
+                deckSize(), // TODO bien vérif que les bonnes tailles sont renvoyées
+                disCardSize());
     }
 
     /**
@@ -93,9 +99,12 @@ public final class CardState extends PublicCardState{
      * @return a CardState where the SortedBag of cards is added to the discard
      */
     public CardState withMoreDiscardCards(SortedBag<Card> additionalDiscards){
-        // discard = SortedBag.of(additionalDiscards);
-        discard.union(additionalDiscards); // TODO union ?
-        return this;
+        discard.union(additionalDiscards);
+        return new CardState(faceUpCards,
+                deck,
+                discard.union(additionalDiscards),
+                deckSize(),
+                disCardSize()+additionalDiscards.size());
     }
 
 }
