@@ -38,6 +38,13 @@ class TrailTest {
         System.out.println("================");
         System.out.println(Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(61),
                 ChMapPublic.ALL_ROUTES.get(62), ChMapPublic.ALL_ROUTES.get(70), ChMapPublic.ALL_ROUTES.get(18))));
+        System.out.println("===Test 2 Trails même taille mais nbre de routes différents===");
+        System.out.println(Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(15),
+                ChMapPublic.ALL_ROUTES.get(49), ChMapPublic.ALL_ROUTES.get(17), ChMapPublic.ALL_ROUTES.get(64), ChMapPublic.ALL_ROUTES.get(23),
+                ChMapPublic.ALL_ROUTES.get(24), ChMapPublic.ALL_ROUTES.get(78))));
+        System.out.println(Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(78),
+                ChMapPublic.ALL_ROUTES.get(24), ChMapPublic.ALL_ROUTES.get(17), ChMapPublic.ALL_ROUTES.get(64), ChMapPublic.ALL_ROUTES.get(23),
+                ChMapPublic.ALL_ROUTES.get(49), ChMapPublic.ALL_ROUTES.get(15), ChMapPublic.ALL_ROUTES.get(20))));
 
     }
 
