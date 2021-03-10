@@ -90,9 +90,6 @@ public final class Route {
      * @return the color of the route
      */
     public Color color() {
-        if(color==null){  //TODO
-            return null;
-        }
         return color;
     }
 
@@ -161,10 +158,8 @@ public final class Route {
             if(drawnCard.equals(Card.LOCOMOTIVE)){
                 numberOfAdditionalClaimCards += 1;
             }else{
-                for(Card claimCard: claimCards){
-                    if(drawnCard.equals(claimCard)){
-                        numberOfAdditionalClaimCards += 1;
-                    }
+                if(claimCards.contains(drawnCard)){
+                    numberOfAdditionalClaimCards += 1;
                 }
             }
         }
