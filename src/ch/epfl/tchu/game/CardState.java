@@ -2,7 +2,6 @@ package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,11 +31,12 @@ public final class CardState extends PublicCardState{
      */
     public static CardState of(Deck<Card> deck){
         Preconditions.checkArgument(deck.size()>=Constants.FACE_UP_CARDS_COUNT);
-        List<Card> faceUpCard = List.of();
+        List<Card> faceUpCard = new ArrayList<>();
         for(int slot : Constants.FACE_UP_CARD_SLOTS){
-            faceUpCard.add(deck.topCard());  // TODO immutable obkect is modified
+            faceUpCard.add(deck.topCard());
+            deck = deck.withoutTopCard();
         }
-        return new CardState(faceUpCard, deck.withoutTopCards(5), SortedBag.of());
+        return new CardState(faceUpCard, deck, SortedBag.of());
     }
 
     /**
@@ -48,7 +48,7 @@ public final class CardState extends PublicCardState{
     public CardState withDrawnFaceUpCard(int slot){
         Objects.checkIndex(slot, 5);
         List<Card> faceUpCard = new ArrayList<>(faceUpCards());
-        faceUpCard.set(slot, deck.topCard());  // TODO set ?
+        faceUpCard.set(slot, deck.topCard());
         return new CardState(faceUpCard, deck.withoutTopCard(), SortedBag.of());
     }
 
