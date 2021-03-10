@@ -30,7 +30,7 @@ public final class CardState extends PublicCardState{
      * @throws IllegalArgumentException if the size of the deck is not grater equal than 5
      */
     public static CardState of(Deck<Card> deck){
-        Preconditions.checkArgument(deck.size()>=Constants.FACE_UP_CARDS_COUNT);
+        Preconditions.checkArgument(deck.size() >= Constants.FACE_UP_CARDS_COUNT);
         List<Card> faceUpCard = new ArrayList<>();
         for(int slot : Constants.FACE_UP_CARD_SLOTS){
             faceUpCard.add(deck.topCard());
@@ -47,6 +47,7 @@ public final class CardState extends PublicCardState{
      */
     public CardState withDrawnFaceUpCard(int slot){
         Objects.checkIndex(slot, 5);
+        Preconditions.checkArgument(deckSize() > 0);
         List<Card> faceUpCard = new ArrayList<>(faceUpCards());
         faceUpCard.set(slot, deck.topCard());
         return new CardState(faceUpCard, deck.withoutTopCard(), SortedBag.of());
@@ -91,5 +92,4 @@ public final class CardState extends PublicCardState{
         discard.union(additionalDiscards);
         return new CardState(faceUpCards(), deck, discard.union(additionalDiscards));
     }
-
 }
