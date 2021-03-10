@@ -308,6 +308,8 @@ class RouteTest {
                         drawnB.add(m - locomotives, matchingCard);
                         drawnB.add(3 - m, nonMatchingCard);
                         var drawn = drawnB.build();
+                        System.out.println(m +" || " + r.additionalClaimCardsCount(claimCards, drawn));
+                        System.out.println(claimCards + " || " + drawn);
                         assertEquals(m, r.additionalClaimCardsCount(claimCards, drawn));
                     }
                 }
