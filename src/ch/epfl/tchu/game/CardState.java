@@ -79,7 +79,7 @@ public final class CardState extends PublicCardState{
      * @throws IllegalArgumentException if the deck isn't empty
      */
     public CardState withDeckRecreatedFromDiscard(Random rng){
-        Preconditions.checkArgument(deck.isEmpty());
+        Preconditions.checkArgument(!deck.isEmpty());
         return new CardState(faceUpCards(), Deck.of(discard, rng), SortedBag.of());
     }
 

@@ -76,5 +76,35 @@ public class CardStateTest {
         });
     }
 
+    @Test
+    public void withoutTopCardAFailsWithToSmallDeck(){
+        Deck<Card> deck = deckExactBuilder();
+        CardState cardState = CardState.of(deck);
+        assertThrows(IllegalArgumentException.class, ()->{
+            cardState.withoutTopDeckCard();
+        });
+    }
+
+    @Test
+    public void topDeckCardsWork(){
+        Deck<Card> deck = deckExactBuilder();
+        Deck<Card> deckOk = deckOkBuilder();
+        CardState cardState = CardState.of(deck);
+        CardState cardStateOk = CardState.of(deckOk);
+        assertThrows(IllegalArgumentException.class, ()->{
+            cardState.topDeckCard();
+        });
+//        assertEquals(Card.BLUE, cardStateOk.topDeckCard()); //TODO comment tester vu que c'est random ?
+    }
+
+    @Test
+    public void withDeckRecreatedFailsWithEmptyDeck(){
+        Deck<Card> deck = deckExactBuilder();
+        CardState cardState = CardState.of(deck);
+        assertThrows(IllegalArgumentException.class, ()->{
+            cardState.withDeckRecreatedFromDiscard(new Random());
+        });
+    }
+
     // TODO comment testerr que les bonnes choses sont renvoyées
 }
