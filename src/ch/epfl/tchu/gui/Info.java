@@ -120,7 +120,7 @@ public final class Info {
      * Creates a message for the player's turn
      * @return "C'est à playerName de jouer."
      */
-    public String canPlayer() {
+    public String canPlay() {
         return String.format(StringsFr.CAN_PLAY, playerName);
     }
 
