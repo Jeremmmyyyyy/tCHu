@@ -31,13 +31,13 @@ public final class Info {
      * @return "fromStation - toStation"
      */
     private static String routeName(Route route) {
-        return String.format("%s %s %s", route.station1(), StringsFr.EN_DASH_SEPARATOR, route.station2());
+        return String.join(StringsFr.EN_DASH_SEPARATOR, route.station1().name(), route.station2().name());
     }
 
     /**
      * Creates a textual representation of a set of cards
      * @param cards to put as String
-     * @return "multiplicity1 card1, ... , multiplicityN cardN"
+     * @return "multiplicity1 card1, ... , multiplicityN-1 cardN-1 et multiplicityN cardN"
      */
     private static String cardsName(SortedBag<Card> cards) {
         List<String> cardsName = new ArrayList<>();
@@ -93,7 +93,7 @@ public final class Info {
      * Creates a message in case of a draw
      * @param playerNames players of the game
      * @param points of the draw (of both players)
-     * @return "playerName1 et playerName2 sont ex æqo avec points points !"
+     * @return "\nplayerName1 et playerName2 sont ex æqo avec points points !\n"
      */
     public static String draw(List<String> playerNames, int points) {
         return String.format(StringsFr.DRAW, String.join(StringsFr.AND_SEPARATOR, playerNames), points);
@@ -101,7 +101,7 @@ public final class Info {
 
     /**
      * Displays that the player plays first
-     * @return "playerName jouera en premier."
+     * @return "playerName jouera en premier.\n\n"
      */
     public String willPlayFirst() {
         return String.format(StringsFr.WILL_PLAY_FIRST, playerName);
@@ -110,7 +110,7 @@ public final class Info {
     /**
      * Displays the number of tickets kept by the player
      * @param count number of tickets kept by the player
-     * @return "playerName a gardé count billet(s)."
+     * @return "playerName a gardé count billet(s).\n"
      */
     public String keptTickets(int count) {
         return String.format(StringsFr.KEPT_N_TICKETS, playerName, count);
@@ -118,7 +118,7 @@ public final class Info {
 
     /**
      * Creates a message for the player's turn
-     * @return "C'est à playerName de jouer."
+     * @return "\nC'est à playerName de jouer.\n"
      */
     public String canPlay() {
         return String.format(StringsFr.CAN_PLAY, playerName);
@@ -127,7 +127,7 @@ public final class Info {
     /**
      * Displays the number of card drew by the player
      * @param count number of card drew by the player
-     * @return "playerName a tiré count billet(s)..."
+     * @return "playerName a tiré count billet(s)...\n"
      */
     public String drewTickets(int count) {
         return String.format(StringsFr.DREW_TICKETS, playerName, count);
@@ -135,7 +135,7 @@ public final class Info {
 
     /**
      * Creates a message for the player taking a card from the deck
-     * @return "playerName a tiré une carte de la pioche."
+     * @return "playerName a tiré une carte de la pioche.\n"
      */
     public String drewBlindCard() {
         return String.format(StringsFr.DREW_BLIND_CARD, playerName);
@@ -144,7 +144,7 @@ public final class Info {
     /**
      * Creates a message for the player taking a card from a visible card
      * @param card taken from the player
-     * @return "playerName a tiré une carte card visible."
+     * @return "playerName a tiré une carte card visible.\n"
      */
     public String drewVisibleCard(Card card) {
         return String.format(StringsFr.DREW_VISIBLE_CARD, playerName, cardName(card, 1));
@@ -154,7 +154,7 @@ public final class Info {
      * Creates a message for the player claiming a route
      * @param route claimed by the player
      * @param cards used to claim the route
-     * @return "playerName a pris possession de la route route au moyen de cards."
+     * @return "playerName a pris possession de la route route au moyen de cards.\n"
      */
     public String claimedRoute(Route route, SortedBag<Card> cards) {
         return String.format(StringsFr.CLAIMED_ROUTE, playerName, routeName(route), cardsName(cards));
@@ -164,7 +164,7 @@ public final class Info {
      * Creates a message for the player attempting to claim a tunnel
      * @param route the player wants to claim
      * @param initialCards
-     * @return "playerName tente de s'emparer du tunnel route au moyen de initialCards."
+     * @return "playerName tente de s'emparer du tunnel route au moyen de initialCards.\n"
      */
     public String attemptsTunnelClaim(Route route, SortedBag<Card> initialCards) {
         return String.format(StringsFr.ATTEMPTS_TUNNEL_CLAIM, playerName, routeName(route), cardsName(initialCards));
@@ -175,11 +175,11 @@ public final class Info {
      * @param drawnCards the payer wants to play
      * @param additionalCost number of additional cards that need to be played by the player
      * @return "Les cartes supplémentaires sont drawnCards. "
-     * + "Elles impliquent un coût additionnel de additionalCost carte(s)." if additionalCost != 0
-     * + "Elles n'impliquent aucun coût additionel." else
-     */ //TODO Separe d'un espace ??
+     * + "Elles impliquent un coût additionnel de additionalCost carte(s).\n" if additionalCost != 0
+     * + "Elles n'impliquent aucun coût additionel.\n" else
+     */
     public String drewAdditionalCards(SortedBag<Card> drawnCards, int additionalCost) {
-        return  String.join(" ",
+        return  String.join("",
                 String.format(StringsFr.ADDITIONAL_CARDS_ARE, cardsName(drawnCards)), additionalCost != 0 ?
                 String.format(StringsFr.SOME_ADDITIONAL_COST, additionalCost, StringsFr.plural(additionalCost))
                 : StringsFr.NO_ADDITIONAL_COST);
@@ -188,7 +188,7 @@ public final class Info {
     /**
      * Displays that the player did not or could not claim a route
      * @param route the player wanted to claim
-     * @return "playerName n'a pas pu (ou voulu) s'emparer de la route route."
+     * @return "playerName n'a pas pu (ou voulu) s'emparer de la route route.\n"
      */
     public String didNotClaimRoute(Route route) {
         return String.format(StringsFr.DID_NOT_CLAIM_ROUTE, playerName, routeName(route));
@@ -197,7 +197,7 @@ public final class Info {
     /**
      * Indicates that the last turn begins
      * @param carCount number of player's cards left
-     * @return "playerName n'a plus que carCount wagon(s), le dernier tour commence !"
+     * @return "\nplayerName n'a plus que carCount wagon(s), le dernier tour commence !\n"
      */
     public String lastTurnBegins(int carCount) {
         return String.format(StringsFr.LAST_TURN_BEGINS, playerName, carCount, StringsFr.plural(carCount));
@@ -206,7 +206,7 @@ public final class Info {
     /**
      * Creates a message for the player gaining the longest trail bonus
      * @param longestTrail longest trail of the end-game
-     * @return "playerName reçoit un bonus de 10 points pour le plus long trajet (longestTrail)." //TODO ICI
+     * @return "\nplayerName reçoit un bonus de 10 points pour le plus long trajet (longestTrail).\n" //TODO ICI
      */ //TODO entre parentheses longueur du chemin ou toString du chemin ?
     public String getsLongestTrailBonus(Trail longestTrail) {
         return String.format(StringsFr.GETS_BONUS, playerName, String.join(StringsFr.EN_DASH_SEPARATOR,
@@ -217,7 +217,7 @@ public final class Info {
      * Displays the winner
      * @param points of the winner
      * @param loserPoints of the looser
-     * @return "playerName remporte la victoire avec points points, contre loserPoints points."
+     * @return "\nplayerName remporte la victoire avec points points, contre loserPoints points.\n"
      */
     public String won(int points, int loserPoints) {
         return String.format(StringsFr.WINS, playerName, points, loserPoints);
