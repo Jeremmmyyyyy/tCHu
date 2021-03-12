@@ -3,7 +3,6 @@ package ch.epfl.tchu.game;
 import ch.epfl.tchu.SortedBag;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Random;
 
 
@@ -102,7 +101,7 @@ public class CardStateTest {
         Deck<Card> deck = deckExactBuilder();
         CardState cardState = CardState.of(deck);
         assertThrows(IllegalArgumentException.class, ()->{
-            cardState.withDeckRecreatedFromDiscard(new Random());
+            cardState.withDeckRecreatedFromDiscards(new Random());
         });
     }
 

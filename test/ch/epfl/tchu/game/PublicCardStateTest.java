@@ -55,7 +55,7 @@ public class PublicCardStateTest {
             test.faceUpCard(6);
         });
         assertEquals(5, test.deckSize());
-        assertEquals(12, test.disCardSize());
+        assertEquals(12, test.discardsSize());
         assertFalse(test.isDeckEmpty());
     }
 

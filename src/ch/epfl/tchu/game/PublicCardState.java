@@ -84,7 +84,7 @@ public class PublicCardState {
      * return the size of the discard
      * @return the size of the discard
      */
-    public int disCardSize(){
+    public int discardsSize(){
         return discardSize;
     }
 }
