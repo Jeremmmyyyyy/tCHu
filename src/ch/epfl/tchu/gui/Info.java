@@ -46,8 +46,12 @@ public final class Info {
             cardsName.add(String.format("%s %s", i, cardName(card, i)));
         }
         int lastIndex = cardsName.size() - 1;
+        if (lastIndex <= 0) { //if only one type of cards
+            return cardsName.get(0);
+        }
         return String.format("%s et %s",
                 String.join(", ", cardsName.subList(0, lastIndex)), cardsName.get(lastIndex));
+
     }
 
     /**
