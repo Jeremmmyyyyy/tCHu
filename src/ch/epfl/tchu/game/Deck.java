@@ -58,9 +58,9 @@ public final class Deck<C extends Comparable<C>> {
      * @return the top card of the deck, last here in case of a stack
      * @throws IllegalArgumentException if the deck is empty
      */
-    public C topCard() { //TODO bien a la fin ??? commme une pile ?
+    public C topCard() {
         Preconditions.checkArgument(!isEmpty());
-        return cards.get(size() - 1);
+        return cards.get(0);
     }
 
     /**
@@ -70,7 +70,7 @@ public final class Deck<C extends Comparable<C>> {
      */
     public Deck<C> withoutTopCard() {
         Preconditions.checkArgument(!isEmpty());
-        return new Deck<>(cards.subList(0, size() - 1));
+        return new Deck<>(cards.subList(1, size()));
     }
 
     /**
@@ -81,7 +81,7 @@ public final class Deck<C extends Comparable<C>> {
      */
     public SortedBag<C> topCards(int count) {
         Preconditions.checkArgument(0 <= count && count <= size());
-        List<C> topCardsList = cards.subList(size() - count, size());
+        List<C> topCardsList = cards.subList(0, count);
         SortedBag.Builder<C> topCards = new SortedBag.Builder<>();
         for (C card : topCardsList) {
             topCards.add(card);
@@ -97,7 +97,7 @@ public final class Deck<C extends Comparable<C>> {
      */
     public Deck<C> withoutTopCards(int count) {
         Preconditions.checkArgument(0 <= count && count <= size());
-        return new Deck<>(cards.subList(0, size() - count));
+        return new Deck<>(cards.subList(count, size()));
 
     }
 }
