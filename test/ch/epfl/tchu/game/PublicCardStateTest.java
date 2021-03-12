@@ -11,7 +11,7 @@ public class PublicCardStateTest {
 
     List<Card> faceUpCards6 = List.of(Card.BLUE, Card.RED, Card.BLACK, Card.LOCOMOTIVE, Card.ORANGE, Card.BLUE);
     List<Card> faceUpCards5 = List.of(Card.BLUE, Card.RED, Card.ORANGE, Card.LOCOMOTIVE, Card.ORANGE);
-//    List<Card> faceUpCardsProblem = List.of(null, Card.RED, Card.ORANGE, Card.LOCOMOTIVE, Card.ORANGE);
+    List<Card> faceUpCardsProblem = List.of(null, Card.RED, Card.ORANGE, Card.LOCOMOTIVE, Card.ORANGE);
     List<Card> faceUpCards4 = List.of(Card.BLUE, Card.RED, Card.BLACK, Card.LOCOMOTIVE);
     List<Card> faceUpCardsEmpty = List.of();
 
@@ -30,8 +30,9 @@ public class PublicCardStateTest {
             PublicCardState test1 = new PublicCardState(faceUpCards5, -5,-5);
         });
 //        assertThrows(IllegalArgumentException.class, () ->{
-//            PublicCardState test1 = new PublicCardState(faceUpCardsProblem, -5,-5);
+//            PublicCardState test1 = new PublicCardState(faceUpCardsProblem, 5,5);
 //        });
+
 //        assertThrows(IllegalArgumentException.class, () ->{
 //            PublicCardState test1 = new PublicCardState(null, 5,5);
 //        }); //TODO si faceUpCards null ?
@@ -55,6 +56,4 @@ public class PublicCardStateTest {
         assertEquals(12, test.discardsSize());
         assertFalse(test.isDeckEmpty());
     }
-
-    //TODO faire un test si on modifie faceUpCards -> copie est modif ?
 }

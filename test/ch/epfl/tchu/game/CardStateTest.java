@@ -137,7 +137,7 @@ public class CardStateTest {
         Deck<Card> deck = deckExactBuilder();
         CardState cardState = CardState.of(deck);
         assertThrows(IllegalArgumentException.class, ()->{
-            cardState.withDeckRecreatedFromDiscards(new Random());  //TODO comment tester que le deck est recréé à partir de la discard vu que l'on a pas accès à la discard ?
+            cardState.withDeckRecreatedFromDiscards(new Random());
         });
     }
 
