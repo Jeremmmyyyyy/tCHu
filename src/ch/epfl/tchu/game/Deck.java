@@ -14,7 +14,7 @@ import java.util.List;
  */
 public final class Deck<C extends Comparable<C>> {
 
-    private List<C> cards;
+    private final List<C> cards;
 
     /**
      * Private constructor of the class Deck
