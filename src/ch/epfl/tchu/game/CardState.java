@@ -78,7 +78,7 @@ public final class CardState extends PublicCardState{
      * @return a new CardState with a new deck regenerated from the discard that was mixed
      * @throws IllegalArgumentException if the deck isn't empty
      */
-    public CardState withDeckRecreatedFromDiscard(Random rng){
+    public CardState withDeckRecreatedFromDiscards(Random rng){
         Preconditions.checkArgument(!deck.isEmpty());
         return new CardState(faceUpCards(), Deck.of(discard, rng), SortedBag.of());
     }
@@ -88,7 +88,7 @@ public final class CardState extends PublicCardState{
      * @param additionalDiscards SortedBag of Cards that will be added to the discard
      * @return a CardState where the SortedBag of cards is added to the discard
      */
-    public CardState withMoreDiscardCards(SortedBag<Card> additionalDiscards){
+    public CardState withMoreDiscardedCards(SortedBag<Card> additionalDiscards){
         discard.union(additionalDiscards);
         return new CardState(faceUpCards(), deck, discard.union(additionalDiscards));
     }
