@@ -58,7 +58,7 @@ public final class Deck<C extends Comparable<C>> {
      * @return the top card of the deck, last here in case of a stack
      * @throws IllegalArgumentException if the deck is empty
      */
-    public C topCard() {
+    public C topCard() { //TODO bien a la fin ??? commme une pile ?
         Preconditions.checkArgument(!isEmpty());
         return cards.get(size() - 1);
     }

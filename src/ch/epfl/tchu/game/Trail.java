@@ -45,7 +45,7 @@ public final class  Trail {
             finishedTrails.add(new Trail(route.station1(), route.station2(), List.of(route), route.length()));
             finishedTrails.add(new Trail(route.station2(), route.station1(), List.of(route), route.length()));
         }
-        Trail longestTrail = listOfTrailsToExtend.get(0);
+        Trail longestTrail = new Trail(null, null, null, 0);
         while(!listOfTrailsToExtend.isEmpty()){
             //refreshes the longestTrail at each step
             for (Trail trail : listOfTrailsToExtend) {
