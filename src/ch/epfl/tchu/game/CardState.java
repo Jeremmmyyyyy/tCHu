@@ -46,7 +46,7 @@ public final class CardState extends PublicCardState{
      * @throws IndexOutOfBoundsException if the slot is out of bound 0,5
      */
     public CardState withDrawnFaceUpCard(int slot){
-        Objects.checkIndex(slot, 5);
+        Objects.checkIndex(slot, Constants.FACE_UP_CARDS_COUNT);
         Preconditions.checkArgument(deckSize() > 0);
         List<Card> faceUpCard = new ArrayList<>(faceUpCards());
         faceUpCard.set(slot, deck.topCard());
@@ -79,7 +79,7 @@ public final class CardState extends PublicCardState{
      * @throws IllegalArgumentException if the deck isn't empty
      */
     public CardState withDeckRecreatedFromDiscards(Random rng){
-        Preconditions.checkArgument(!deck.isEmpty());
+        Preconditions.checkArgument(deck.isEmpty());
         return new CardState(faceUpCards(), Deck.of(discard, rng), SortedBag.of());
     }
 
@@ -89,6 +89,6 @@ public final class CardState extends PublicCardState{
      * @return a CardState where the SortedBag of cards is added to the discard
      */
     public CardState withMoreDiscardedCards(SortedBag<Card> additionalDiscards){
-        return new CardState(faceUpCards(), deck, discard.union(additionalDiscards)); // TODO test ne marche pas
+        return new CardState(faceUpCards(), deck, discard.union(additionalDiscards));
     }
 }

@@ -46,12 +46,11 @@ public class CardStateTest {
     }
 
     @Test
-    public void CardStateOfTestWithTooSmallDeck(){
+    public void CardStateOfTestWithTooSmallDeck() {
         Deck<Card> deck = deckTooSmallBuilder();
-        assertThrows(IllegalArgumentException.class, ()->{
+        assertThrows(IllegalArgumentException.class, () -> {
             CardState test = CardState.of(deck);
         });
-
     }
 
     @Test
@@ -127,8 +126,8 @@ public class CardStateTest {
     }
 
     @Test
-    public void withDeckRecreatedFailsWithEmptyDeck(){
-        Deck<Card> deck = deckExactBuilder();
+    public void withDeckRecreatedFailsWithNotEmptyDeck(){
+        Deck<Card> deck = deckOkBuilder();
         CardState cardState = CardState.of(deck);
         assertThrows(IllegalArgumentException.class, ()->{
             cardState.withDeckRecreatedFromDiscards(new Random());
@@ -147,23 +146,21 @@ public class CardStateTest {
         SortedBag<Card> deckInBag =  cards0.union(cards1.union(cards2.union(cards3.union(cards4))));
 
         cardState =  cardState.withMoreDiscardedCards(deckInBag);
-        System.out.println(deckInBag +" "+ deckInBag.size());
         assertEquals(5, cardState.faceUpCards().size());
         assertEquals(85, cardState.deckSize());
         assertEquals(90, cardState.discardsSize());
 
-//        Deck<Card> deck1 = deckExactBuilder();
-//        CardState cardState1 = CardState.of(deck1);
-//        cardState1 = cardState1.withMoreDiscardedCards(deckInBag);
-//        assertEquals(5, cardState1.faceUpCards().size());
-//        assertEquals(0, cardState1.deckSize());
-//        assertEquals(90, cardState1.discardsSize());
+        Deck<Card> deck1 = deckExactBuilder();
+        CardState cardState1 = CardState.of(deck1);
+        cardState1 = cardState1.withMoreDiscardedCards(deckInBag);
+        assertEquals(5, cardState1.faceUpCards().size());
+        assertEquals(0, cardState1.deckSize());
+        assertEquals(90, cardState1.discardsSize());
 
-//        cardState1 = cardState1.withDeckRecreatedFromDiscards(new Random());
-//        assertEquals(5, cardState1.faceUpCards().size());
-//        assertEquals(90, cardState1.deckSize());
-//        assertEquals(0, cardState1.discardsSize());
-
+        cardState1 = cardState1.withDeckRecreatedFromDiscards(new Random());
+        assertEquals(5, cardState1.faceUpCards().size());
+        assertEquals(90, cardState1.deckSize());
+        assertEquals(0, cardState1.discardsSize());
     }
 
 
