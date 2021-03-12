@@ -11,7 +11,7 @@ public class PublicCardStateTest {
 
     List<Card> faceUpCards6 = List.of(Card.BLUE, Card.RED, Card.BLACK, Card.LOCOMOTIVE, Card.ORANGE, Card.BLUE);
     List<Card> faceUpCards5 = List.of(Card.BLUE, Card.RED, Card.ORANGE, Card.LOCOMOTIVE, Card.ORANGE);
-    List<Card> faceUpCardsProblem = List.of(null, Card.RED, Card.ORANGE, Card.LOCOMOTIVE, Card.ORANGE);
+//    List<Card> faceUpCardsProblem = List.of(null, Card.RED, Card.ORANGE, Card.LOCOMOTIVE, Card.ORANGE);
     List<Card> faceUpCards4 = List.of(Card.BLUE, Card.RED, Card.BLACK, Card.LOCOMOTIVE);
     List<Card> faceUpCardsEmpty = List.of();
 

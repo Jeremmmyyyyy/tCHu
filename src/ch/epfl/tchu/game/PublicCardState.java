@@ -29,7 +29,7 @@ public class PublicCardState {
      * @throws IllegalArgumentException if the size of the discard is negative
      */
     public PublicCardState(List<Card> faceUpCards, int deckSize, int discardSize){
-        Preconditions.checkArgument(faceUpCards.size() == 5);
+        Preconditions.checkArgument(faceUpCards.size() == Constants.FACE_UP_CARDS_COUNT);
         Preconditions.checkArgument(deckSize >= 0);
         Preconditions.checkArgument(discardSize >= 0);
         this.faceUpCards = List.copyOf(faceUpCards);
