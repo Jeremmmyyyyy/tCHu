@@ -33,7 +33,7 @@ public final class CardState extends PublicCardState{
         Preconditions.checkArgument(deck.size() >= Constants.FACE_UP_CARDS_COUNT);
         List<Card> faceUpCard = new ArrayList<>();
         for(int slot : Constants.FACE_UP_CARD_SLOTS){
-            faceUpCard.add(deck.topCard());
+            faceUpCard.add(slot, deck.topCard());
             deck = deck.withoutTopCard();
         }
         return new CardState(faceUpCard, deck, SortedBag.of());

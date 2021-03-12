@@ -2,15 +2,9 @@ package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.SortedBag;
 import org.junit.jupiter.api.Test;
-
 import java.util.Random;
-
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CardStateTest {
 
@@ -152,22 +146,23 @@ public class CardStateTest {
         SortedBag<Card> cards4 = SortedBag.of(10, Card.LOCOMOTIVE);
         SortedBag<Card> deckInBag =  cards0.union(cards1.union(cards2.union(cards3.union(cards4))));
 
-        cardState.withMoreDiscardedCards(deckInBag);
+        cardState =  cardState.withMoreDiscardedCards(deckInBag);
         System.out.println(deckInBag +" "+ deckInBag.size());
         assertEquals(5, cardState.faceUpCards().size());
         assertEquals(85, cardState.deckSize());
         assertEquals(90, cardState.discardsSize());
 
-        Deck<Card> deck1 = deckExactBuilder();
-        CardState cardState1 = CardState.of(deck1);
-        cardState1.withMoreDiscardedCards(deckInBag);
-        assertEquals(5, cardState1.faceUpCards().size());
-        assertEquals(0, cardState1.deckSize());
-        assertEquals(90, cardState1.discardsSize());
-        cardState1.withDeckRecreatedFromDiscards(new Random());
-        assertEquals(5, cardState1.faceUpCards().size());
-        assertEquals(90, cardState1.deckSize());
-        assertEquals(0, cardState1.discardsSize());
+//        Deck<Card> deck1 = deckExactBuilder();
+//        CardState cardState1 = CardState.of(deck1);
+//        cardState1 = cardState1.withMoreDiscardedCards(deckInBag);
+//        assertEquals(5, cardState1.faceUpCards().size());
+//        assertEquals(0, cardState1.deckSize());
+//        assertEquals(90, cardState1.discardsSize());
+
+//        cardState1 = cardState1.withDeckRecreatedFromDiscards(new Random());
+//        assertEquals(5, cardState1.faceUpCards().size());
+//        assertEquals(90, cardState1.deckSize());
+//        assertEquals(0, cardState1.discardsSize());
 
     }
 
