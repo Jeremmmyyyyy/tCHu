@@ -13,11 +13,11 @@ public class PublicCardState {
     /**
      * List of 5 Cards that are shown on the board, final because we want an immutable class
      */
-    public final List<Card> faceUpCards;
+    private final List<Card> faceUpCards;
     /**
      * final integer values for the size of the deck and discard
      */
-    public final int deckSize, discardSize; // TODO PUBLIQUE ?
+    private final int deckSize, discardSize;
 
     /**
      * create the board infos and set the cards that are known by the player
@@ -29,10 +29,10 @@ public class PublicCardState {
      * @throws IllegalArgumentException if the size of the discard is negative
      */
     public PublicCardState(List<Card> faceUpCards, int deckSize, int discardSize){
-        Preconditions.checkArgument(faceUpCards.size() > 5);
-        Preconditions.checkArgument(deckSize > 0);
-        Preconditions.checkArgument(discardSize > 0);
-        this.faceUpCards = faceUpCards;
+        Preconditions.checkArgument(faceUpCards.size() == 5);
+        Preconditions.checkArgument(deckSize >= 0);
+        Preconditions.checkArgument(discardSize >= 0);
+        this.faceUpCards = List.copyOf(faceUpCards);
         this.deckSize = deckSize;
         this.discardSize = discardSize;
     }
@@ -50,7 +50,7 @@ public class PublicCardState {
      * @return a copy of the faceUpCards
      */
     public List<Card> faceUpCards(){
-        return List.copyOf(faceUpCards); //TODO Copy ?
+        return faceUpCards;
     }
 
     /**

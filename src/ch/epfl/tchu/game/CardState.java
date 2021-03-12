@@ -2,6 +2,7 @@ package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -12,12 +13,12 @@ import java.util.Random;
  */
 public final class CardState extends PublicCardState{
 
-    private final Deck<Card> deck; //TODO final ?
+    private final Deck<Card> deck;
     private final SortedBag<Card> discard;
 
 
-    private CardState(List<Card> faceUpCards, Deck<Card> deck, SortedBag<Card> discard, int deckSize, int discardSize) {  // TODO decksize et discardsize nécessaires ?
-        super(faceUpCards, deckSize, discardSize);
+    private CardState(List<Card> faceUpCards, Deck<Card> deck, SortedBag<Card> discard) {
+        super(faceUpCards, deck.size(), discard.size());
         this.deck = deck;
         this.discard = discard;
     }
@@ -29,12 +30,13 @@ public final class CardState extends PublicCardState{
      * @throws IllegalArgumentException if the size of the deck is not grater equal than 5
      */
     public static CardState of(Deck<Card> deck){
-        Preconditions.checkArgument(deck.size()>=Constants.FACE_UP_CARDS_COUNT);
-        return new CardState(deck.topCards(Constants.FACE_UP_CARDS_COUNT).toList(),
-                            deck.withoutTopCards(5),
-                            SortedBag.of(),
-                    deck.size()-Constants.FACE_UP_CARDS_COUNT,
-                    0);
+        Preconditions.checkArgument(deck.size() >= Constants.FACE_UP_CARDS_COUNT);
+        List<Card> faceUpCard = new ArrayList<>();
+        for(int slot : Constants.FACE_UP_CARD_SLOTS){
+            faceUpCard.add(deck.topCard());
+            deck = deck.withoutTopCard();
+        }
+        return new CardState(faceUpCard, deck, SortedBag.of());
     }
 
     /**
@@ -45,14 +47,10 @@ public final class CardState extends PublicCardState{
      */
     public CardState withDrawnFaceUpCard(int slot){
         Objects.checkIndex(slot, 5);
-        List<Card> faceUpCard = List.copyOf(faceUpCards);
-        faceUpCard.set(slot, deck.topCard()); // TODO alerte immutable object is modified
-        //TODO renvoyer ,un new cardstate et non this ?
-        return new CardState(faceUpCard,
-                deck.withoutTopCard(),
-                SortedBag.of(),
-                deckSize()-1,
-                disCardSize()+1);
+        Preconditions.checkArgument(deckSize() > 0);
+        List<Card> faceUpCard = new ArrayList<>(faceUpCards());
+        faceUpCard.set(slot, deck.topCard());
+        return new CardState(faceUpCard, deck.withoutTopCard(), SortedBag.of());
     }
 
     /**
@@ -71,11 +69,7 @@ public final class CardState extends PublicCardState{
      */
     public CardState withoutTopDeckCard(){
         Preconditions.checkArgument(!deck.isEmpty());
-        return new CardState(faceUpCards,
-                deck.withoutTopCard(),
-                SortedBag.of(),
-                deckSize(), // TODO bien vérif que les bonnes tailles sont renvoyées
-                disCardSize());
+        return new CardState(faceUpCards(), deck.withoutTopCard(), SortedBag.of());
     }
 
     /**
@@ -85,12 +79,8 @@ public final class CardState extends PublicCardState{
      * @throws IllegalArgumentException if the deck isn't empty
      */
     public CardState withDeckRecreatedFromDiscard(Random rng){
-        Preconditions.checkArgument(deck.isEmpty());
-        return new CardState(faceUpCards,
-                Deck.of(discard, rng),
-                SortedBag.of(),
-                deckSize(), // TODO bien vérif que les bonnes tailles sont renvoyées
-                disCardSize());
+        Preconditions.checkArgument(!deck.isEmpty());
+        return new CardState(faceUpCards(), Deck.of(discard, rng), SortedBag.of());
     }
 
     /**
@@ -100,11 +90,6 @@ public final class CardState extends PublicCardState{
      */
     public CardState withMoreDiscardCards(SortedBag<Card> additionalDiscards){
         discard.union(additionalDiscards);
-        return new CardState(faceUpCards,
-                deck,
-                discard.union(additionalDiscards),
-                deckSize(),
-                disCardSize()+additionalDiscards.size());
+        return new CardState(faceUpCards(), deck, discard.union(additionalDiscards));
     }
-
 }
