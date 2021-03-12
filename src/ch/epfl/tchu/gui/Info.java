@@ -18,10 +18,10 @@ public final class Info {
     private String playerName;
 
     /**
-     * Constructor of the class Info //TODO constructeur prive ou public ???
+     * Constructor of the class Info
      * @param playerName of the given player attached to ingame information
      */
-    Info(String playerName) {
+    public Info(String playerName) {
         this.playerName = playerName;
     }
 
@@ -117,52 +117,108 @@ public final class Info {
     }
 
     /**
-     *
-     * @return
+     * Creates a message for the player's turn
+     * @return "C'est à playerName de jouer."
      */
     public String canPlayer() {
         return String.format(StringsFr.CAN_PLAY, playerName);
     }
 
+    /**
+     * Displays the number of card drew by the player
+     * @param count number of card drew by the player
+     * @return "playerName a tiré count billet(s)..."
+     */
     public String drewTickets(int count) {
         return String.format(StringsFr.DREW_TICKETS, playerName, count);
     }
 
+    /**
+     * Creates a message for the player taking a card from the deck
+     * @return "playerName a tiré une carte de la pioche."
+     */
     public String drewBlindCard() {
         return String.format(StringsFr.DREW_BLIND_CARD, playerName);
     }
 
+    /**
+     * Creates a message for the player taking a card from a visible card
+     * @param card taken from the player
+     * @return "playerName a tiré une carte card visible."
+     */
     public String drewVisibleCard(Card card) {
         return String.format(StringsFr.DREW_VISIBLE_CARD, playerName, cardName(card, 1));
     }
 
+    /**
+     * Creates a message for the player claiming a route
+     * @param route claimed by the player
+     * @param cards used to claim the route
+     * @return "playerName a pris possession de la route route au moyen de cards."
+     */
     public String claimedRoute(Route route, SortedBag<Card> cards) {
         return String.format(StringsFr.CLAIMED_ROUTE, playerName, routeName(route), cardsName(cards));
     }
 
+    /**
+     * Creates a message for the player attempting to claim a tunnel
+     * @param route the player wants to claim
+     * @param initialCards
+     * @return "playerName tente de s'emparer du tunnel route au moyen de initialCards."
+     */
     public String attemptsTunnelClaim(Route route, SortedBag<Card> initialCards) {
         return String.format(StringsFr.ATTEMPTS_TUNNEL_CLAIM, playerName, routeName(route), cardsName(initialCards));
     }
 
+    /**
+     * Creates a message to indicate the number of additional cards that need to be played by the player
+     * @param drawnCards the payer wants to play
+     * @param additionalCost number of additional cards that need to be played by the player
+     * @return "Les cartes supplémentaires sont drawnCards. "
+     * + "Elles impliquent un coût additionnel de additionalCost carte(s)." if additionalCost != 0
+     * + "Elles n'impliquent aucun coût additionel." else
+     */ //TODO Separe d'un espace ??
     public String drewAdditionalCards(SortedBag<Card> drawnCards, int additionalCost) {
-        return String.join(" ",
-                String.format(StringsFr.ADDITIONAL_CARDS_ARE, cardsName(drawnCards)),
-                String.format(StringsFr.SOME_ADDITIONAL_COST, additionalCost, StringsFr.plural(additionalCost)));
+        return  String.join(" ",
+                String.format(StringsFr.ADDITIONAL_CARDS_ARE, cardsName(drawnCards)), additionalCost != 0 ?
+                String.format(StringsFr.SOME_ADDITIONAL_COST, additionalCost, StringsFr.plural(additionalCost))
+                : StringsFr.NO_ADDITIONAL_COST);
     }
 
+    /**
+     * Displays that the player did not or could not claim a route
+     * @param route the player wanted to claim
+     * @return "playerName n'a pas pu (ou voulu) s'emparer de la route route."
+     */
     public String didNotClaimRoute(Route route) {
         return String.format(StringsFr.DID_NOT_CLAIM_ROUTE, playerName, routeName(route));
     }
 
+    /**
+     * Indicates that the last turn begins
+     * @param carCount number of player's cards left
+     * @return "playerName n'a plus que carCount wagon(s), le dernier tour commence !"
+     */
     public String lastTurnBegins(int carCount) {
         return String.format(StringsFr.LAST_TURN_BEGINS, playerName, carCount, StringsFr.plural(carCount));
     }
 
+    /**
+     * Creates a message for the player gaining the longest trail bonus
+     * @param longestTrail longest trail of the end-game
+     * @return "playerName reçoit un bonus de 10 points pour le plus long trajet (longestTrail)." //TODO ICI
+     */ //TODO entre parentheses longueur du chemin ou toString du chemin ?
     public String getsLongestTrailBonus(Trail longestTrail) {
         return String.format(StringsFr.GETS_BONUS, playerName, String.join(StringsFr.EN_DASH_SEPARATOR,
                 longestTrail.station1().name(),longestTrail.station2().name()));
     }
 
+    /**
+     * Displays the winner
+     * @param points of the winner
+     * @param loserPoints of the looser
+     * @return "playerName remporte la victoire avec points points, contre loserPoints points."
+     */
     public String won(int points, int loserPoints) {
         return String.format(StringsFr.WINS, playerName, points, loserPoints);
     }
