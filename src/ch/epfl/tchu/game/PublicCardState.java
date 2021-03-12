@@ -60,7 +60,7 @@ public class PublicCardState {
      * @throws IndexOutOfBoundsException if the slot is out of bound à 0,5
      */
     public Card faceUpCard(int slot){
-        Objects.checkIndex(slot, 5);
+        Objects.checkIndex(slot, Constants.FACE_UP_CARDS_COUNT);
         return faceUpCards.get(slot);
     }
 
