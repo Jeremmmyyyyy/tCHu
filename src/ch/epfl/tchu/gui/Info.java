@@ -113,7 +113,7 @@ public final class Info {
      * @return "playerName a gardé count billet(s).\n"
      */
     public String keptTickets(int count) {
-        return String.format(StringsFr.KEPT_N_TICKETS, playerName, count);
+        return String.format(StringsFr.KEPT_N_TICKETS, playerName, count, StringsFr.plural(count));
     }
 
     /**
@@ -130,7 +130,7 @@ public final class Info {
      * @return "playerName a tiré count billet(s)...\n"
      */
     public String drewTickets(int count) {
-        return String.format(StringsFr.DREW_TICKETS, playerName, count);
+        return String.format(StringsFr.DREW_TICKETS, playerName, count, StringsFr.plural(count));
     }
 
     /**
@@ -164,7 +164,7 @@ public final class Info {
      * Creates a message for the player attempting to claim a tunnel
      * @param route the player wants to claim
      * @param initialCards
-     * @return "playerName tente de s'emparer du tunnel route au moyen de initialCards.\n"
+     * @return "playerName tente de s'emparer du tunnel route au moyen de initialCards !\n"
      */
     public String attemptsTunnelClaim(Route route, SortedBag<Card> initialCards) {
         return String.format(StringsFr.ATTEMPTS_TUNNEL_CLAIM, playerName, routeName(route), cardsName(initialCards));
@@ -206,8 +206,8 @@ public final class Info {
     /**
      * Creates a message for the player gaining the longest trail bonus
      * @param longestTrail longest trail of the end-game
-     * @return "\nplayerName reçoit un bonus de 10 points pour le plus long trajet (longestTrail).\n" //TODO ICI
-     */ //TODO entre parentheses longueur du chemin ou toString du chemin ?
+     * @return "\nplayerName reçoit un bonus de 10 points pour le plus long trajet (longestTrail).\n"
+     */
     public String getsLongestTrailBonus(Trail longestTrail) {
         return String.format(StringsFr.GETS_BONUS, playerName, String.join(StringsFr.EN_DASH_SEPARATOR,
                 longestTrail.station1().name(),longestTrail.station2().name()));
@@ -217,10 +217,11 @@ public final class Info {
      * Displays the winner
      * @param points of the winner
      * @param loserPoints of the looser
-     * @return "\nplayerName remporte la victoire avec points points, contre loserPoints points.\n"
+     * @return "\nplayerName remporte la victoire avec points points, contre loserPoints points !\n"
      */
     public String won(int points, int loserPoints) {
-        return String.format(StringsFr.WINS, playerName, points, loserPoints);
+        return String.format(StringsFr.WINS, playerName,
+                points, StringsFr.plural(points), loserPoints, StringsFr.plural(loserPoints));
     }
 
 }
