@@ -80,6 +80,9 @@ class InfoTest {
         SortedBag<Card> cards = SortedBag.of(3, Card.BLUE, 2, Card.YELLOW);
         assertEquals("Luc a pris possession de la route Autriche – Saint-Gall au moyen de 3 bleues et 2 jaunes.\n",
                 gui.claimedRoute(ChMapPublic.ALL_ROUTES.get(0), cards));
+        SortedBag<Card> cards1 = SortedBag.of(3, Card.BLUE);
+        assertEquals("Luc a pris possession de la route Autriche – Saint-Gall au moyen de 3 bleues.\n",
+                gui.claimedRoute(ChMapPublic.ALL_ROUTES.get(0), cards1));
     }
 
     @Test
