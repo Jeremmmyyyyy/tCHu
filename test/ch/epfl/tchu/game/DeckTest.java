@@ -41,10 +41,10 @@ class DeckTest {
 //        Random rng = new Random(24973458);
 //        Deck<Card> deck = Deck.of(cards, rng);
 //        for (Card card : deck.cards) {
-//            System.out.println(card + ", ");
+//            System.out.print(card + ", ");
 //        }
 //        System.out.println();
-//        System.out.println(deck.topCard());
+//        System.out.println("TopCard :c" + deck.topCard());
 //    }
 //
 //    @Test
@@ -61,9 +61,13 @@ class DeckTest {
 //        Deck<Card> deck = Deck.of(cards, new Random(398474));
 //        int l = deck.size() - 1;
 //        Deck<Card> deckWithoutTopCard = deck.withoutTopCard();
-//        deck.cards.remove(l);
-//        for (int i = 0; i < deck.size(); ++i) {
-//            assertEquals(deck.cards.get(i), deckWithoutTopCard.cards.get(i));
+//        System.out.println("Deck normal :");
+//        for (Card card : deck.cards) {
+//            System.out.print(card + ", ");
+//        }
+//        System.out.println("\nDeckWithoutTopCard :");
+//        for (Card card : deckWithoutTopCard.cards) {
+//            System.out.print(card + ", ");
 //        }
 //    }
 //
@@ -88,13 +92,14 @@ class DeckTest {
 //    void withoutTopCards() {
 //        SortedBag<Card> cards = SortedBag.of(3, Card.YELLOW, 4, Card.BLUE);
 //        Deck<Card> deck = Deck.of(cards, new Random(398474));
-//        int l = deck.cards.size();
-//        Deck<Card> deckWithoutTopCards = deck.withoutTopCards(3);
-//        for (int i = 1; i <= 3; ++i) {
-//            deck.cards.remove(l - i);
+//        Deck<Card> deckWithout3TopCards = deck.withoutTopCards(3);
+//        System.out.println("Deck de depart : ");
+//        for (Card card : deck.cards) {
+//            System.out.print(card + ", ");
 //        }
-//        for (int i = 0; i < deck.size(); ++i) {
-//            assertEquals(deck.cards.get(i), deckWithoutTopCards.cards.get(i));
+//        System.out.println("\nDeckWithout3TopCards :");
+//        for (Card card : deckWithout3TopCards.cards) {
+//            System.out.print(card + ", ");
 //        }
 //    }
 //
@@ -103,13 +108,15 @@ class DeckTest {
 //        SortedBag<Card> cards = SortedBag.of(3, Card.YELLOW, 4, Card.BLUE);
 //        Deck<Card> deck = Deck.of(cards, new Random(398474));
 //        int l = deck.size();
-//        Deck<Card> deckWithoutTopCards = deck.withoutTopCards(l);
-//        deck.cards.clear();
-//        assertTrue(deck.isEmpty());
-//        for (Card card : deckWithoutTopCards.cards) {
-//            System.out.print(card + "/ ");
+//        Deck<Card> deckWithoutCards = deck.withoutTopCards(l);
+//        System.out.println("Deck normal :");
+//        for (Card card : deck.cards) {
+//            System.out.print(card + ", ");
 //        }
-//        assertEquals(0, deckWithoutTopCards.size());
+//        System.out.println("\nDeckWithoutAllCards :");
+//        for (Card card : deckWithoutCards.cards) {
+//            System.out.print(card + ", ");
+//        }
 //    }
 //
 //    @Test
@@ -127,7 +134,7 @@ class DeckTest {
 //        for (Card card : deck.cards) {
 //            System.out.print(card + ", ");
 //        }
-//        System.out.println("============");
+//        System.out.println();
 //        SortedBag<Card> topCards = deck.topCards(3);
 //        for (Card card : topCards) {
 //            System.out.print(card + ", ");
@@ -146,6 +153,47 @@ class DeckTest {
 //        SortedBag<Card> noCards = deck.topCards(0);
 //        assertTrue(noCards.isEmpty());
 //    }
-
+//
+//    @Test
+//    void hugeTest() {
+//        System.out.println("==================== Huge test ====================");
+//        SortedBag<Card> cards1 = SortedBag.of(3, Card.BLUE, 2, Card.LOCOMOTIVE);
+//        SortedBag<Card> cards2 = SortedBag.of(1, Card.BLACK, 5, Card.BLUE);
+//        SortedBag<Card> cards3 = SortedBag.of(1, Card.YELLOW, 1, Card.WHITE);
+//        SortedBag<Card> cards4 = SortedBag.of(3, Card.ORANGE, 1, Card.RED);
+//        SortedBag<Card> cards5 = SortedBag.of(2, Card.LOCOMOTIVE, 2, Card.GREEN);
+//        Random rng = new Random();
+//        SortedBag<Card> cards = cards1.union(cards2.union(cards3.union(cards4.union(cards5))));
+//        Deck<Card> deck = Deck.of(cards, rng);
+//        System.out.println("Initial deck : ");
+//        for (Card card : deck.cards) {
+//            System.out.print(card + ", ");
+//        }
+//        System.out.println("\nTop card : " + deck.topCard());
+//        System.out.println("5 top cards : " + deck.topCards(5));
+//        System.out.println("deck.size() top cards : " + deck.topCards(deck.size()));
+//        System.out.println("0 top card : " + deck.topCards(0));
+//
+//        Deck<Card> deckWithoutTopCard = deck.withoutTopCard();
+//        System.out.println("DeckWithoutTopCard : ");
+//        for (Card card : deckWithoutTopCard.cards) {
+//            System.out.print(card + ", ");
+//        }
+//        Deck<Card> deckWithout7TopCards = deck.withoutTopCards(7);
+//        System.out.println("\nDeckWithout7TopCards : ");
+//        for (Card card : deckWithout7TopCards.cards) {
+//            System.out.print(card + ", ");
+//        }
+//        Deck<Card> deckWithout0TopCards = deck.withoutTopCards(0);
+//        System.out.println("\nDeckWithout0TopCards : ");
+//        for (Card card : deckWithout0TopCards.cards) {
+//            System.out.print(card + ", ");
+//        }
+//        Deck<Card> deckWithoutAllTopCards = deck.withoutTopCards(deck.size());
+//        System.out.println("\nDeckWithoutAllTopCards : ");
+//        for (Card card : deckWithoutAllTopCards.cards) {
+//            System.out.print(card + ", ");
+//        }
+//    }
 
 }
