@@ -89,7 +89,6 @@ public final class CardState extends PublicCardState{
      * @return a CardState where the SortedBag of cards is added to the discard
      */
     public CardState withMoreDiscardedCards(SortedBag<Card> additionalDiscards){
-        discard.union(additionalDiscards);
-        return new CardState(faceUpCards(), deck, discard.union(additionalDiscards));
+        return new CardState(faceUpCards(), deck, discard.union(additionalDiscards)); // TODO test ne marche pas
     }
 }

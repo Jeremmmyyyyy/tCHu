@@ -27,9 +27,6 @@ public class PublicCardStateTest {
             PublicCardState test1 = new PublicCardState(faceUpCardsEmpty, 5,5);
         });
         assertThrows(IllegalArgumentException.class, () ->{
-            PublicCardState test1 = new PublicCardState(faceUpCards5, 0,0);
-        });
-        assertThrows(IllegalArgumentException.class, () ->{
             PublicCardState test1 = new PublicCardState(faceUpCards5, -5,-5);
         });
 //        assertThrows(IllegalArgumentException.class, () ->{
