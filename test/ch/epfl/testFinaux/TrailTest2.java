@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TrailTest {
+class TrailTest2 {
     @Test
     void trailLongestWorksOnGivenExample() {
         var s1 = new Station(1, "Yverdon");

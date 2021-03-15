@@ -3,10 +3,7 @@ package ch.epfl.tchu.game;
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public final class PlayerState extends PublicPlayerState{
 
@@ -20,7 +17,7 @@ public final class PlayerState extends PublicPlayerState{
     }
 
     public static PlayerState initial(SortedBag<Card> initialCards){
-        Preconditions.checkArgument(initialCards.size() >= 4);
+        Preconditions.checkArgument(initialCards.size() == Constants.INITIAL_CARDS_COUNT);
         return new PlayerState(SortedBag.of(), initialCards, List.of());
     }
 
@@ -28,12 +25,17 @@ public final class PlayerState extends PublicPlayerState{
         return tickets;
     }
 
+
     public PlayerState withAddedTickets(SortedBag<Ticket> newTickets){
         return new PlayerState(tickets.union(newTickets), cards, routes());
     }
 
     public SortedBag<Card> cards(){
         return cards;
+    }
+
+    public PlayerState withAddedCard(Card card){
+        return new PlayerState(tickets, cards.union(SortedBag.of(card)), routes());
     }
 
     public PlayerState withAddedCards(SortedBag<Card> additionalCards){
@@ -61,11 +63,21 @@ public final class PlayerState extends PublicPlayerState{
     }
 
     public List<SortedBag<Card>> possibleAdditionalCards(int additionalCardsCount, SortedBag<Card> initialCards, SortedBag<Card> drawnCards){
+        Preconditions.checkArgument(additionalCardsCount >= 1 && additionalCardsCount <=3);
+        Preconditions.checkArgument(!initialCards.isEmpty());
+        Map<Card, Integer> initialTypes =  initialCards.toMap();
+        Preconditions.checkArgument(initialTypes.size() <= 2);
+        Preconditions.checkArgument(drawnCards.size() == 3);
 
-
-
-
-        return null;
+        SortedBag<Card> remainingCards = cards.difference(initialCards);
+        Set<SortedBag<Card>> cardsSet = remainingCards.subsetsOfSize(additionalCardsCount);
+        List<SortedBag<Card>> possibleAdditionalCards = new ArrayList<>();
+        for(SortedBag<Card> set : cardsSet){
+            possibleAdditionalCards.add(set);
+        }
+        possibleAdditionalCards.sort(
+                Comparator.comparingInt(cs -> cs.countOf(Card.LOCOMOTIVE)));
+        return possibleAdditionalCards;
     }
 
     /**
@@ -101,7 +113,7 @@ public final class PlayerState extends PublicPlayerState{
      * Returns the points the player has with his current tickets and his current connectivity
      * @return the total points the player has given its current tickets
      */
-    public int ticketsPoints() {
+    public int ticketPoints() {
         int maxStationIndex = 0, ticketsPoints = 0;
         for (Station station : stations()) {
             maxStationIndex = Math.max(station.id(), maxStationIndex);
@@ -123,7 +135,7 @@ public final class PlayerState extends PublicPlayerState{
      * @return the total points at the end of the game
      */
     public int finalPoints() {
-        return claimPoints() + ticketsPoints();
+        return claimPoints() + ticketPoints();
     }
 
 }

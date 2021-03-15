@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RouteTest {
+class RouteTest2 {
     private static final List<Color> COLORS =
             List.of(
                     Color.BLACK,
