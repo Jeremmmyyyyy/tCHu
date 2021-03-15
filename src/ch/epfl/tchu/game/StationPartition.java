@@ -48,7 +48,7 @@ public final class StationPartition implements StationConnectivity {
          * @param stationCount number of stations to partition
          * @throws IllegalArgumentException if stationCount > 0
          */
-        public Builder(int stationCount) {
+        public  Builder(int stationCount) {
             Preconditions.checkArgument(stationCount >= 0);
             for (int i = 0; i < stationCount; ++i) {
                 stationPartition.put(i, i);
