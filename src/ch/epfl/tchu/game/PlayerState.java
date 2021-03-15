@@ -4,7 +4,9 @@ import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public final class PlayerState extends PublicPlayerState{
 
@@ -65,4 +67,63 @@ public final class PlayerState extends PublicPlayerState{
 
         return null;
     }
+
+    /**
+     * Returns the same PlayerState with an added claimed route and without the claimCards in the playing hand
+     * @param route that was claimed by the player
+     * @param claimCards the card used to claim the route
+     * @return a new PlayerState where routes is extended by route and cards shortened by claimCards
+     */
+    public PlayerState withClaimedRoute(Route route, SortedBag<Card> claimCards) {
+        List<Route> newRoutes = new ArrayList<>();
+        for (Route r : routes()) {
+            newRoutes.add(r);
+        }
+        newRoutes.add(route);
+        return new PlayerState(tickets, cards.difference(claimCards), newRoutes);
+    }
+
+    /**
+     * Method called by ticketsPoints()
+     * @return a set of all the stations of the claimed routes of the player
+     */
+    private Set<Station> stations() {
+        Set<Station> stations = new HashSet<>();
+        for (Route route : routes()) {
+            for (Station routeStation : route.stations()) {
+                stations.add(routeStation);
+            }
+        }
+        return stations;
+    }
+
+    /**
+     * Returns the points the player has with his current tickets and his current connectivity
+     * @return the total points the player has given its current tickets
+     */
+    public int ticketsPoints() {
+        int maxStationIndex = 0, ticketsPoints = 0;
+        for (Station station : stations()) {
+            maxStationIndex = Math.max(station.id(), maxStationIndex);
+        }
+        //maxStationIndex = the max index of the stations fo the claimed routes of the player
+        StationPartition.Builder connectivityBuilder = new StationPartition.Builder(maxStationIndex + 1);
+        for (Route route : routes()) {
+            connectivityBuilder.connect(route.station1(), route.station2());
+        }
+        StationPartition connectivity = connectivityBuilder.build();
+        for (Ticket ticket : tickets) {
+            ticketsPoints += ticket.points(connectivity);
+        }
+        return ticketsPoints;
+    }
+
+    /**
+     * Returns the end-game points
+     * @return the total points at the end of the game
+     */
+    public int finalPoints() {
+        return claimPoints() + ticketsPoints();
+    }
+
 }
