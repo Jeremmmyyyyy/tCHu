@@ -275,10 +275,9 @@ public class PlayerStateTest {
     @Test
     public void withClaimedRouteWorks(){
         PlayerState playerState = new PlayerState(tickets, bagOkBuilder(), routes2);
-//        playerState = playerState.withClaimedRoute();
+        Route route = new Route("AT1_STG_1",ChMapPublic.AT1, ChMapPublic.STG, 4, Route.Level.UNDERGROUND, null);
+        playerState = playerState.withClaimedRoute(route, SortedBag.of(4, Card.LOCOMOTIVE));
+        assertEquals(1, playerState.routes().size());
+        assertEquals(86, playerState.cards().size());
     }
-
-
-
-
 }
