@@ -128,9 +128,50 @@ public class PlayerStateTest {
     @Test
     public void initialWorks(){
         PlayerState playerState = PlayerState.initial(bagExactBuilder());
-        PlayerState playerState1 = PlayerState.initial(bagOkBuilder());
+        assertThrows(IllegalArgumentException.class, ()->{
+            PlayerState playerState1 = PlayerState.initial(bagOkBuilder());
+        });
+        assertThrows(IllegalArgumentException.class, ()->{
+            PlayerState playerState2 = PlayerState.initial(bagTooSmallBuilder());
+        });
+        assertEquals(SortedBag.of(), playerState.tickets());
+        assertEquals(bagExactBuilder(), playerState.cards());
+        assertEquals(List.of(), playerState.routes());
+    }
 
+    @Test
+    public void withAddedTicketsWork(){
+        PlayerState playerState1 = new PlayerState(tickets, bagOkBuilder(), routes);
+        playerState1 = playerState1.withAddedTickets(ticketsToAdd);
+        assertEquals(9, playerState1.tickets().size());
+    }
+
+    @Test
+    public void withAddedCardsWork(){
+        PlayerState playerState1 = new PlayerState(tickets, bagOkBuilder(), routes);
+        playerState1 = playerState1.withAddedCards(bagOkBuilder());
+        PlayerState playerState2 = new PlayerState(tickets, bagOkBuilder(), routes);
+        playerState2 = playerState2.withAddedCards(bagExactBuilder());
+
+        assertEquals(180, playerState1.cards().size());
+        assertEquals(94, playerState2.cards().size());
 
     }
+
+    @Test
+    public void withAddedCardWork(){
+        PlayerState playerState1 = new PlayerState(tickets, bagOkBuilder(), routes);
+        playerState1 = playerState1.withAddedCard(Card.BLACK);
+        assertEquals(91, playerState1.cards().size());
+    }
+
+    @Test
+    public void canClaimRouteWorks(){
+
+    }
+
+
+
+
 
 }
