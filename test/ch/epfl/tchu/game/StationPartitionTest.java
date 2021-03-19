@@ -24,15 +24,15 @@ class StationPartitionTest {
         builder1.connect(ChMapPublic.BER, ChMapPublic.BEL); //3-2
         System.out.println("Expected map : 0-5 1-1 2-2 3-2 4-3 5-7 6-7 7-7");
         System.out.print("Actual map :   ");
-        for (Map.Entry<Integer, Integer> e : builder1.stationPartition.entrySet()) {
-            System.out.print(e.getKey() + "-" + e.getValue() + " ");
-        }
+//        for (Map.Entry<Integer, Integer> e : builder1.stationPartition.entrySet()) {
+//            System.out.print(e.getKey() + "-" + e.getValue() + " ");
+//        }
         StationPartition part1 = builder1.build();
         System.out.println("\nExpected map : 0-7 1-1 2-2 3-2 4-2 5-7 6-7 7-7");
         System.out.print("Actual map :   ");
-        for (Map.Entry<Integer, Integer> e : part1.stationPartition.entrySet()) {
-            System.out.print(e.getKey() + "-" + e.getValue() + " ");
-        }
+//        for (Map.Entry<Integer, Integer> e : part1.stationPartition.entrySet()) {
+//            System.out.print(e.getKey() + "-" + e.getValue() + " ");
+//        }
     }
 
     @Test

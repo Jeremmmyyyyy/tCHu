@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public final class StationPartition implements StationConnectivity {
 
-    public final Map<Integer, Integer> stationPartition;
+    private final Map<Integer, Integer> stationPartition;
 
     /**
      * Private constructor for StationPartition
@@ -42,7 +42,7 @@ public final class StationPartition implements StationConnectivity {
      */
     public final static class Builder {
 
-        public Map<Integer, Integer> stationPartition;
+        private Map<Integer, Integer> stationPartition;
 
         /**
          * Public constructor of the class Builder
