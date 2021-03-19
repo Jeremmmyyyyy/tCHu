@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class PlayerStateTest {
@@ -59,7 +57,8 @@ public class PlayerStateTest {
             new Route("BER_INT_1", ChMapPublic.BER, ChMapPublic.INT, 3, Route.Level.OVERGROUND, Color.BLUE),
             new Route("BER_LUC_1", ChMapPublic.BER, ChMapPublic.LUC, 4, Route.Level.OVERGROUND, null));
 
-    private List<Route> routesTooLong = List.of(new Route("BRI_LOC_1", ChMapPublic.BRI, ChMapPublic.LOC, 6, Route.Level.UNDERGROUND, null),
+    private List<Route> routesTooLong = List.of(
+            new Route("BRI_LOC_1", ChMapPublic.BRI, ChMapPublic.LOC, 6, Route.Level.UNDERGROUND, null),
             new Route("COI_WAS_1", ChMapPublic.COI, ChMapPublic.WAS, 5, Route.Level.UNDERGROUND, null),
             new Route("GEN_YVE_1", ChMapPublic.GEN, ChMapPublic.YVE, 6, Route.Level.OVERGROUND, null),
             new Route("SCE_WIN_2", ChMapPublic.SCE, ChMapPublic.WIN, 1, Route.Level.OVERGROUND, Color.WHITE),
@@ -170,6 +169,72 @@ public class PlayerStateTest {
 
     }
 
+    @Test
+    public void possibleClaimCardsWorksGenerally(){
+        //Test global prints
+        PlayerState playerState1 = new PlayerState(tickets, bagOkBuilder(), routes2);
+        for(Route route : ChMapPublic.ALL_ROUTES){
+            System.out.println(playerState1.possibleClaimCards(route));
+        }
+    }
+
+    @Test
+    public void possibleClaimCardsWorksWithSpecificCases(){
+        //Test spécifique avec cartes limitées
+        Route route = new Route("AT1_STG_1",ChMapPublic.AT1, ChMapPublic.STG, 4, Route.Level.UNDERGROUND, null);
+        List<Card> cardsList = List.of(Card.LOCOMOTIVE,Card.LOCOMOTIVE,Card.LOCOMOTIVE,Card.LOCOMOTIVE,Card.RED,Card.RED,Card.ORANGE,Card.ORANGE,Card.ORANGE,Card.ORANGE);
+        PlayerState playerState2 = new PlayerState(tickets, SortedBag.of(cardsList), routes2);
+        System.out.println(playerState2.possibleClaimCards(route));
+
+        //Test spécifique avec cartes limitées
+        Route route2 = new Route("AT1_STG_1",ChMapPublic.AT1, ChMapPublic.STG, 4, Route.Level.UNDERGROUND, null);
+        List<Card> cardsList2 = List.of(Card.RED,Card.RED,Card.ORANGE,Card.ORANGE,Card.ORANGE,Card.ORANGE,Card.BLUE,Card.BLUE,Card.BLUE,Card.BLUE,Card.BLUE,Card.LOCOMOTIVE);
+        PlayerState playerState3 = new PlayerState(tickets, SortedBag.of(cardsList2), routes2);
+        System.out.println(playerState3.possibleClaimCards(route2));
+
+        //Test spécifique avec cartes limitées
+        Route route3 = new Route("AT1_STG_1",ChMapPublic.AT1, ChMapPublic.STG, 4, Route.Level.UNDERGROUND, null);
+        List<Card> cardsList3 = List.of(Card.RED);
+        PlayerState playerState4 = new PlayerState(tickets, SortedBag.of(cardsList3), routes2);
+        System.out.println(playerState4.possibleClaimCards(route3));
+    }
+
+    @Test
+    public void possibleAdditionalCardsWithBigBag(){
+        PlayerState playerState = new PlayerState(tickets, bagOkBuilder(), routes2);
+        List<Card> moreThanTwoTypesOfCards = List.of(Card.BLUE, Card.BLUE,Card.RED,Card.WHITE);
+        playerState.possibleAdditionalCards(1,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED));
+        playerState.possibleAdditionalCards(2,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED));
+        playerState.possibleAdditionalCards(3,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED));
+        assertThrows(IllegalArgumentException.class, ()-> {
+            playerState.possibleAdditionalCards(0,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED));
+        });
+        assertThrows(IllegalArgumentException.class, ()-> {
+            playerState.possibleAdditionalCards(-1,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED));
+        });
+        assertThrows(IllegalArgumentException.class, ()-> {
+            playerState.possibleAdditionalCards(4,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED));
+        });
+        assertThrows(IllegalArgumentException.class, ()-> {
+            playerState.possibleAdditionalCards(2,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE));
+        });
+        assertThrows(IllegalArgumentException.class, ()-> {
+            playerState.possibleAdditionalCards(2,SortedBag.of(), SortedBag.of(2, Card.BLUE, 1, Card.RED));
+        });
+        assertThrows(IllegalArgumentException.class, ()-> {
+            playerState.possibleAdditionalCards(1,SortedBag.of(moreThanTwoTypesOfCards), SortedBag.of(2, Card.BLUE, 1, Card.RED));
+        });
+        System.out.println(playerState.possibleAdditionalCards(1,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED)));
+        System.out.println(playerState.possibleAdditionalCards(2,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED)));
+        System.out.println(playerState.possibleAdditionalCards(3,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED)));
+    }
+
+    @Test
+    public void possibleAdditionalCardsWithLimitedBag(){
+        List<Card> listOfCards = List.of(Card.BLUE);
+        PlayerState playerState = new PlayerState(tickets, SortedBag.of(listOfCards), routes2);
+        System.out.println(playerState.possibleAdditionalCards(1, SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(3, Card.BLUE)));
+    }
 
 
 

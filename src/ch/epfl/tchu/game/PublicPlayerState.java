@@ -29,7 +29,7 @@ public class PublicPlayerState {
         Preconditions.checkArgument(ticketCount >= 0 && cardCount >= 0);
         this.ticketCount = ticketCount;
         this.cardCount = cardCount;
-        this.routes = List.copyOf(routes);  //TODO faire une copie utile ?
+        this.routes = List.copyOf(routes);
         int carsUsed = 0;
         int totalPoints = 0;
         for(Route route : routes){
@@ -66,7 +66,7 @@ public class PublicPlayerState {
 
     /**
      * return the amount of remaining cars
-     * @return the amount of remaining cars  TODO remainig amount or total ??
+     * @return the amount of remaining cars
      */
     public int carCount(){
         return carCount;

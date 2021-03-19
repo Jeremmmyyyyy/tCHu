@@ -65,7 +65,7 @@ public class PublicPLayerStateTest {
         assertEquals(27, playerState.carCount());
         assertEquals(40, playerState2.carCount());
         assertEquals(0, playerState40.carCount());
-//        assertEquals(-9, playerStateTooLong.carCount()); //TODO liste de routes trop longues que faire ?
+//        assertEquals(-9, playerStateTooLong.carCount());
 
         assertEquals(20, playerState.claimPoints());
         assertEquals(0, playerState2.claimPoints());

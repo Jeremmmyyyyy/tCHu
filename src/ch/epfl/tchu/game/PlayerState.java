@@ -86,12 +86,13 @@ public final class PlayerState extends PublicPlayerState{
      * @return true if the route can be taken false otherwise
      */
     public boolean canClaimRoute(Route route){
-        for(SortedBag<Card> possibleCards : route.possibleClaimCards()){
-            if(route.length() <= carCount() && cards.contains(possibleCards)){ // TODO vérif cette méthode
-                return true;
-            }
-        }
-        return false;
+        return (!possibleClaimCards(route).isEmpty() && route.length() <= carCount()); //TODO ancien code à enlever si tt est bon
+//        for(SortedBag<Card> possibleCards : route.possibleClaimCards()){
+//            if(route.length() <= carCount() && cards.contains(possibleCards)){
+//                return true;
+//            }
+//        }
+//        return false;
     }
 
     /**
@@ -126,17 +127,21 @@ public final class PlayerState extends PublicPlayerState{
         Preconditions.checkArgument(!initialCards.isEmpty());
         Map<Card, Integer> initialTypes =  initialCards.toMap();
         Preconditions.checkArgument(initialTypes.size() <= 2);
-        Preconditions.checkArgument(drawnCards.size() == 3);
+        Preconditions.checkArgument(drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
 
         SortedBag<Card> remainingCards = cards.difference(initialCards);
-        Set<SortedBag<Card>> cardsSet = remainingCards.subsetsOfSize(additionalCardsCount);
-        List<SortedBag<Card>> possibleAdditionalCards = new ArrayList<>();
-        for(SortedBag<Card> set : cardsSet){
-            possibleAdditionalCards.add(set);
+        if(remainingCards.size()>=additionalCardsCount){
+            Set<SortedBag<Card>> cardsSet = remainingCards.subsetsOfSize(additionalCardsCount);
+            List<SortedBag<Card>> possibleAdditionalCards = new ArrayList<>();
+            for(SortedBag<Card> set : cardsSet){
+                possibleAdditionalCards.add(set);
+            }
+            possibleAdditionalCards.sort(
+                    Comparator.comparingInt(cs -> cs.countOf(Card.LOCOMOTIVE)));
+            return possibleAdditionalCards;
+        }else{
+            return List.of();
         }
-        possibleAdditionalCards.sort(
-                Comparator.comparingInt(cs -> cs.countOf(Card.LOCOMOTIVE)));
-        return possibleAdditionalCards;
     }
 
     /**
