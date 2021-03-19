@@ -272,6 +272,12 @@ public class PlayerStateTest {
         System.out.println(playerState.possibleAdditionalCards(2, SortedBag.of(2, Card.BLUE, 1,Card.LOCOMOTIVE), SortedBag.of(3, Card.BLUE)));
     }
 
+    @Test
+    public void withClaimedRouteWorks(){
+        PlayerState playerState = new PlayerState(tickets, bagOkBuilder(), routes2);
+//        playerState = playerState.withClaimedRoute();
+    }
+
 
 
 
