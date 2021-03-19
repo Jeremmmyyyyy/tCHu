@@ -166,7 +166,43 @@ public class PlayerStateTest {
 
     @Test
     public void canClaimRouteWorks(){
+        //Cas le plus simple avec Overground et couleur unique
+        PlayerState playerState = new PlayerState(tickets, SortedBag.of(2, Card.VIOLET), routes);
+        Route route1 = new Route("BAD_OLT_1", ChMapPublic.BAD, ChMapPublic.OLT, 2, Route.Level.OVERGROUND, Color.VIOLET);
+        assertTrue(playerState.canClaimRoute(route1));
 
+        //Cas où il n'y a plus assez de wagons
+        assertThrows(IllegalArgumentException.class,()->{
+            PlayerState playerState1 = new PlayerState(tickets, SortedBag.of(2, Card.VIOLET), routes40);
+            assertFalse(playerState1.canClaimRoute(route1));
+        });
+
+        //Cas ou le joueur possède déjà la route
+        PlayerState playerState3 = new PlayerState(tickets, SortedBag.of(3, Card.BLUE), routes);
+        Route route2 = new Route("BER_INT_1", ChMapPublic.BER, ChMapPublic.INT, 3, Route.Level.OVERGROUND, Color.BLUE);
+        assertTrue(playerState3.canClaimRoute(route2));
+
+        //Cas route de couleur null
+        PlayerState playerState4 = new PlayerState(tickets, bagOkBuilder(), routes);
+        Route route3 = new Route("BER_LUC_1", ChMapPublic.BER, ChMapPublic.LUC, 4, Route.Level.OVERGROUND, null);
+        assertTrue(playerState4.canClaimRoute(route3));
+
+        //Cas route de couleur null mais pas assez de cartes
+        PlayerState playerState5 = new PlayerState(tickets, bagTooSmallBuilder(), routes);
+        Route route4 = new Route("BER_LUC_1", ChMapPublic.BER, ChMapPublic.LUC, 4, Route.Level.OVERGROUND, null);
+        assertFalse(playerState5.canClaimRoute(route4));
+
+        //Test Général
+        PlayerState playerState6 = new PlayerState(tickets, bagOkBuilder(), routes2);
+        for(Route route : ChMapPublic.ALL_ROUTES){
+            assertTrue(playerState6.canClaimRoute(route));
+        }
+
+        //Cas route tunnel avec trop de cartes diff mais le bon nombre
+        List<Card> cardsList = List.of(Card.LOCOMOTIVE,Card.LOCOMOTIVE,Card.RED,Card.RED,Card.ORANGE);
+        PlayerState playerState7 = new PlayerState(tickets, SortedBag.of(cardsList), routes);
+        Route route5 = new Route("COI_WAS_1", ChMapPublic.COI, ChMapPublic.WAS, 5, Route.Level.UNDERGROUND, null);
+        assertFalse(playerState7.canClaimRoute(route5));
     }
 
     @Test
