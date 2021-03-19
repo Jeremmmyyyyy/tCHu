@@ -5,7 +5,10 @@ import ch.epfl.test.ChMapPublic;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class PlayerStateTest {
@@ -15,6 +18,25 @@ public class PlayerStateTest {
             new Ticket(ChMapPublic.BAL, ChMapPublic.BRI, 10),
             new Ticket(ChMapPublic.BAL, ChMapPublic.STG, 8),
             new Ticket(ChMapPublic.BER, ChMapPublic.LUG, 12));
+
+    private List<Ticket> listOfTicketsToAdd = List.of(
+            new Ticket(ChMapPublic.GEN, ChMapPublic.SIO, 10),
+            new Ticket(ChMapPublic.GEN, ChMapPublic.ZUR, 14),
+            new Ticket(ChMapPublic.INT, ChMapPublic.WIN, 7),
+            new Ticket(ChMapPublic.KRE, ChMapPublic.ZUR, 3),
+            new Ticket(ChMapPublic.LAU, ChMapPublic.INT, 7));
+
+    private List<Ticket> unionOfTickets = List.of(
+            new Ticket(ChMapPublic.BAL, ChMapPublic.BER, 5),
+            new Ticket(ChMapPublic.BAL, ChMapPublic.BRI, 10),
+            new Ticket(ChMapPublic.BAL, ChMapPublic.STG, 8),
+            new Ticket(ChMapPublic.BER, ChMapPublic.LUG, 12),
+            new Ticket(ChMapPublic.GEN, ChMapPublic.SIO, 10),
+            new Ticket(ChMapPublic.GEN, ChMapPublic.ZUR, 14),
+            new Ticket(ChMapPublic.INT, ChMapPublic.WIN, 7),
+            new Ticket(ChMapPublic.KRE, ChMapPublic.ZUR, 3),
+            new Ticket(ChMapPublic.LAU, ChMapPublic.INT, 7));
+
 
     private List<Route> routes = List.of(new Route("AT1_STG_1", ChMapPublic.AT1, ChMapPublic.STG, 4, Route.Level.UNDERGROUND, null),
             new Route("BAD_OLT_1", ChMapPublic.BAD, ChMapPublic.OLT, 2, Route.Level.OVERGROUND, Color.VIOLET),
@@ -56,9 +78,12 @@ public class PlayerStateTest {
 
     private SortedBag<Ticket> tickets = SortedBag.of(listOfTickets);
 
+    private SortedBag<Ticket> ticketsToAdd = SortedBag.of(listOfTicketsToAdd);
+
+
     public SortedBag<Card> bagTooSmallBuilder(){
         SortedBag<Card> cards0 = SortedBag.of(1, Card.BLACK, 1, Card.VIOLET);
-        SortedBag<Card> cards1 = SortedBag.of(1, Card.BLUE, 1, Card.GREEN);
+        SortedBag<Card> cards1 = SortedBag.of(0, Card.BLUE, 0, Card.GREEN);
         SortedBag<Card> cards2 = SortedBag.of(0, Card.YELLOW, 0, Card.ORANGE);
         SortedBag<Card> cards3 = SortedBag.of(0, Card.RED, 0, Card.WHITE);
         SortedBag<Card> cards4 = SortedBag.of(0, Card.LOCOMOTIVE);
