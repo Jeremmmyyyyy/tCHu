@@ -2,6 +2,7 @@ package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.Preconditions;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Map;
  */
 public final class StationPartition implements StationConnectivity {
 
-    private final Map<Integer, Integer> stationPartition;
+    public final Map<Integer, Integer> stationPartition;
 
     /**
      * Private constructor for StationPartition
@@ -41,15 +42,16 @@ public final class StationPartition implements StationConnectivity {
      */
     public final static class Builder {
 
-        private Map<Integer, Integer> stationPartition;
+        public Map<Integer, Integer> stationPartition;
 
         /**
          * Public constructor of the class Builder
          * @param stationCount number of stations to partition
          * @throws IllegalArgumentException if stationCount > 0
          */
-        public  Builder(int stationCount) {
+        public Builder(int stationCount) {
             Preconditions.checkArgument(stationCount >= 0);
+            stationPartition = new HashMap<>();
             for (int i = 0; i < stationCount; ++i) {
                 stationPartition.put(i, i);
             }
@@ -71,8 +73,7 @@ public final class StationPartition implements StationConnectivity {
          * @return the current instance
          */
         public Builder connect(Station s1, Station s2) {
-            //the lead-station of s1 becomes the lead-station for s2 and thus connects the two stations
-            stationPartition.put(s2.id(), representative(s1));
+            stationPartition.put(representative(s1), representative(s2));
             return this;
         }
 
@@ -81,6 +82,14 @@ public final class StationPartition implements StationConnectivity {
          * @return a new instance of StationPartition
          */
         public StationPartition build() {
+            for (Map.Entry<Integer, Integer> id : stationPartition.entrySet()) {
+                Integer representativeId = id.getValue();
+                //to find the best representative, we loop until the representative is itself representative
+                while (!representativeId.equals(stationPartition.get(representativeId))) {
+                    representativeId = stationPartition.get(representativeId);
+                }
+                stationPartition.replace(id.getKey(), representativeId);
+            }
             return new StationPartition(stationPartition);
         }
     }
