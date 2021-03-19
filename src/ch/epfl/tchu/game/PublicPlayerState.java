@@ -30,7 +30,6 @@ public class PublicPlayerState {
         this.ticketCount = ticketCount;
         this.cardCount = cardCount;
         this.routes = List.copyOf(routes);  //TODO faire une copie utile ?
-
         int carsUsed = 0;
         int totalPoints = 0;
         for(Route route : routes){
