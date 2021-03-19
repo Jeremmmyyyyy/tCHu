@@ -243,33 +243,33 @@ public class PlayerStateTest {
         playerState.possibleAdditionalCards(2,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED));
         playerState.possibleAdditionalCards(3,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED));
         assertThrows(IllegalArgumentException.class, ()-> {
-            playerState.possibleAdditionalCards(0,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED));
+            playerState.possibleAdditionalCards(0,SortedBag.of(2, Card.BLUE, 1,Card.LOCOMOTIVE), SortedBag.of(2, Card.BLUE, 1, Card.RED));
         });
         assertThrows(IllegalArgumentException.class, ()-> {
-            playerState.possibleAdditionalCards(-1,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED));
+            playerState.possibleAdditionalCards(-1,SortedBag.of(2, Card.BLUE, 1,Card.LOCOMOTIVE), SortedBag.of(2, Card.BLUE, 1, Card.RED));
         });
         assertThrows(IllegalArgumentException.class, ()-> {
-            playerState.possibleAdditionalCards(4,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED));
+            playerState.possibleAdditionalCards(4,SortedBag.of(2, Card.BLUE, 1,Card.LOCOMOTIVE), SortedBag.of(2, Card.BLUE, 1, Card.RED));
         });
         assertThrows(IllegalArgumentException.class, ()-> {
-            playerState.possibleAdditionalCards(2,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE));
+            playerState.possibleAdditionalCards(2,SortedBag.of(2, Card.BLUE, 1,Card.LOCOMOTIVE), SortedBag.of(2, Card.BLUE));
         });
         assertThrows(IllegalArgumentException.class, ()-> {
-            playerState.possibleAdditionalCards(2,SortedBag.of(), SortedBag.of(2, Card.BLUE, 1, Card.RED));
+            playerState.possibleAdditionalCards(2,SortedBag.of(), SortedBag.of(2, Card.LOCOMOTIVE, 1, Card.RED));
         });
         assertThrows(IllegalArgumentException.class, ()-> {
             playerState.possibleAdditionalCards(1,SortedBag.of(moreThanTwoTypesOfCards), SortedBag.of(2, Card.BLUE, 1, Card.RED));
         });
-        System.out.println(playerState.possibleAdditionalCards(1,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED)));
-        System.out.println(playerState.possibleAdditionalCards(2,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED)));
-        System.out.println(playerState.possibleAdditionalCards(3,SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(2, Card.BLUE, 1, Card.RED)));
+        System.out.println(playerState.possibleAdditionalCards(1,SortedBag.of(2, Card.BLUE, 1,Card.LOCOMOTIVE), SortedBag.of(2, Card.BLUE, 1, Card.RED)));
+        System.out.println(playerState.possibleAdditionalCards(2,SortedBag.of(2, Card.BLUE, 1,Card.LOCOMOTIVE), SortedBag.of(2, Card.BLUE, 1, Card.RED)));
+        System.out.println(playerState.possibleAdditionalCards(3,SortedBag.of(2, Card.BLUE, 1,Card.LOCOMOTIVE), SortedBag.of(2, Card.BLUE, 1, Card.RED)));
     }
 
     @Test
     public void possibleAdditionalCardsWithLimitedBag(){
-        List<Card> listOfCards = List.of(Card.BLUE);
+        List<Card> listOfCards = List.of(Card.RED,Card.RED,Card.BLUE,Card.BLUE,Card.BLUE, Card.LOCOMOTIVE,Card.LOCOMOTIVE);
         PlayerState playerState = new PlayerState(tickets, SortedBag.of(listOfCards), routes2);
-        System.out.println(playerState.possibleAdditionalCards(1, SortedBag.of(2, Card.BLUE, 1,Card.RED), SortedBag.of(3, Card.BLUE)));
+        System.out.println(playerState.possibleAdditionalCards(2, SortedBag.of(2, Card.BLUE, 1,Card.LOCOMOTIVE), SortedBag.of(3, Card.BLUE)));
     }
 
 
