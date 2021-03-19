@@ -2,9 +2,6 @@ package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.Preconditions;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Represents a partition of the stations given a player's connectivity
  *
@@ -12,13 +9,13 @@ import java.util.Map;
  */
 public final class StationPartition implements StationConnectivity {
 
-    private final Map<Integer, Integer> stationPartition;
+    private final int[] stationPartition;
 
     /**
      * Private constructor for StationPartition
      * @param stationPartition map where each station id (value) is associated to one lead-station id (key)
      */
-    private StationPartition(Map<Integer, Integer> stationPartition) {
+    private StationPartition(int[] stationPartition) {
         this.stationPartition = stationPartition;
     }
 
@@ -32,7 +29,10 @@ public final class StationPartition implements StationConnectivity {
      */
     @Override
     public boolean connected(Station s1, Station s2) {
-        return stationPartition.getOrDefault(s1.id(), s1.id()) == stationPartition.getOrDefault(s2.id(), s2.id());
+        if (s1.id() >= stationPartition.length || s2.id() >= stationPartition.length) {
+            return s1.id() == s2.id();
+        }
+        return stationPartition[s1.id()] == stationPartition[s2.id()];
     }
 
     /**
@@ -42,7 +42,7 @@ public final class StationPartition implements StationConnectivity {
      */
     public final static class Builder {
 
-        private Map<Integer, Integer> stationPartition;
+        private int[] stationPartition;
 
         /**
          * Public constructor of the class Builder
@@ -51,19 +51,23 @@ public final class StationPartition implements StationConnectivity {
          */
         public Builder(int stationCount) {
             Preconditions.checkArgument(stationCount >= 0);
-            stationPartition = new HashMap<>();
+            stationPartition = new int[stationCount];
             for (int i = 0; i < stationCount; ++i) {
-                stationPartition.put(i, i);
+                stationPartition[i] = i;
             }
         }
 
         /**
          * Returns the lead-station of a given station
-         * @param s station whose representative is to return
-         * @return the lead-station (representative) of the station s
+         * @param stationId id of the station whose representative is to return
+         * @return the id of the lead-station (representative) of the station s
          */
-        private Integer representative(Station s) {
-            return stationPartition.get(s.id());
+        private int representative(int stationId) {
+            int representative = stationPartition[stationId];
+            while (representative != stationPartition[representative]) {
+                representative = stationPartition[representative];
+            }
+            return representative;
         }
 
         /**
@@ -73,7 +77,7 @@ public final class StationPartition implements StationConnectivity {
          * @return the current instance
          */
         public Builder connect(Station s1, Station s2) {
-            stationPartition.put(representative(s1), representative(s2));
+            stationPartition[representative(s1.id())] = representative(s2.id());
             return this;
         }
 
@@ -82,13 +86,8 @@ public final class StationPartition implements StationConnectivity {
          * @return a new instance of StationPartition
          */
         public StationPartition build() {
-            for (Map.Entry<Integer, Integer> id : stationPartition.entrySet()) {
-                Integer representativeId = id.getValue();
-                //to find the best representative, we loop until the representative is itself representative
-                while (!representativeId.equals(stationPartition.get(representativeId))) {
-                    representativeId = stationPartition.get(representativeId);
-                }
-                stationPartition.replace(id.getKey(), representativeId);
+            for (int i = 0; i < stationPartition.length; ++i) {
+                stationPartition[i] = representative(i);
             }
             return new StationPartition(stationPartition);
         }

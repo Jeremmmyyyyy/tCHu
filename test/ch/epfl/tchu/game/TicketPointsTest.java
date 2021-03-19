@@ -127,7 +127,10 @@ class TicketPointsTest {
             ChMapPublic.ticketToNeighbors(List.of(ChMapPublic.ZUR), 3, 7, 11, 7)));
 
     private SortedBag<Ticket> tickets_5 = SortedBag.of(List.of(
-            new Ticket(ChMapPublic.SCE, ChMapPublic.MAR, 15)));
+            ChMapPublic.deToNeighbors,
+            ChMapPublic.atToNeighbors,
+            ChMapPublic.frToNeighbors,
+            ChMapPublic.itToNeighbors));
 
 
     private List<Route> routes_1_oneConnected =  List.of(
@@ -163,7 +166,7 @@ class TicketPointsTest {
             ChMapPublic.ALL_ROUTES.get(13),
             ChMapPublic.ALL_ROUTES.get(15),
             ChMapPublic.ALL_ROUTES.get(20),
-            ChMapPublic.ALL_ROUTES.get(24),
+            ChMapPublic.ALL_ROUTES.get(23),
             ChMapPublic.ALL_ROUTES.get(18),
             ChMapPublic.ALL_ROUTES.get(19),
             ChMapPublic.ALL_ROUTES.get(67),
@@ -267,14 +270,14 @@ class TicketPointsTest {
             ChMapPublic.ALL_ROUTES.get(44),
             ChMapPublic.ALL_ROUTES.get(56),
             ChMapPublic.ALL_ROUTES.get(57),
-            ChMapPublic.ALL_ROUTES.get(42));
+            ChMapPublic.ALL_ROUTES.get(43));
 
     private List<Route> routes_4_2 = List.of(
             ChMapPublic.ALL_ROUTES.get(14),
             ChMapPublic.ALL_ROUTES.get(44),
             ChMapPublic.ALL_ROUTES.get(56),
             ChMapPublic.ALL_ROUTES.get(57),
-            ChMapPublic.ALL_ROUTES.get(42),
+            ChMapPublic.ALL_ROUTES.get(43),
             ChMapPublic.ALL_ROUTES.get(30),
             ChMapPublic.ALL_ROUTES.get(12),
             ChMapPublic.ALL_ROUTES.get(8),
@@ -290,6 +293,33 @@ class TicketPointsTest {
             ChMapPublic.ALL_ROUTES.get(20),
             ChMapPublic.ALL_ROUTES.get(22),
             ChMapPublic.ALL_ROUTES.get(0));
+
+    private List<Route> routes_5_1 = List.of();
+
+    private List<Route> routes_5_2 = List.of(
+            ChMapPublic.ALL_ROUTES.get(38),
+            ChMapPublic.ALL_ROUTES.get(6),
+            ChMapPublic.ALL_ROUTES.get(5));
+
+    private List<Route> routes_5_3 = List.of(
+            ChMapPublic.ALL_ROUTES.get(41),
+            ChMapPublic.ALL_ROUTES.get(55),
+            ChMapPublic.ALL_ROUTES.get(44),
+            ChMapPublic.ALL_ROUTES.get(13),
+            ChMapPublic.ALL_ROUTES.get(15),
+            ChMapPublic.ALL_ROUTES.get(20),
+            ChMapPublic.ALL_ROUTES.get(23));
+
+    private List<Route> routes_5_4 = List.of(
+            ChMapPublic.ALL_ROUTES.get(41),
+            ChMapPublic.ALL_ROUTES.get(55),
+            ChMapPublic.ALL_ROUTES.get(44),
+            ChMapPublic.ALL_ROUTES.get(13),
+            ChMapPublic.ALL_ROUTES.get(15),
+            ChMapPublic.ALL_ROUTES.get(20),
+            ChMapPublic.ALL_ROUTES.get(23),
+            ChMapPublic.ALL_ROUTES.get(64));
+
 
     @Test
     void ticketPointsWorksWithNoTicketsFulfilled() {
@@ -345,9 +375,6 @@ class TicketPointsTest {
 
     @Test
     void ticketPointsOnCountryCity() {
-//        PlayerState p4_1 = new PlayerState(tickets_4, bagOkBuilder(), routes_4_1); //TODO PAS BON
-//        assertEquals(-3, p4_1.ticketPoints());
-
         PlayerState p4_1 = new PlayerState(tickets_4, bagOkBuilder(), routes_4_1);
         assertEquals(-3, p4_1.ticketPoints());
 
@@ -359,11 +386,22 @@ class TicketPointsTest {
 
         PlayerState p4_4 = new PlayerState(tickets_4, bagOkBuilder(), routes_4_4);
         assertEquals(-13, p4_4.ticketPoints());
-
     }
 
     @Test
     void ticketPointsOnCountryCountry() {
+        PlayerState p5_1 = new PlayerState(tickets_5, bagOkBuilder(), routes_5_1);
+        assertEquals(-21, p5_1.ticketPoints());
 
+        PlayerState p5_2 = new PlayerState(tickets_5, bagOkBuilder(), routes_5_2);
+        assertEquals(-1, p5_2.ticketPoints());
+
+        PlayerState p5_3 = new PlayerState(tickets_5, bagOkBuilder(), routes_5_3);
+        assertEquals(-21, p5_3.ticketPoints());
+
+        PlayerState p5_4 = new PlayerState(tickets_5, bagOkBuilder(), routes_5_4);
+        assertEquals(-21, p5_4.ticketPoints());
     }
+
+
 }
