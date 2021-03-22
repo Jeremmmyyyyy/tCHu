@@ -81,7 +81,7 @@ public final class GameState extends PublicGameState {
 
     public GameState withInitiallyChosenTickets(PlayerId playerId, SortedBag<Ticket> chosenTickets) {
         for (Ticket chosenTicket: chosenTickets) {
-            Preconditions.checkArgument(playerState.get(playerId).tickets().contains(chosenTicket));
+            Preconditions.checkArgument(playerState(playerId).tickets().contains(chosenTicket));
         }
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(), playerState(playerId).withAddedTickets(chosenTickets));
@@ -103,7 +103,7 @@ public final class GameState extends PublicGameState {
     public GameState withChosenAdditionalTickets(SortedBag<Ticket> drawnTickets, SortedBag<Ticket> chosenTickets){
         Preconditions.checkArgument(drawnTickets.contains(chosenTickets));
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
-        newPlayerState.replace(currentPlayerId(), playerState.get(currentPlayerId()).withAddedTickets(chosenTickets));
+        newPlayerState.replace(currentPlayerId(), currentPlayerState().withAddedTickets(chosenTickets));
         return new GameState(tickets.withoutTopCards(drawnTickets.size()), cardState, currentPlayerId(),
                 newPlayerState, lastPlayer() );
     }
@@ -112,7 +112,7 @@ public final class GameState extends PublicGameState {
         Preconditions.checkArgument(canDrawCards());
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(),
-                playerState.get(currentPlayerId()).withAddedCard(cardState.faceUpCard(slot)));
+                currentPlayerState().withAddedCard(cardState.faceUpCard(slot)));
         return new GameState(tickets, cardState.withDrawnFaceUpCard(slot), currentPlayerId(), newPlayerState, lastPlayer());
     }
 
@@ -120,14 +120,14 @@ public final class GameState extends PublicGameState {
         Preconditions.checkArgument(canDrawCards());
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(),
-                playerState.get(currentPlayerId()).withAddedCard(cardState.topDeckCard()));
+                currentPlayerState().withAddedCard(cardState.topDeckCard()));
         return new GameState(tickets, cardState.withoutTopDeckCard(), currentPlayerId(), newPlayerState, lastPlayer());
     }
 
     public GameState withClaimedRoute(Route route, SortedBag<Card> cards){
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(),
-                playerState.get(currentPlayerId()).withClaimedRoute(route, cards));
+                currentPlayerState().withClaimedRoute(route, cards));
         return new GameState(tickets, cardState.withoutTopDeckCard(), currentPlayerId(), newPlayerState, lastPlayer());
         //TODO repetition de code sur les 3 méthodes précedentes à vérif
     }
