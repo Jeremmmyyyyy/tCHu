@@ -5,7 +5,6 @@ import ch.epfl.tchu.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class PublicGameState {
 
@@ -13,21 +12,24 @@ public class PublicGameState {
     private final PublicCardState cardState;
     private final PlayerId currentPlayerId;
     private final Map<PlayerId, PublicPlayerState> playerState;
-    private final PlayerId lastPlayer;
+    private final PlayerId lastPlayerId;
 
     // last player peut etre null vu que le joueur precedent peut etre inconnu au debut de la partie
     public PublicGameState(int ticketCount,
                            PublicCardState cardState,
                            PlayerId currentPlayerId,
                            Map<PlayerId, PublicPlayerState> playerState,
-                           PlayerId lastPlayer){
+                           PlayerId lastPlayerId){
         Preconditions.checkArgument(ticketCount >= 0);
         Preconditions.checkArgument(playerState.size() == 2);
+        if(cardState == null || currentPlayerId == null || playerState == null){
+            throw new NullPointerException(); //TODO verif si ticket count est nul impossible
+        }
         this.ticketCount = ticketCount;
-        this.cardState = Objects.requireNonNull(cardState);
-        this.currentPlayerId = Objects.requireNonNull(currentPlayerId);
-        this.playerState = Objects.requireNonNull(playerState);
-        this.lastPlayer = Objects.requireNonNull(lastPlayer);
+        this.cardState = cardState;
+        this.currentPlayerId = currentPlayerId;
+        this.playerState = playerState;
+        this.lastPlayerId = lastPlayerId;
     }
 
     public int ticketsCount() {
@@ -58,18 +60,15 @@ public class PublicGameState {
         return playerState.get(this.currentPlayerId);
     }
 
-    public List<Route> claimedRoutes(){
-
+    public List<Route> claimedRoutes(){ // TODO opti de faire comme ca ?
         List<Route> totalUsedRoutes = new ArrayList<>(playerState.get(currentPlayerId).routes());
-//        totalUsedRoutes.addAll() //TODO faire plus opti avec iteration sur playerID.values
         for (Route route : playerState.get(currentPlayerId.next()).routes()) {
             totalUsedRoutes.add(route);
         }
-
         return totalUsedRoutes;
     }
 
     public PlayerId lastPlayer() {
-        return lastPlayer;
+        return lastPlayerId; //TODO vérif que null est renvoyé dans le cas ou le dernier joueur n'est pas connu
     }
 }
