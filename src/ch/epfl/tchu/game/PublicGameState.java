@@ -5,6 +5,7 @@ import ch.epfl.tchu.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class PublicGameState {
 
@@ -19,17 +20,14 @@ public class PublicGameState {
                            PublicCardState cardState,
                            PlayerId currentPlayerId,
                            Map<PlayerId, PublicPlayerState> playerState,
-                           PlayerId lastPlayerId){
+                           PlayerId lastPlayer){
         Preconditions.checkArgument(ticketCount >= 0);
         Preconditions.checkArgument(playerState.size() == 2);
-        if(cardState == null || currentPlayerId == null || playerState == null){
-            throw new NullPointerException(); //TODO verif si ticket count est nul impossible
-        }
         this.ticketCount = ticketCount;
-        this.cardState = cardState;
-        this.currentPlayerId = currentPlayerId;
-        this.playerState = playerState;
-        this.lastPlayerId = lastPlayerId;
+        this.cardState = Objects.requireNonNull(cardState);
+        this.currentPlayerId = Objects.requireNonNull(currentPlayerId);
+        this.playerState = Objects.requireNonNull(playerState);
+        this.lastPlayerId = Objects.requireNonNull(lastPlayer);
     }
 
     public int ticketsCount() {
@@ -60,15 +58,18 @@ public class PublicGameState {
         return playerState.get(this.currentPlayerId);
     }
 
-    public List<Route> claimedRoutes(){ // TODO opti de faire comme ca ?
+    public List<Route> claimedRoutes(){
+
         List<Route> totalUsedRoutes = new ArrayList<>(playerState.get(currentPlayerId).routes());
+//        totalUsedRoutes.addAll() //TODO faire plus opti avec iteration sur playerID.values
         for (Route route : playerState.get(currentPlayerId.next()).routes()) {
             totalUsedRoutes.add(route);
         }
+
         return totalUsedRoutes;
     }
 
     public PlayerId lastPlayer() {
-        return lastPlayerId; //TODO vérif que null est renvoyé dans le cas ou le dernier joueur n'est pas connu
+        return lastPlayerId; //TODO verif null
     }
 }
