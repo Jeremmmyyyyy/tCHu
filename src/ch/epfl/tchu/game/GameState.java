@@ -80,4 +80,16 @@ public final class GameState extends PublicGameState {
     }
 
 
+
+
+
+
+
+
+
+
+    public GameState withChosenAdditionalTickets(SortedBag<Ticket> drawnTickets, SortedBag<Ticket> chosenTickets){
+        Preconditions.checkArgument(drawnTickets.contains(chosenTickets));
+        return  null;
+    }
 }
