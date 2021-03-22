@@ -129,16 +129,16 @@ public final class PlayerState extends PublicPlayerState{
         Preconditions.checkArgument(initialTypes.size() <= 2);
         Preconditions.checkArgument(drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
 
-        SortedBag<Card> remainingCards = cards.difference(initialCards);
+        SortedBag<Card> cardDifference = cards.difference(initialCards);
         SortedBag.Builder<Card> cardBuilder = new SortedBag.Builder<>();
-        for (Card card : remainingCards) {
+        for (Card card : cardDifference) {
             if(initialCards.contains(card) || card==Card.LOCOMOTIVE){
                 cardBuilder.add(card);
             }
         }
-        SortedBag<Card> remainingCards2 = cardBuilder.build();  //TODO changer la syntaxe
-        if(remainingCards2.size()>=additionalCardsCount){
-            Set<SortedBag<Card>> cardsSet = remainingCards2.subsetsOfSize(additionalCardsCount);
+        SortedBag<Card> remainingCards = cardBuilder.build();  //TODO changer la syntaxe
+        if(remainingCards.size()>=additionalCardsCount){
+            Set<SortedBag<Card>> cardsSet = remainingCards.subsetsOfSize(additionalCardsCount);
             List<SortedBag<Card>> possibleAdditionalCards = new ArrayList<>(cardsSet);
             possibleAdditionalCards.sort(
                     Comparator.comparingInt(cs -> cs.countOf(Card.LOCOMOTIVE)));
