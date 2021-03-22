@@ -2,6 +2,8 @@ package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.Preconditions;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class PublicGameState {
@@ -51,14 +53,22 @@ public class PublicGameState {
     }
 
     public PublicPlayerState playerState(PlayerId playerId){
-        return null;
+        return playerState.get(playerId);
     }
 
-    public Map<PlayerId, PublicPlayerState> getPlayerState() {
-        return playerState;
+    public PublicPlayerState currentPlayerState(){
+        return playerState.get(this.currentPlayerId);
     }
 
-    public PlayerId getLastPlayer() {
-        return lastPlayer;
+    public List<Route> claimedRoutes(){ // TODO opti de faire comme ca ?
+        List<Route> totalUsedRoutes = new ArrayList<>(playerState.get(currentPlayerId).routes());
+        for (Route route : playerState.get(currentPlayerId.next()).routes()) {
+            totalUsedRoutes.add(route);
+        }
+        return totalUsedRoutes;
+    }
+
+    public PlayerId lastPlayer() {
+        return lastPlayer; //TODO vérif que null est renvoyé dans le cas ou le dernier joueur n'est pas connu
     }
 }
