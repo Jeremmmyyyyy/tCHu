@@ -12,14 +12,14 @@ public class PublicGameState {
     private final PublicCardState cardState;
     private final PlayerId currentPlayerId;
     private final Map<PlayerId, PublicPlayerState> playerState;
-    private final PlayerId lastPlayer;
+    private final PlayerId lastPlayerId;
 
     // last player peut etre null vu que le joueur precedent peut etre inconnu au debut de la partie
     public PublicGameState(int ticketCount,
                            PublicCardState cardState,
                            PlayerId currentPlayerId,
                            Map<PlayerId, PublicPlayerState> playerState,
-                           PlayerId lastPlayer){
+                           PlayerId lastPlayerId){
         Preconditions.checkArgument(ticketCount >= 0);
         Preconditions.checkArgument(playerState.size() == 2);
         if(cardState == null || currentPlayerId == null || playerState == null){
@@ -29,7 +29,7 @@ public class PublicGameState {
         this.cardState = cardState;
         this.currentPlayerId = currentPlayerId;
         this.playerState = playerState;
-        this.lastPlayer = lastPlayer;
+        this.lastPlayerId = lastPlayerId;
     }
 
     public int ticketsCount() {
@@ -69,6 +69,6 @@ public class PublicGameState {
     }
 
     public PlayerId lastPlayer() {
-        return lastPlayer; //TODO vérif que null est renvoyé dans le cas ou le dernier joueur n'est pas connu
+        return lastPlayerId; //TODO vérif que null est renvoyé dans le cas ou le dernier joueur n'est pas connu
     }
 }
