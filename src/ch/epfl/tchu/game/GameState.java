@@ -99,16 +99,35 @@ public final class GameState extends PublicGameState {
     }
 
 
-
-
-
-
-
-
-
-
     public GameState withChosenAdditionalTickets(SortedBag<Ticket> drawnTickets, SortedBag<Ticket> chosenTickets){
         Preconditions.checkArgument(drawnTickets.contains(chosenTickets));
-        return  null;
+        Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
+        newPlayerState.replace(currentPlayerId(), playerState.get(currentPlayerId()).withAddedTickets(chosenTickets));
+        return new GameState(tickets.withoutTopCards(drawnTickets.size()), cardState, currentPlayerId(),
+                newPlayerState, lastPlayer() );
+    }
+
+    public GameState withDrawnFaceUpCard(int slot){
+        Preconditions.checkArgument(canDrawCards());
+        Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
+        newPlayerState.replace(currentPlayerId(),
+                playerState.get(currentPlayerId()).withAddedCard(cardState.faceUpCard(slot)));
+        return new GameState(tickets, cardState.withDrawnFaceUpCard(slot), currentPlayerId(), newPlayerState, lastPlayer());
+    }
+
+    public GameState withBlindlyDrawnCard(){
+        Preconditions.checkArgument(canDrawCards());
+        Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
+        newPlayerState.replace(currentPlayerId(),
+                playerState.get(currentPlayerId()).withAddedCard(cardState.topDeckCard()));
+        return new GameState(tickets, cardState.withoutTopDeckCard(), currentPlayerId(), newPlayerState, lastPlayer());
+    }
+
+    public GameState withClaimedRoute(Route route, SortedBag<Card> cards){
+        Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
+        newPlayerState.replace(currentPlayerId(),
+                playerState.get(currentPlayerId()).withClaimedRoute(route, cards));
+        return new GameState(tickets, cardState.withoutTopDeckCard(), currentPlayerId(), newPlayerState, lastPlayer());
+        //TODO repetition de code sur les 3 méthodes précedentes à vérif
     }
 }

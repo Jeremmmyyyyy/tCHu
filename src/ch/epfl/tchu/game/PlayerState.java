@@ -86,13 +86,7 @@ public final class PlayerState extends PublicPlayerState{
      * @return true if the route can be taken false otherwise
      */
     public boolean canClaimRoute(Route route){
-        return (!possibleClaimCards(route).isEmpty() && route.length() <= carCount()); //TODO ancien code à enlever si tt est bon
-//        for(SortedBag<Card> possibleCards : route.possibleClaimCards()){
-//            if(route.length() <= carCount() && cards.contains(possibleCards)){
-//                return true;
-//            }
-//        }
-//        return false;
+        return (!possibleClaimCards(route).isEmpty() && route.length() <= carCount());
     }
 
     /**
