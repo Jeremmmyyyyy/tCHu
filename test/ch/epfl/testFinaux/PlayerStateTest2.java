@@ -11,7 +11,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class PlayerStateTest {
+class PlayerStateTest2 {
     private static final int INITIAL_CARD_COUNT = 4;
     private static final int TOTAL_CAR_COUNT = 40;
 
