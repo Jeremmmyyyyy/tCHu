@@ -4,11 +4,15 @@ import ch.epfl.tchu.SortedBag;
 
 import java.util.List;
 import java.util.Map;
-
+/**
+ * Interface for all the informations that could be asked for a player
+ *
+ * @author Jérémy Barghorn (328403)
+ */
 public interface Player {
 
     /**
-     * Interface representing the tree different actions a player has during his turn
+     * Enum representing the tree different actions a player has during his turn
      */
     enum TurnKind{
         DRAW_TICKETS,

@@ -27,7 +27,7 @@ public final class GameState extends PublicGameState {
         CardState initialCardState = CardState.of(initialDeck.withoutTopCards(8));
         Deck<Ticket> initialTickets = Deck.of(tickets, rng);
 
-        SortedBag<Card> initialPlayer1Cards = initialDeck.topCards(4);
+        SortedBag<Card> initialPlayer1Cards = initialDeck.topCards(4); // TODO 4 constante ?
         SortedBag<Card> initialPlayer2Cards = initialDeck.withoutTopCards(4).topCards(4);
         Map<PlayerId, PlayerState> initialPlayerState = new EnumMap<>(PlayerId.class);
         initialPlayerState.put(PlayerId.PLAYER_1, PlayerState.initial(initialPlayer1Cards)); //liste
