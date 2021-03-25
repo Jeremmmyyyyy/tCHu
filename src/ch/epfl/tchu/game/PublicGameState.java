@@ -26,6 +26,9 @@ public class PublicGameState {
      * @param currentPlayerId Id of the actual player
      * @param playerState Map containing two elements : the playerState of each player
      * @param lastPlayer Id of the previous player : could be null if it's the first turn
+     * @throws NullPointerException if cardState, currentPlayerId, playerState or lastPlayerId are null
+     * @throws IllegalArgumentException if ticketCount is negative
+     * @throws IllegalArgumentException the playerState is not equal to 2
      */
     public PublicGameState(int ticketCount,
                            PublicCardState cardState,
@@ -38,7 +41,7 @@ public class PublicGameState {
         this.cardState = Objects.requireNonNull(cardState);
         this.currentPlayerId = Objects.requireNonNull(currentPlayerId);
         this.playerState = Objects.requireNonNull(playerState);
-        this.lastPlayerId = Objects.requireNonNull(lastPlayer);
+        this.lastPlayerId = lastPlayer;
     }
 
     /**
@@ -103,8 +106,8 @@ public class PublicGameState {
      * @return a list of all the routes that are taken by the players
      */
     public List<Route> claimedRoutes(){
-        List<Route> totalUsedRoutes = new ArrayList<>(playerState.get(currentPlayerId).routes());
-        playerState.forEach((k, v) -> totalUsedRoutes.addAll(playerState.get(k).routes())); // TODO bon lambda
+        List<Route> totalUsedRoutes = new ArrayList<>();
+        playerState.forEach((k, v) -> totalUsedRoutes.addAll(playerState.get(k).routes()));
         return totalUsedRoutes;
     }
 
@@ -113,6 +116,6 @@ public class PublicGameState {
      * @return the Id of the previous player
      */
     public PlayerId lastPlayer() {
-        return lastPlayerId; //TODO verif null
+        return lastPlayerId;
     }
 }
