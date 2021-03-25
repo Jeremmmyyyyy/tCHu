@@ -218,7 +218,7 @@ public final class GameState extends PublicGameState {
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(),
                 currentPlayerState().withAddedCard(cardState.topDeckCard()));
-        return new GameState(   tickets, cardState.withoutTopDeckCard(), currentPlayerId(), newPlayerState, lastPlayer());
+        return new GameState(tickets, cardState.withoutTopDeckCard(), currentPlayerId(), newPlayerState, lastPlayer());
     }
 
     /**
