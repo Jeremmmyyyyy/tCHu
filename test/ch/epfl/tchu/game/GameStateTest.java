@@ -30,6 +30,18 @@ public class GameStateTest {
             .union(SortedBag.of(1, Card.YELLOW, 2, Card.ORANGE))
             .union(SortedBag.of(3, Card.RED, 5, Card.WHITE))
             .union(SortedBag.of(3, Card.LOCOMOTIVE));
+
+    private final SortedBag<Ticket> moreTickets = SortedBag.of(List.of(new Ticket(ChMapPublic.LAU, ChMapPublic.STG, 13),
+            new Ticket(ChMapPublic.LCF, ChMapPublic.BER, 3),
+            new Ticket(ChMapPublic.LCF, ChMapPublic.LUC, 7),
+            new Ticket(ChMapPublic.LCF, ChMapPublic.ZUR, 8)));
+
+    private final SortedBag<Ticket> moreTicketsWithOneSimilar = SortedBag.of(List.of(new Ticket(ChMapPublic.LAU, ChMapPublic.STG, 13),
+            new Ticket(ChMapPublic.LCF, ChMapPublic.BER, 3),
+            new Ticket(ChMapPublic.LCF, ChMapPublic.LUC, 7),
+            new Ticket(ChMapPublic.GEN, ChMapPublic.SIO, 10),
+            new Ticket(ChMapPublic.LCF, ChMapPublic.ZUR, 8)));
+
     private final GameState gameState = GameState.initial(ticketDeck, new Random());
 
 
@@ -92,7 +104,6 @@ public class GameStateTest {
         assertEquals(gameState.cardState().discardsSize() + cards.size(),
                 gameState.cardState().discardsSize());
         assertEquals(gameState.cardState().deckSize(), gameStateWithMoreDiscardedCards.cardState().deckSize());
-
     }
 
     @Test
@@ -111,6 +122,32 @@ public class GameStateTest {
 
     @Test
     void withInitiallyChosenTickets() {
-
+        GameState gameStateWithInitiallyChosenTickets =
+                gameState.withInitiallyChosenTickets(PlayerId.PLAYER_1, moreTickets);
+        assertEquals(gameStateWithInitiallyChosenTickets.currentPlayerId(),
+                gameStateWithInitiallyChosenTickets.currentPlayerId());
+        assertNotEquals(gameStateWithInitiallyChosenTickets.currentPlayerState(),
+                gameStateWithInitiallyChosenTickets.currentPlayerState());
+        assertEquals(gameState.cardState(), gameStateWithInitiallyChosenTickets.cardState());
+        assertEquals(gameState.lastPlayer(), gameStateWithInitiallyChosenTickets.lastPlayer());
+        assertEquals(gameState.ticketsCount() - moreTickets.size(),
+                gameStateWithInitiallyChosenTickets.ticketsCount());
+        assertThrows(IllegalArgumentException.class,
+                () -> {gameState.withInitiallyChosenTickets(PlayerId.PLAYER_1, moreTicketsWithOneSimilar);});
+        assertEquals(gameState.playerState(PlayerId.PLAYER_1).tickets().size() + moreTickets.size(),
+                gameStateWithInitiallyChosenTickets.playerState(PlayerId.PLAYER_1).tickets().size());
+        assertTrue(gameStateWithInitiallyChosenTickets.playerState(PlayerId.PLAYER_1).tickets().contains(moreTickets));
     }
+
+    @Test
+    void lastTurnBegins() {
+        assertFalse(gameState.lastTurnBegins());
+    }
+
+    @Test
+    void forNextTurn() {
+    }
+
+
+
 }
