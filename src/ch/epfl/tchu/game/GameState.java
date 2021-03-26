@@ -149,9 +149,7 @@ public final class GameState extends PublicGameState {
      * @throws IllegalArgumentException if the player has already one of the chosen tickets
      */
     public GameState withInitiallyChosenTickets(PlayerId playerId, SortedBag<Ticket> chosenTickets) {
-        for (Ticket chosenTicket: chosenTickets) {
-            Preconditions.checkArgument(!playerState(playerId).tickets().contains(chosenTicket));
-        }
+        Preconditions.checkArgument(playerState(playerId).tickets().isEmpty());
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(playerId, playerState(playerId).withAddedTickets(chosenTickets));
         return new GameState(tickets, cardState, currentPlayerId(), newPlayerState, lastPlayer());
