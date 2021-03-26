@@ -144,7 +144,7 @@ public final class GameState extends PublicGameState {
 
     /**
      * Returns a similar state to this where the given player has chosen the given tickets
-     * @param playerId of the player who choosed the tickets
+     * @param playerId of the player who chose the tickets
      * @param chosenTickets to add to the given player
      * @return  a new GameState similar to this with the chosenTickets given to the player of playerId
      * @throws IllegalArgumentException if the player has already one of the chosen tickets
@@ -189,7 +189,7 @@ public final class GameState extends PublicGameState {
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(), currentPlayerState().withAddedTickets(chosenTickets));
         return new GameState(tickets.withoutTopCards(drawnTickets.size()), cardState, currentPlayerId(),
-                newPlayerState, lastPlayer() );
+                newPlayerState, lastPlayer());
     }
 
     /**

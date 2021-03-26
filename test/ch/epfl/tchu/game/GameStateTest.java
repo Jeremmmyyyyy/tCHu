@@ -34,9 +34,9 @@ public class GameStateTest {
             System.out.println("Number of tickets " + gameState.ticketsCount());
             System.out.println("ALL_CARDS size " + Constants.ALL_CARDS.size());
             System.out.println("FaceUpCards " + gameState.cardState().faceUpCards() + "Decksize " + gameState.cardState().deckSize() + " DiscardSize " + gameState.cardState().discardsSize());
-            System.out.println("TicketsPlayer1 " + gameState.playerState(PlayerId.PLAYER_1).tickets() + "CardsPlayer 1 " + gameState.playerState(PlayerId.PLAYER_2).cards());
+            System.out.println("TicketsPlayer1 " + gameState.playerState(PlayerId.PLAYER_1).tickets() + "CardsPlayer 1 " + gameState.playerState(PlayerId.PLAYER_1).cards());
             System.out.println("TicketsPlayer2 " + gameState.playerState(PlayerId.PLAYER_2).tickets() + "CardsPlayer 2 " + gameState.playerState(PlayerId.PLAYER_2).cards());
-            System.out.println("First Player " + gameState.currentPlayerId() + " Second Player" + gameState.lastPlayer());
+            System.out.println("First Player " + gameState.currentPlayerId() + " Second Player " + gameState.lastPlayer());
             System.out.println("===========================");
 
         }
@@ -84,9 +84,9 @@ public class GameStateTest {
     void initial() {
         assertTrue(ticketDeck.equals(gameState.topTickets(gameState.ticketsCount())));
         assertEquals(ticketDeck.size(), gameState.ticketsCount());
-//        assertEquals(Constants.ALL_CARDS.size() - 2 * Constants.INITIAL_CARDS_COUNT, //TODO test non fonctionnel
-//                gameState.cardState().deckSize());
-        assertEquals(gameState.currentPlayerId(), gameState.lastPlayer());
+        assertEquals(Constants.ALL_CARDS.size() - 2*Constants.INITIAL_CARDS_COUNT
+                        - Constants.FACE_UP_CARDS_COUNT, gameState.cardState().deckSize());
+        assertEquals(null, gameState.lastPlayer());
         assertEquals(4, gameState.playerState(PlayerId.PLAYER_1).cards().size());
         assertEquals(4, gameState.playerState(PlayerId.PLAYER_2).cards().size());
     }
@@ -107,8 +107,8 @@ public class GameStateTest {
                 () -> {gameState.withoutTopTickets(-2);});
         assertThrows(IllegalArgumentException.class,
                 () -> {gameState.withoutTopTickets(gameState.ticketsCount() + 1);});
-        assertEquals(gameStateWithoutTop5Tickets.currentPlayerId(), gameStateWithoutTop5Tickets.currentPlayerId());
-        assertEquals(gameStateWithoutTop5Tickets.currentPlayerState(),
+        assertEquals(gameState.currentPlayerId(), gameStateWithoutTop5Tickets.currentPlayerId());
+        assertEquals(gameState.currentPlayerState(),
                 gameStateWithoutTop5Tickets.currentPlayerState());
         assertEquals(gameState.cardState(), gameStateWithoutTop5Tickets.cardState());
         assertEquals(gameState.lastPlayer(), gameStateWithoutTop5Tickets.lastPlayer());
@@ -125,8 +125,8 @@ public class GameStateTest {
     @Test
     void withoutTopCard() {
         GameState gameStateWithoutTopCard = gameState.withoutTopCard();
-        assertEquals(gameStateWithoutTopCard.currentPlayerId(), gameStateWithoutTopCard.currentPlayerId());
-        assertEquals(gameStateWithoutTopCard.currentPlayerState(), gameStateWithoutTopCard.currentPlayerState());
+        assertEquals(gameState.currentPlayerId(), gameStateWithoutTopCard.currentPlayerId());
+        assertEquals(gameState.currentPlayerState(), gameStateWithoutTopCard.currentPlayerState());
         assertNotEquals(gameState.cardState(), gameStateWithoutTopCard.cardState());
         assertEquals(gameState.lastPlayer(), gameStateWithoutTopCard.lastPlayer());
         assertEquals(gameState.cardState().deckSize() - 1, gameStateWithoutTopCard.cardState().deckSize());
@@ -137,9 +137,9 @@ public class GameStateTest {
     @Test
     void withMoreDiscardedCards() {
         GameState gameStateWithMoreDiscardedCards = gameState.withMoreDiscardedCards(cards);
-        assertEquals(gameStateWithMoreDiscardedCards.currentPlayerId(),
+        assertEquals(gameState.currentPlayerId(),
                 gameStateWithMoreDiscardedCards.currentPlayerId());
-        assertEquals(gameStateWithMoreDiscardedCards.currentPlayerState(),
+        assertEquals(gameState.currentPlayerState(),
                 gameStateWithMoreDiscardedCards.currentPlayerState());
         assertNotEquals(gameState.cardState(), gameStateWithMoreDiscardedCards.cardState());
         assertEquals(gameState.lastPlayer(), gameStateWithMoreDiscardedCards.lastPlayer());
@@ -151,9 +151,9 @@ public class GameStateTest {
     @Test
     void withCardsDeckRecreatedIfNeeded() {
         GameState gameStateWithCardsDeckRecreatedIfNeeded= gameState.withCardsDeckRecreatedIfNeeded(new Random());
-        assertEquals(gameStateWithCardsDeckRecreatedIfNeeded.currentPlayerId(),
+        assertEquals(gameState.currentPlayerId(),
                 gameStateWithCardsDeckRecreatedIfNeeded.currentPlayerId());
-        assertEquals(gameStateWithCardsDeckRecreatedIfNeeded.currentPlayerState(),
+        assertEquals(gameState.currentPlayerState(),
                 gameStateWithCardsDeckRecreatedIfNeeded.currentPlayerState());
 //        assertNotEquals(gameState.cardState(), gameStateWithCardsDeckRecreatedIfNeeded.cardState()); // on peut pas comparer des listes avec not equal
         assertEquals(gameState.lastPlayer(), gameStateWithCardsDeckRecreatedIfNeeded.lastPlayer());
@@ -166,16 +166,21 @@ public class GameStateTest {
     void withInitiallyChosenTickets() {
         GameState gameStateWithInitiallyChosenTickets =
                 gameState.withInitiallyChosenTickets(PlayerId.PLAYER_1, moreTickets);
-        assertEquals(gameStateWithInitiallyChosenTickets.currentPlayerId(),
+        GameState gameState1 = gameState.withChosenAdditionalTickets(
+                SortedBag.of(new Ticket(ChMapPublic.GEN, ChMapPublic.SIO, 10)),
+                SortedBag.of(new Ticket(ChMapPublic.GEN, ChMapPublic.SIO, 10)));
+        assertEquals(gameState.currentPlayerId(),
                 gameStateWithInitiallyChosenTickets.currentPlayerId());
-        assertNotEquals(gameStateWithInitiallyChosenTickets.currentPlayerState(),
+        assertNotEquals(gameState.currentPlayerState(),
                 gameStateWithInitiallyChosenTickets.currentPlayerState());
         assertEquals(gameState.cardState(), gameStateWithInitiallyChosenTickets.cardState());
         assertEquals(gameState.lastPlayer(), gameStateWithInitiallyChosenTickets.lastPlayer());
-        assertEquals(gameState.ticketsCount() - moreTickets.size(),
+        assertEquals(gameState.ticketsCount(),
                 gameStateWithInitiallyChosenTickets.ticketsCount());
         assertThrows(IllegalArgumentException.class,
-                () -> {gameState.withInitiallyChosenTickets(PlayerId.PLAYER_1, moreTicketsWithOneSimilar);});
+                () -> { gameState1.withInitiallyChosenTickets(gameState1.currentPlayerId(),
+                        SortedBag.of(new Ticket(ChMapPublic.GEN, ChMapPublic.SIO, 10)));
+        });
         assertEquals(gameState.playerState(PlayerId.PLAYER_1).tickets().size() + moreTickets.size(),
                 gameStateWithInitiallyChosenTickets.playerState(PlayerId.PLAYER_1).tickets().size());
         assertTrue(gameStateWithInitiallyChosenTickets.playerState(PlayerId.PLAYER_1).tickets().contains(moreTickets));
