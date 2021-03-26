@@ -30,7 +30,7 @@ public final class GameState extends PublicGameState {
      */
     private GameState(Deck<Ticket> tickets, CardState cardState, PlayerId currentPlayerId, Map<PlayerId,
             PlayerState> playerState, PlayerId lastPlayerId) {
-        super(tickets.size(), cardState, currentPlayerId, Map.copyOf(playerState), lastPlayerId); //TODO revoir la copie de map
+        super(tickets.size(), cardState, currentPlayerId, Map.copyOf(playerState), lastPlayerId);
         this.playerState = Map.copyOf(playerState);
         this.cardState = cardState;
         this.tickets = tickets;
@@ -47,10 +47,10 @@ public final class GameState extends PublicGameState {
         CardState initialCardState = CardState.of(initialDeck.withoutTopCards(2*Constants.INITIAL_CARDS_COUNT));
         Deck<Ticket> initialTickets = Deck.of(tickets, rng);
 
-        SortedBag<Card> initialPlayer1Cards =
+        SortedBag<Card> initialPlayer1Cards = //TODO REDEMANDER SI ON PREND LES 8 PREMIERES CARTES
                 initialDeck.topCards(Constants.INITIAL_CARDS_COUNT);
         SortedBag<Card> initialPlayer2Cards =
-                initialDeck.withoutTopCards(Constants.INITIAL_CARDS_COUNT).topCards(Constants.INITIAL_CARDS_COUNT);// TODO marche pas renvoie deux fois les meme cartes
+                initialDeck.withoutTopCards(Constants.INITIAL_CARDS_COUNT).topCards(Constants.INITIAL_CARDS_COUNT);
         Map<PlayerId, PlayerState> initialPlayerState = new EnumMap<>(PlayerId.class);
         initialPlayerState.put(PlayerId.PLAYER_1, PlayerState.initial(initialPlayer1Cards)); //liste
         initialPlayerState.put(PlayerId.PLAYER_2, PlayerState.initial(initialPlayer2Cards));
@@ -144,7 +144,7 @@ public final class GameState extends PublicGameState {
 
     /**
      * Returns a similar state to this where the given player has chosen the given tickets
-     * @param playerId of the player who choosed the tickets
+     * @param playerId of the player who chose the tickets
      * @param chosenTickets to add to the given player
      * @return  a new GameState similar to this with the chosenTickets given to the player of playerId
      * @throws IllegalArgumentException if the player has already one of the chosen tickets
@@ -189,7 +189,7 @@ public final class GameState extends PublicGameState {
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(), currentPlayerState().withAddedTickets(chosenTickets));
         return new GameState(tickets.withoutTopCards(drawnTickets.size()), cardState, currentPlayerId(),
-                newPlayerState, lastPlayer() );
+                newPlayerState, lastPlayer());
     }
 
     /**
