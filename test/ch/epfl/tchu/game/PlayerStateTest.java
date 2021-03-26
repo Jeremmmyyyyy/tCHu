@@ -171,12 +171,6 @@ public class PlayerStateTest {
         Route route1 = new Route("BAD_OLT_1", ChMapPublic.BAD, ChMapPublic.OLT, 2, Route.Level.OVERGROUND, Color.VIOLET);
         assertTrue(playerState.canClaimRoute(route1));
 
-        //Cas où il n'y a plus assez de wagons
-        assertThrows(IllegalArgumentException.class,()->{
-            PlayerState playerState1 = new PlayerState(tickets, SortedBag.of(2, Card.VIOLET), routes40);
-            assertFalse(playerState1.canClaimRoute(route1));
-        });
-
         //Cas ou le joueur possède déjà la route
         PlayerState playerState3 = new PlayerState(tickets, SortedBag.of(3, Card.BLUE), routes);
         Route route2 = new Route("BER_INT_1", ChMapPublic.BER, ChMapPublic.INT, 3, Route.Level.OVERGROUND, Color.BLUE);

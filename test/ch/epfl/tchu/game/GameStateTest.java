@@ -4,14 +4,12 @@ import ch.epfl.tchu.SortedBag;
 import ch.epfl.test.ChMapPublic;
 import org.junit.jupiter.api.Test;
 
-import javax.management.relation.RelationNotFoundException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameStateTest {
 

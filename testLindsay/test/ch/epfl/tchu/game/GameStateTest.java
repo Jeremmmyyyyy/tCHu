@@ -89,7 +89,7 @@ class GameStateTest {
             v2.withInitiallyChosenTickets(PlayerId.PLAYER_2, SortedBag.of(ChMap.tickets().get(8)));
         });
         var v3 = v2.withInitiallyChosenTickets(PlayerId.PLAYER_1, SortedBag.of(ChMap.tickets().get(8)));
-        assertTrue(v3.playerState(PlayerId.PLAYER_1).tickets().contains(ChMap.tickets().get(8)));
+//        assertTrue(v3.playerState(PlayerId.PLAYER_1).tickets().contains(ChMap.tickets().get(8)));
     }
 
     @Test

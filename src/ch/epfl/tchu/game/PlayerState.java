@@ -130,7 +130,7 @@ public final class PlayerState extends PublicPlayerState{
                 cardBuilder.add(card);
             }
         }
-        SortedBag<Card> remainingCards = cardBuilder.build();  //TODO changer la syntaxe
+        SortedBag<Card> remainingCards = cardBuilder.build();
         if(remainingCards.size()>=additionalCardsCount){
             Set<SortedBag<Card>> cardsSet = remainingCards.subsetsOfSize(additionalCardsCount);
             List<SortedBag<Card>> possibleAdditionalCards = new ArrayList<>(cardsSet);

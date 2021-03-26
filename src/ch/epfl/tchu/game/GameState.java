@@ -47,7 +47,7 @@ public final class GameState extends PublicGameState {
         CardState initialCardState = CardState.of(initialDeck.withoutTopCards(2*Constants.INITIAL_CARDS_COUNT));
         Deck<Ticket> initialTickets = Deck.of(tickets, rng);
 
-        SortedBag<Card> initialPlayer1Cards = //TODO REDEMANDER SI ON PREND LES 8 PREMIERES CARTES
+        SortedBag<Card> initialPlayer1Cards =
                 initialDeck.topCards(Constants.INITIAL_CARDS_COUNT);
         SortedBag<Card> initialPlayer2Cards =
                 initialDeck.withoutTopCards(Constants.INITIAL_CARDS_COUNT).topCards(Constants.INITIAL_CARDS_COUNT);
@@ -58,7 +58,6 @@ public final class GameState extends PublicGameState {
         PlayerId initialPlayer = PlayerId.ALL.get(rng.nextInt(2));
 
         return new GameState(initialTickets, initialCardState, initialPlayer, initialPlayerState, null);
-
     }
 
     /**
@@ -184,8 +183,8 @@ public final class GameState extends PublicGameState {
      * @return a new GameState similar to this with the chosen tickets given to the current player
      * @throws IllegalArgumentException if chosenTickets is a subset of drawnTickets
      */
-    public GameState withChosenAdditionalTickets(SortedBag<Ticket> drawnTickets, SortedBag<Ticket> chosenTickets){ // TODO suppr les tickets de la pioche ou que la haut
-        Preconditions.checkArgument(drawnTickets.contains(chosenTickets)); //TODO ou vont les tickets qui ne sont pas choisis
+    public GameState withChosenAdditionalTickets(SortedBag<Ticket> drawnTickets, SortedBag<Ticket> chosenTickets){
+        Preconditions.checkArgument(drawnTickets.contains(chosenTickets));
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(), currentPlayerState().withAddedTickets(chosenTickets));
         return new GameState(tickets.withoutTopCards(drawnTickets.size()), cardState, currentPlayerId(),
@@ -233,6 +232,5 @@ public final class GameState extends PublicGameState {
         newPlayerState.replace(currentPlayerId(),
                 currentPlayerState().withClaimedRoute(route, cards));
         return new GameState(tickets, cardState.withoutTopDeckCard(), currentPlayerId(), newPlayerState, lastPlayer());
-        //TODO repetition de code sur les 3 méthodes précedentes à vérif
     }
 }
