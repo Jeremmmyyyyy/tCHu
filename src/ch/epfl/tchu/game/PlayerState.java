@@ -85,7 +85,7 @@ public final class PlayerState extends PublicPlayerState{
      * @param route that is tested
      * @return true if the route can be taken false otherwise
      */
-    public boolean canClaimRoute(Route route){
+    public boolean canClaimRoute(Route route){ // TODO pourquoi le test a echoué ?  Il
         return (!possibleClaimCards(route).isEmpty() && route.length() <= carCount());
     }
 
