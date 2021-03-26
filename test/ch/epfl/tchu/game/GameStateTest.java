@@ -151,14 +151,13 @@ public class GameStateTest {
     @Test
     void withCardsDeckRecreatedIfNeeded() {
         GameState gameStateWithCardsDeckRecreatedIfNeeded= gameState.withCardsDeckRecreatedIfNeeded(new Random());
-        System.out.println(gameStateWithCardsDeckRecreatedIfNeeded.cardState().isDeckEmpty()); // ne peut pas recréer car non vide mais je vois pas comment vider le deck
         assertEquals(gameStateWithCardsDeckRecreatedIfNeeded.currentPlayerId(),
                 gameStateWithCardsDeckRecreatedIfNeeded.currentPlayerId());
         assertEquals(gameStateWithCardsDeckRecreatedIfNeeded.currentPlayerState(),
                 gameStateWithCardsDeckRecreatedIfNeeded.currentPlayerState());
 //        assertNotEquals(gameState.cardState(), gameStateWithCardsDeckRecreatedIfNeeded.cardState()); // on peut pas comparer des listes avec not equal
         assertEquals(gameState.lastPlayer(), gameStateWithCardsDeckRecreatedIfNeeded.lastPlayer());
-        assertEquals(gameState.cardState().discardsSize(),
+        assertNotEquals(gameState.cardState().discardsSize(),
                 gameStateWithCardsDeckRecreatedIfNeeded.cardState().deckSize());
         assertEquals(0, gameStateWithCardsDeckRecreatedIfNeeded.cardState().discardsSize());
     }

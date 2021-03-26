@@ -57,7 +57,7 @@ public final class GameState extends PublicGameState {
 
         PlayerId initialPlayer = PlayerId.ALL.get(rng.nextInt(2));
 
-        return new GameState(initialTickets, initialCardState, initialPlayer, initialPlayerState, initialPlayer); //TODO le lastpalyer ne devrait pas etre null ?
+        return new GameState(initialTickets, initialCardState, initialPlayer, initialPlayerState, null);
 
     }
 
