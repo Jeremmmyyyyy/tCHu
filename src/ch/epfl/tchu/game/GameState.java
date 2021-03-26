@@ -184,8 +184,8 @@ public final class GameState extends PublicGameState {
      * @return a new GameState similar to this with the chosen tickets given to the current player
      * @throws IllegalArgumentException if chosenTickets is a subset of drawnTickets
      */
-    public GameState withChosenAdditionalTickets(SortedBag<Ticket> drawnTickets, SortedBag<Ticket> chosenTickets){
-        Preconditions.checkArgument(drawnTickets.contains(chosenTickets));
+    public GameState withChosenAdditionalTickets(SortedBag<Ticket> drawnTickets, SortedBag<Ticket> chosenTickets){ // TODO suppr les tickets de la pioche ou que la haut
+        Preconditions.checkArgument(drawnTickets.contains(chosenTickets)); //TODO ou vont les tickets qui ne sont pas choisis
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(), currentPlayerState().withAddedTickets(chosenTickets));
         return new GameState(tickets.withoutTopCards(drawnTickets.size()), cardState, currentPlayerId(),
@@ -223,8 +223,8 @@ public final class GameState extends PublicGameState {
 
     /**
      * Returns a similar state to this where the current player claimed the given route thanks to the given cards
-     * @param route
-     * @param cards
+     * @param route route that is claimed
+     * @param cards cards that are required to take control of the route
      * @return a new GameState similar to this where the current player
      * claimed the given route thanks to the given cards
      */

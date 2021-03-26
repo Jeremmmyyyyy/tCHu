@@ -193,27 +193,71 @@ public class GameStateTest {
 
     @Test
     void forNextTurn() {
+
     }
 
 
     @Test
     public void withChosenAdditionalTickets(){
+        List<Ticket> drawTicketsToSortedBag = new ArrayList<>();
+        List<Ticket> chosenTicketsToSortedBag = new ArrayList<>();
+        List<Ticket> randomTicketsToSortedBag = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            drawTicketsToSortedBag.add(ChMapPublic.ALL_TICKETS.get(getRandomNumber(0, ChMapPublic.ALL_TICKETS.size())));
+            randomTicketsToSortedBag.add(ChMapPublic.ALL_TICKETS.get(getRandomNumber(0, ChMapPublic.ALL_TICKETS.size())));
+        }
+        for (int i = 0; i < drawTicketsToSortedBag.size() - 2; i++) {
+            chosenTicketsToSortedBag.add(drawTicketsToSortedBag.get(i));
+        }
+        SortedBag<Ticket> drawnTickets = SortedBag.of(drawTicketsToSortedBag);
+        SortedBag<Ticket> chosenTicket = SortedBag.of(chosenTicketsToSortedBag);
+        SortedBag<Ticket> randomTickets = SortedBag.of(randomTicketsToSortedBag);
+        GameState gameState = gameStateCreator(10, false);
+        GameState gameState1 = gameStateCreator(10, false);
 
+        assertThrows(IllegalArgumentException.class, ()->{
+            gameState.withChosenAdditionalTickets(drawnTickets, randomTickets);
+        });
+
+        gameState1 = gameState1.withChosenAdditionalTickets(drawnTickets, chosenTicket);
+        System.out.println(drawnTickets);
+        System.out.println(gameState1.currentPlayerState().tickets());
+        assertEquals(5, gameState1.ticketsCount());
+        assertEquals(3, gameState1.currentPlayerState().tickets().size());
+        assertEquals(chosenTicket, gameState1.currentPlayerState().tickets());
     }
 
     @Test
     public void withDrawnFaceUpCard(){
-
+        GameState gameState = gameStateCreator(10, true);
+        for (int i = 0; i < gameState.cardState().faceUpCards().size(); i++) {
+            gameState = gameState.withDrawnFaceUpCard(i);
+            System.out.println(gameState.cardState().faceUpCards());
+            assertEquals(97-i-1, gameState.cardState().deckSize());
+            assertEquals(4+1+i, gameState.currentPlayerState().cards().size());
+        }
+        System.out.println(gameState.currentPlayerState().cards());
     }
 
     @Test
     public void withBlindlyDrawnCard(){
-
+        GameState gameState = gameStateCreator(10, true);
+        for (int i = 0; i < 5; i++) {
+            gameState = gameState.withBlindlyDrawnCard();
+            assertEquals(4+1+i, gameState.currentPlayerState().cards().size());
+        }
+        System.out.println(gameState.currentPlayerState().cards());
     }
 
     @Test
     public void withClaimedRoute(){
-
+        GameState gameState = gameStateCreator(10, true);
+        gameState = gameState.withClaimedRoute(ChMapPublic.ALL_ROUTES.get(0), SortedBag.of(4, Card.LOCOMOTIVE));
+        assertEquals(1, gameState.currentPlayerState().routes().size());
+        System.out.println(gameState.currentPlayerState().cards().size());
+        gameState = gameState.withClaimedRoute(ChMapPublic.ALL_ROUTES.get(1), SortedBag.of(10, Card.LOCOMOTIVE));
+        assertEquals(2, gameState.currentPlayerState().routes().size());
+        System.out.println(gameState.currentPlayerState().cards().size());
     }
 
 
