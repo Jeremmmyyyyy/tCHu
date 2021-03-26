@@ -179,6 +179,7 @@ public class GameStateTest {
                 () -> { gameState1.withInitiallyChosenTickets(gameState1.currentPlayerId(),
                         SortedBag.of(new Ticket(ChMapPublic.GEN, ChMapPublic.SIO, 10)));
                 });
+        System.out.println(gameState.playerState(PlayerId.PLAYER_1).tickets().size() + moreTickets.size() + " " + gameStateWithInitiallyChosenTickets.playerState(PlayerId.PLAYER_1).tickets().size());
         assertEquals(gameState.playerState(PlayerId.PLAYER_1).tickets().size() + moreTickets.size(),
                 gameStateWithInitiallyChosenTickets.playerState(PlayerId.PLAYER_1).tickets().size());
         assertTrue(gameStateWithInitiallyChosenTickets.playerState(PlayerId.PLAYER_1).tickets().contains(moreTickets));

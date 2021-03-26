@@ -153,7 +153,7 @@ public final class GameState extends PublicGameState {
             Preconditions.checkArgument(!playerState(playerId).tickets().contains(chosenTicket));
         }
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
-        newPlayerState.replace(currentPlayerId(), playerState(playerId).withAddedTickets(chosenTickets));
+        newPlayerState.replace(playerId, playerState(playerId).withAddedTickets(chosenTickets));
         return new GameState(tickets, cardState, currentPlayerId(), newPlayerState, lastPlayer());
     }
 
