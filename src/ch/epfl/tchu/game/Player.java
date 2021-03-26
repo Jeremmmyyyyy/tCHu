@@ -68,7 +68,7 @@ public interface Player {
      * @param options
      * @return
      */
-    SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options);//TODO billets ???
+    SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options);
 
     /**
      * Called if the player wants to draw Cards
