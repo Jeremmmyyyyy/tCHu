@@ -41,7 +41,7 @@ public interface Player {
     /**
      * Called each time the GameState changes
      * @param newState new PublicGameState that has to be known by the player
-     * @param ownState PlayerState
+     * @param ownState PlayerState of the PublicPlayerState
      */
     void updateState(PublicGameState newState, PlayerState ownState);
 
