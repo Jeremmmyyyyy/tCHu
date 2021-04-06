@@ -50,7 +50,7 @@ public final class CardState extends PublicCardState{
         Preconditions.checkArgument(deckSize() > 0);
         List<Card> faceUpCard = new ArrayList<>(faceUpCards());
         faceUpCard.set(slot, deck.topCard());
-        return new CardState(faceUpCard, deck.withoutTopCard(), SortedBag.of());
+        return new CardState(faceUpCard, deck.withoutTopCard(), discard);
     }
 
     /**
@@ -69,7 +69,7 @@ public final class CardState extends PublicCardState{
      */
     public CardState withoutTopDeckCard(){
         Preconditions.checkArgument(!deck.isEmpty());
-        return new CardState(faceUpCards(), deck.withoutTopCard(), SortedBag.of());
+        return new CardState(faceUpCards(), deck.withoutTopCard(), discard);
     }
 
     /**

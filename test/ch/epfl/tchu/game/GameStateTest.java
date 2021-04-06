@@ -169,8 +169,6 @@ public class GameStateTest {
                 SortedBag.of(new Ticket(ChMapPublic.GEN, ChMapPublic.SIO, 10)));
         assertEquals(gameState.currentPlayerId(),
                 gameStateWithInitiallyChosenTickets.currentPlayerId());
-        assertNotEquals(gameState.currentPlayerState(),
-                gameStateWithInitiallyChosenTickets.currentPlayerState());
         assertEquals(gameState.cardState(), gameStateWithInitiallyChosenTickets.cardState());
         assertEquals(gameState.lastPlayer(), gameStateWithInitiallyChosenTickets.lastPlayer());
         assertEquals(gameState.ticketsCount(),

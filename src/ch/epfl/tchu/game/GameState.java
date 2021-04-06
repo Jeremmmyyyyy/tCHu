@@ -81,7 +81,7 @@ public final class GameState extends PublicGameState {
 
     /**
      * Returns a given amount of tickets from the deck
-     * @param count number of top tickets to return
+     * @param count number of top tickets to ret    urn
      * @return the first count tickets of the attribute tickets
      * @throws IllegalArgumentException if count isn't in [0,tickets.size()]
      */
@@ -229,6 +229,6 @@ public final class GameState extends PublicGameState {
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(),
                 currentPlayerState().withClaimedRoute(route, cards));
-        return new GameState(tickets, cardState.withoutTopDeckCard(), currentPlayerId(), newPlayerState, lastPlayer());
+        return new GameState(tickets, cardState, currentPlayerId(), newPlayerState, lastPlayer());
     }
 }
