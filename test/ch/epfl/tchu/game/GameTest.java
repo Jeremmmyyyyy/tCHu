@@ -114,6 +114,13 @@ public class GameTest {
                 initialClaimCards = cards.get(0);
                 System.out.println("CLAIM_ROUTE = Route : " + route.id() + " | Level : "
                         + route.level() + " | InitialClaimCards : " + initialClaimCards);
+                System.out.println("Deck: " +gameState.cardState().deckSize()+
+                                    "| Discard: " +gameState.cardState().discardsSize() +
+                                        "| FaceUpCards: " +gameState.cardState().faceUpCards());
+                gameState.claimedRoutes().forEach((s)-> System.out.print(s + "|"));
+                System.out.println();
+
+
                 return TurnKind.CLAIM_ROUTE;
             }
         }
