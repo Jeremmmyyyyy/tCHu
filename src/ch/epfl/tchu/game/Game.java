@@ -89,9 +89,11 @@ public final class Game {
                                 sendInfoToBoth(new Info(playerNames.get(playerId)).didNotClaimRoute(claimedRoute), players);
                             }
                         } else {
+                            currentGameState = currentGameState.withClaimedRoute(claimedRoute, initialClaimCards);
                             sendInfoToBoth(new Info(playerNames.get(playerId)).claimedRoute(claimedRoute, initialClaimCards), players);
                         }
                     } else if (claimedRoute.level() == Route.Level.OVERGROUND) {
+                        currentGameState = currentGameState.withClaimedRoute(claimedRoute, initialClaimCards);
                         sendInfoToBoth(new Info(playerNames.get(playerId)).claimedRoute(claimedRoute, initialClaimCards), players);
                     }//TODO un joueur peut il jouer CLAIM_ROUTE sans pouvoir la claim ??? donc boucle else ici + test canClaimRoute en haut
                 }
