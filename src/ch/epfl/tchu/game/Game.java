@@ -91,7 +91,7 @@ public final class Game {
         for(PlayerId playerId : playerOrder) {
             sendInfoToBoth(new Info(playerNames.get(playerId)).canPlay(), players);
             Player currentPlayer = players.get(playerId);
-            updateStates(players, currentGameState, playerOrder);
+            players.get(playerId).updateState(currentGameState, currentGameState.playerState(playerId));
             Player.TurnKind turnKind = players.get(playerId).nextTurn();
 
             if(turnKind.equals(Player.TurnKind.DRAW_TICKETS)){
@@ -104,12 +104,14 @@ public final class Game {
             }else if(turnKind.equals(Player.TurnKind.DRAW_CARDS)){
                 for (int i = 0; i < 2; i++) {
                     currentGameState = withCardsRecreatedFromDeckIfDeckEmpty(currentGameState, rng);
-                    updateStates(players, currentGameState, playerOrder);
+                    players.get(playerId).updateState(currentGameState, currentGameState.playerState(playerId));
                     int slot = players.get(playerId).drawSlot();
                     if(0<=slot && slot<=4){
+                        System.out.println("1 " + currentGameState.cardState().faceUpCards());
                         sendInfoToBoth(new Info(playerNames.get(playerId)).drewVisibleCard(currentGameState.cardState().faceUpCard(slot)), players);
                         currentGameState = currentGameState.withDrawnFaceUpCard(slot);
                     }else if(slot == Constants.DECK_SLOT){ //TODO deck slot
+                        System.out.println("2");
                         sendInfoToBoth(new Info(playerNames.get(playerId)).drewBlindCard(), players);
                         currentGameState = currentGameState.withBlindlyDrawnCard();
                     }

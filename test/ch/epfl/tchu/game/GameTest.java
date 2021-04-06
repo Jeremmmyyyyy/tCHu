@@ -104,7 +104,8 @@ public class GameTest {
                 }
             }
             if (claimableRoutes.isEmpty()) {
-                System.out.println("DRAW_CARDS");
+                System.out.println("DRAW_CARDS ");
+
                 return TurnKind.DRAW_CARDS;
             } else {
                 int routeIndex = rng.nextInt(claimableRoutes.size());
