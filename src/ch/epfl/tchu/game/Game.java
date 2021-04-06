@@ -24,7 +24,7 @@ public final class Game {
             currentGameState = currentGameState.withoutTopTickets(Constants.INITIAL_TICKETS_COUNT);
         }
 
-
+        //TODO update state ici ou dans la boucle ????
 
         for(PlayerId playerId : PlayerId.ALL){
             updateStates(players, currentGameState);
