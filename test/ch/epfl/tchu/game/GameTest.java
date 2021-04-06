@@ -1,154 +1,125 @@
 package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.SortedBag;
-import ch.epfl.test.ChMapPublic;
-import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
-public class GameTest {
+final class GameTest$TestPlayer implements Player {
+    private static final int TURN_LIMIT = 1000;
+    private final Random rng;
+    private final List<Route> allRoutes;
+    private int turnCounter;
+    private PlayerState ownState;
+    private PublicGameState gameState;
+    private Route routeToClaim;
+    private SortedBag<Card> initialClaimCards;
+    private Map<PlayerId, String> playerNames;
+    private PlayerId ownId;
+    private SortedBag<Ticket> tickets;
+    private int numberOfInfoReceived = 0;
 
-
-    @Test
-    void test(){
-        TestPlayer player1 = new TestPlayer(165473674358L, ChMapPublic.ALL_ROUTES);
-        TestPlayer player2 = new TestPlayer(165473674358L, ChMapPublic.ALL_ROUTES);
-        Map<PlayerId, String> playerNames = new HashMap<>();
-        playerNames.putIfAbsent(PlayerId.PLAYER_1, "Alice");
-        playerNames.putIfAbsent(PlayerId.PLAYER_2, "Bob");
-        Map<PlayerId, Player> players = new HashMap<>();
-        players.putIfAbsent(PlayerId.PLAYER_1, player1);
-        players.putIfAbsent(PlayerId.PLAYER_2, player2);
-
-        Game.play(players, playerNames, SortedBag.of(ChMapPublic.ALL_TICKETS), new Random(137829475L));
+    public int getRandomNumber(int min, int max) {
+        return (int)(Math.random() * (double)(max - min) + (double)min);
     }
 
+    public GameTest$TestPlayer(long randomSeed, List<Route> allRoutes) {
+        this.rng = new Random(randomSeed);
+        this.allRoutes = List.copyOf(allRoutes);
+        this.turnCounter = 0;
+    }
 
+    public void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
+        this.ownId = ownId;
+        this.playerNames = playerNames;
+    }
 
-    private static final class TestPlayer implements Player {
+    public void receiveInfo(String info) {
+        ++this.numberOfInfoReceived;
+        System.out.println(this.numberOfInfoReceived + " | " + info);
+    }
 
-        public int getRandomNumber(int min, int max) {
-            return (int) ((Math.random() * (max - min)) + min);
+    public void updateState(PublicGameState newState, PlayerState ownState) {
+        this.gameState = newState;
+        this.ownState = ownState;
+    }
+
+    public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
+        this.tickets = tickets;
+    }
+
+    public SortedBag<Ticket> chooseInitialTickets() {
+        List<Ticket> chosenTickets = new ArrayList();
+
+        for(int i = 0; i < this.getRandomNumber(3, 5); ++i) {
+            chosenTickets.add((Ticket)this.tickets.get(i));
         }
 
-        private static final int TURN_LIMIT = 1000;
+        return SortedBag.of(chosenTickets);
+    }
 
-        private final Random rng;
-        // Toutes les routes de la carte
-        private final List<Route> allRoutes;
+    public TurnKind nextTurn() {
+        ++this.turnCounter;
+        if (this.turnCounter > 1000) {
+            throw new Error("Trop de tours joués !");
+        } else {
+            List<Route> claimableRoutes = new ArrayList();
+            Iterator var2 = this.allRoutes.iterator();
 
-        private int turnCounter;
-        private PlayerState ownState;
-        private PublicGameState gameState;
-
-        // Lorsque nextTurn retourne CLAIM_ROUTE
-        private Route routeToClaim;
-        private SortedBag<Card> initialClaimCards;
-        private Map<PlayerId, String> playerNames;
-        private PlayerId ownId;
-        private SortedBag<Ticket> tickets;
-        private int numberOfInfoReceived = 0;
-
-        public TestPlayer(long randomSeed, List<Route> allRoutes) {
-            this.rng = new Random(randomSeed);
-            this.allRoutes = List.copyOf(allRoutes);
-            this.turnCounter = 0;
-        }
-
-
-        @Override
-        public void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
-            this.ownId = ownId;
-            this.playerNames = playerNames;
-        }
-
-        @Override
-        public void receiveInfo(String info) {
-            ++numberOfInfoReceived;
-            System.out.println(numberOfInfoReceived + " | " + info);
-        }
-
-        @Override
-        public void updateState(PublicGameState newState, PlayerState ownState) {
-            this.gameState = newState;
-            this.ownState = ownState;
-        }
-
-        @Override
-        public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
-            this.tickets = tickets;
-        }
-
-        @Override
-        public SortedBag<Ticket> chooseInitialTickets() {
-            List<Ticket> chosenTickets = new ArrayList<>();
-            for (int i = 0; i < getRandomNumber(3, 5); ++i) {
-                chosenTickets.add(tickets.get(i));
-            }
-            return SortedBag.of(chosenTickets);
-        }
-
-
-        @Override
-        public TurnKind nextTurn() {
-            turnCounter += 1;
-            if (turnCounter > TURN_LIMIT)
-                throw new Error("Trop de tours joués !");
-
-            // Détermine les routes dont ce joueur peut s'emparer
-            List<Route> claimableRoutes = new ArrayList<>();
-            for (Route r : allRoutes) {
-                if (ownState.canClaimRoute(r)) {
-                    claimableRoutes.add(r);
+            Route route;
+            while(var2.hasNext()) {
+                route = (Route)var2.next();
+                if (this.ownState.canClaimRoute(route)) {
+                    claimableRoutes.add(route);
                 }
             }
+
             if (claimableRoutes.isEmpty()) {
                 System.out.println("DRAW_CARDS");
                 return TurnKind.DRAW_CARDS;
             } else {
-                int routeIndex = rng.nextInt(claimableRoutes.size());
-                Route route = claimableRoutes.get(routeIndex);
-                List<SortedBag<Card>> cards = ownState.possibleClaimCards(route);
-
-                routeToClaim = route;
-                initialClaimCards = cards.get(0);
-                System.out.println("CLAIM_ROUTE = Route : " + route.id() + " | Level : "
-                        + route.level() + " | InitialClaimCards : " + initialClaimCards);
+                int routeIndex = this.rng.nextInt(claimableRoutes.size());
+                route = (Route)claimableRoutes.get(routeIndex);
+                List<SortedBag<Card>> cards = this.ownState.possibleClaimCards(route);
+                this.routeToClaim = route;
+                this.initialClaimCards = (SortedBag)cards.get(0);
+                PrintStream var10000 = System.out;
+                String var10001 = route.id();
+                var10000.println("CLAIM_ROUTE = Route : " + var10001 + " | Level : " + route.level() + " | InitialClaimCards : " + this.initialClaimCards);
                 return TurnKind.CLAIM_ROUTE;
             }
         }
-
-        @Override
-        public SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) {
-            List<Ticket> chosenTickets = new ArrayList<>();
-            for (int i = 0; i < getRandomNumber(1, 3); ++i) {
-                chosenTickets.add(options.get(i));
-            }
-            return SortedBag.of(chosenTickets);
-        }
-
-        @Override
-        public int drawSlot() {
-            return getRandomNumber(-1, 4);
-        }
-
-        @Override
-        public Route claimedRoute() {
-            return routeToClaim;
-        }
-
-        @Override
-        public SortedBag<Card> initialClaimCards() {
-            return initialClaimCards;
-        }
-
-        @Override
-        public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) {
-            SortedBag<Card> chosenAdditionalCards = options.get(getRandomNumber(0, options.size() - 1));
-            System.out.println("ChosenAdditionalCards : " + chosenAdditionalCards);
-            return chosenAdditionalCards;
-        }
-
     }
 
+    public SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) {
+        List<Ticket> chosenTickets = new ArrayList();
+
+        for(int i = 0; i < this.getRandomNumber(1, 3); ++i) {
+            chosenTickets.add((Ticket)options.get(i));
+        }
+
+        return SortedBag.of(chosenTickets);
+    }
+
+    public int drawSlot() {
+        return this.getRandomNumber(-1, 4);
+    }
+
+    public Route claimedRoute() {
+        return this.routeToClaim;
+    }
+
+    public SortedBag<Card> initialClaimCards() {
+        return this.initialClaimCards;
+    }
+
+    public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) {
+        SortedBag<Card> chosenAdditionalCards = (SortedBag)options.get(this.getRandomNumber(0, options.size() - 1));
+        System.out.println("ChosenAdditionalCards : " + chosenAdditionalCards);
+        return chosenAdditionalCards;
+    }
 }
