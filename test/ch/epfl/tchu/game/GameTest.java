@@ -13,14 +13,15 @@ public class GameTest {
     void test(){
         TestPlayer player1 = new TestPlayer(165473674358L, ChMapPublic.ALL_ROUTES);
         TestPlayer player2 = new TestPlayer(165473674358L, ChMapPublic.ALL_ROUTES);
-        Map<PlayerId, String> playerNames = new HashMap<>();
+        Map<PlayerId, String> playerNames = new TreeMap<>();
         playerNames.putIfAbsent(PlayerId.PLAYER_1, "Alice");
         playerNames.putIfAbsent(PlayerId.PLAYER_2, "Bob");
-        Map<PlayerId, Player> players = new HashMap<>();
+        Map<PlayerId, Player> players = new TreeMap<>();
         players.putIfAbsent(PlayerId.PLAYER_1, player1);
         players.putIfAbsent(PlayerId.PLAYER_2, player2);
 
-        Game.play(players, playerNames, SortedBag.of(ChMapPublic.ALL_TICKETS), new Random(137829475L));
+        Game.play(players, playerNames, SortedBag.of(ChMapPublic.ALL_TICKETS), new Random(1L));
+        // Seed 9149849847L = player 2 puis player 1 // Seed 2000 Player 1 puis player 2
     }
 
 
@@ -116,8 +117,10 @@ public class GameTest {
                         + route.level() + " | InitialClaimCards : " + initialClaimCards);
                 System.out.println("Deck: " +gameState.cardState().deckSize()+
                                     "| Discard: " +gameState.cardState().discardsSize() +
-                                        "| FaceUpCards: " +gameState.cardState().faceUpCards());
-                gameState.claimedRoutes().forEach((s)-> System.out.print(s + "|"));
+                                     "| Cards: " + ownState.cards()+
+                                        "| AvailableCars: " + gameState.playerState(ownId).carCount() +
+                                        " | faceUpCards " + gameState.cardState().faceUpCards());
+                gameState.claimedRoutes().forEach((s)-> System.out.print(s.id() + "|"));
                 System.out.println();
 
 

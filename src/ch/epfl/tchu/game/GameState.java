@@ -51,11 +51,15 @@ public final class GameState extends PublicGameState {
                 initialDeck.topCards(Constants.INITIAL_CARDS_COUNT);
         SortedBag<Card> initialPlayer2Cards =
                 initialDeck.withoutTopCards(Constants.INITIAL_CARDS_COUNT).topCards(Constants.INITIAL_CARDS_COUNT);
-        Map<PlayerId, PlayerState> initialPlayerState = new EnumMap<>(PlayerId.class);
-        initialPlayerState.put(PlayerId.PLAYER_1, PlayerState.initial(initialPlayer1Cards));
-        initialPlayerState.put(PlayerId.PLAYER_2, PlayerState.initial(initialPlayer2Cards));
 
         PlayerId initialPlayer = PlayerId.ALL.get(rng.nextInt(2));
+        System.out.println(initialPlayer);
+        Map<PlayerId, PlayerState> initialPlayerState = new EnumMap<>(PlayerId.class);
+        initialPlayerState.put(initialPlayer, PlayerState.initial(initialPlayer1Cards));
+        initialPlayerState.put(initialPlayer.next(), PlayerState.initial(initialPlayer2Cards));
+
+        initialPlayerState.forEach((k,v)-> System.out.print(k+" gamestate "));
+        System.out.println();
 
         return new GameState(initialTickets, initialCardState, initialPlayer, initialPlayerState, null);
     }
