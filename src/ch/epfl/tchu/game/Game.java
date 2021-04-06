@@ -54,16 +54,15 @@ public final class Game {
                         if(0<=slot && slot<=4){
                             sendInfoToBoth(new Info(playerNames.get(playerId)).drewVisibleCard(currentGameState.withDrawnFaceUpCard(slot).topCard()), players);
                             currentGameState = currentGameState.withDrawnFaceUpCard(slot);
-                        }else{
+                        }else if(slot == Constants.DECK_SLOT){ //TODO deck slot
                             sendInfoToBoth(new Info(playerNames.get(playerId)).drewBlindCard(), players);
                             currentGameState = currentGameState.withBlindlyDrawnCard();
                         }
                     }
 
-                }else{
+                }else if(turnKind.equals(Player.TurnKind.CLAIM_ROUTE)){
                     Route claimedRoute = players.get(playerId).claimedRoute();
                     SortedBag<Card> initialClaimCards = players.get(playerId).initialClaimCards();
-                    sendInfoToBoth(new Info(playerNames.get(playerId)).claimedRoute(claimedRoute, initialClaimCards), players);
                     if(claimedRoute.level() == Route.Level.UNDERGROUND){
                         sendInfoToBoth(new Info(playerNames.get(playerId)).attemptsTunnelClaim(claimedRoute, initialClaimCards), players);
                         List<Card> drawnCardsList = new ArrayList<>();
@@ -81,9 +80,12 @@ public final class Game {
                                     claimedRoute,
                                     currentPlayer.chooseAdditionalCards(currentGameState.playerState(playerId).
                                             possibleAdditionalCards(additionalCards, initialClaimCards, drawnCards)));
+                            sendInfoToBoth(new Info(playerNames.get(playerId)).claimedRoute(claimedRoute, initialClaimCards), players);
                         }else{
                             sendInfoToBoth(new Info(playerNames.get(playerId)).didNotClaimRoute(claimedRoute), players);
                         }
+                    } else if (claimedRoute.level() == Route.Level.OVERGROUND) {
+                        sendInfoToBoth(new Info(playerNames.get(playerId)).claimedRoute(claimedRoute, initialClaimCards), players);
                     }
                 }
             }

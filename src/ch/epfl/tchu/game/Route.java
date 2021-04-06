@@ -46,8 +46,8 @@ public final class Route {
     }
 
     /**
-     * return the id of the station
-     * @return the id of the station
+     * return the id of the route
+     * @return the id of the route
      */
     public String id() {
         return id;
