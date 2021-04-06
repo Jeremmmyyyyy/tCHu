@@ -29,25 +29,33 @@ public final class Game {
         for(PlayerId playerId : PlayerId.ALL){
             SortedBag<Ticket> chosenTickets = players.get(playerId).chooseInitialTickets();
             currentGameState = currentGameState.withInitiallyChosenTickets(playerId, chosenTickets);
-            sendInfoToBoth(new Info(playerNames.get(playerId)).keptTickets(chosenTickets.size()), players);
+            sendInfoToBoth(new Info(playerNames.get(playerId)).keptTickets(chosenTickets.size()), players); // mettre à l'extérieur de la boucle?
         }
 
-        while (!currentGameState.lastTurnBegins()){
+        do{
             for(PlayerId playerId : PlayerId.ALL) {
+                sendInfoToBoth(new Info(playerNames.get(playerId)).canPlay(), players);
                 Player currentPlayer = players.get(playerId);
+                updateStates(players, currentGameState);
                 Player.TurnKind turnKind = players.get(playerId).nextTurn();
 
                 if(turnKind.equals(Player.TurnKind.DRAW_TICKETS)){
+                    sendInfoToBoth(new Info(playerNames.get(playerId)).drewTickets(Constants.IN_GAME_TICKETS_COUNT), players);
                     SortedBag<Ticket> drawnTickets = currentGameState.topTickets(Constants.IN_GAME_TICKETS_COUNT);
-                    currentGameState = currentGameState.withChosenAdditionalTickets(drawnTickets, currentPlayer.chooseTickets(drawnTickets));
+                    SortedBag<Ticket> keptTickets = currentPlayer.chooseTickets(drawnTickets);
+                    sendInfoToBoth(new Info(playerNames.get(playerId)).keptTickets(keptTickets.size()), players); // TODO bonne position?
+                    currentGameState = currentGameState.withChosenAdditionalTickets(drawnTickets, keptTickets);
 
                 }else if(turnKind.equals(Player.TurnKind.DRAW_CARDS)){
                     for (int i = 0; i < 2; i++) {
                         withCardsRecreatedFromDeckIfDeckEmpty(currentGameState, rng);
+                        updateStates(players, currentGameState);
                         int slot = players.get(playerId).drawSlot();
                         if(0<=slot && slot<=4){
+                            sendInfoToBoth(new Info(playerNames.get(playerId)).drewVisibleCard(currentGameState.withDrawnFaceUpCard(slot).topCard()), players);
                             currentGameState = currentGameState.withDrawnFaceUpCard(slot);
                         }else{
+                            sendInfoToBoth(new Info(playerNames.get(playerId)).drewBlindCard(), players);
                             currentGameState = currentGameState.withBlindlyDrawnCard();
                         }
                     }
@@ -55,7 +63,9 @@ public final class Game {
                 }else{
                     Route claimedRoute = players.get(playerId).claimedRoute();
                     SortedBag<Card> initialClaimCards = players.get(playerId).initialClaimCards();
+                    sendInfoToBoth(new Info(playerNames.get(playerId)).claimedRoute(claimedRoute, initialClaimCards), players);
                     if(claimedRoute.level() == Route.Level.UNDERGROUND){
+                        sendInfoToBoth(new Info(playerNames.get(playerId)).attemptsTunnelClaim(claimedRoute, initialClaimCards), players);
                         List<Card> drawnCardsList = new ArrayList<>();
                         for (int i = 0; i < Constants.ADDITIONAL_TUNNEL_CARDS; i++) {
                             withCardsRecreatedFromDeckIfDeckEmpty(currentGameState, rng);
@@ -63,19 +73,46 @@ public final class Game {
                             currentGameState = currentGameState.withoutTopCard();
                         }
                         SortedBag<Card> drawnCards = SortedBag.of(drawnCardsList);
-
                         int additionalCards = claimedRoute.additionalClaimCardsCount(initialClaimCards, drawnCards);
+                        sendInfoToBoth(new Info(playerNames.get(playerId)).drewAdditionalCards(drawnCards, additionalCards), players);
+
                         if(additionalCards > 0 && currentGameState.playerState(playerId).canClaimRoute(claimedRoute)){
                             currentGameState = currentGameState.withClaimedRoute(
                                     claimedRoute,
                                     currentPlayer.chooseAdditionalCards(currentGameState.playerState(playerId).
                                             possibleAdditionalCards(additionalCards, initialClaimCards, drawnCards)));
-
-                            //TODO C'est LA HESS Recieve Info et update State
+                        }else{
+                            sendInfoToBoth(new Info(playerNames.get(playerId)).didNotClaimRoute(claimedRoute), players);
                         }
                     }
                 }
             }
+        }while (!currentGameState.lastTurnBegins());
+
+        updateStates(players, currentGameState);
+        sendInfoToBoth(new Info(playerNames.get(currentGameState.currentPlayerId())).lastTurnBegins(currentGameState.currentPlayerState().carCount()), players);
+        Trail trail1 = Trail.longest(currentGameState.playerState(PlayerId.PLAYER_1).routes());
+        Trail trail2 = Trail.longest(currentGameState.playerState(PlayerId.PLAYER_2).routes());
+
+
+        if(trail1.length() > trail2.length()){
+            sendInfoToBoth(new Info(playerNames.get(PlayerId.PLAYER_1)).getsLongestTrailBonus(trail1), players);
+        }else if(trail1.length() < trail2.length()){
+            sendInfoToBoth(new Info(playerNames.get(PlayerId.PLAYER_1)).getsLongestTrailBonus(trail2), players);
+        }else{
+            sendInfoToBoth(new Info(playerNames.get(PlayerId.PLAYER_1)).getsLongestTrailBonus(trail1), players);
+            sendInfoToBoth(new Info(playerNames.get(PlayerId.PLAYER_2)).getsLongestTrailBonus(trail2), players);
+        } // TODO methode
+
+        int points1 = currentGameState.playerState(PlayerId.PLAYER_1).finalPoints();
+        int points2 = currentGameState.playerState(PlayerId.PLAYER_2).finalPoints();
+
+        if(points1 > points2){
+            sendInfoToBoth(new Info(playerNames.get(PlayerId.PLAYER_1)).won(points1,points2), players);
+        }else if(points1 < points2){
+            sendInfoToBoth(new Info(playerNames.get(PlayerId.PLAYER_2)).won(points2, points1), players);
+        }else{
+            sendInfoToBoth(Info.draw(new ArrayList<>(playerNames.values()), points1), players);
         }
     }
 
