@@ -40,7 +40,10 @@ public final class Game {
             sendInfoToBoth(new Info(playerNames.get(playerId)).keptTickets(chosenTickets.size()), players);
         }
 
-        while (!currentGameState.currentPlayerId().equals(currentGameState.lastPlayer())) {
+        boolean gameEnds = false;
+        boolean lastTurnHasBegun = false;
+
+        while (!gameEnds) {
             PlayerId currentPlayerId = currentGameState.currentPlayerId();
             Player currentPlayer = players.get(currentPlayerId);
             PlayerState currentPlayerState = currentGameState.playerState(currentPlayerId);
@@ -112,11 +115,16 @@ public final class Game {
                     sendInfoToBoth(currentInfo.claimedRoute(claimedRoute, initialClaimCards), players);
                 }//TODO un joueur peut il jouer CLAIM_ROUTE sans pouvoir la claim ??? donc boucle else ici + test canClaimRoute en haut
             }
+            if (currentGameState.currentPlayerId().equals(currentGameState.lastPlayer())) {
+                gameEnds = true;
+            }
             currentGameState = currentGameState.forNextTurn();
+            if (currentGameState.lastPlayer() != null && !lastTurnHasBegun) {
+                lastTurnHasBegun = true;
+                sendInfoToBoth(new Info(playerNames.get(currentGameState.lastPlayer()))
+                        .lastTurnBegins(currentGameState.playerState(currentGameState.lastPlayer()).carCount()), players);
+            }
         }
-
-        sendInfoToBoth(new Info(playerNames.get(currentGameState.currentPlayerId()))
-                .lastTurnBegins(currentGameState.currentPlayerState().carCount()), players);
 
         updateStates(players, currentGameState, playerOrder);
         Trail trail1 = Trail.longest(currentGameState.playerState(PlayerId.PLAYER_1).routes());
