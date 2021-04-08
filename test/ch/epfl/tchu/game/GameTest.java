@@ -184,8 +184,8 @@ public class GameTest {
 
         @Override
         public int drawSlot() {
-            return -1;
-//            return getRandomNumber(-1, 4);
+//            return -1;
+            return getRandomNumber(-1, 4);
         }
 
         @Override
