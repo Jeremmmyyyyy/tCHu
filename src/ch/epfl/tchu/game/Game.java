@@ -20,11 +20,6 @@ public final class Game {
 
         players.forEach((k,v) -> v.initPlayers(k, playerNames));
 
-        playerNames.forEach((k,v)-> System.out.print(k+" "));
-        System.out.println();
-        players.forEach((k,v)-> System.out.print(k+" "));
-        System.out.println();
-
         sendInfoToBoth(new Info(playerNames.get(currentGameState.currentPlayerId())).willPlayFirst(), players);
 
         for(PlayerId playerId : playerOrder) {

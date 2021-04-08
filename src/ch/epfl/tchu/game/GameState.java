@@ -57,10 +57,6 @@ public final class GameState extends PublicGameState {
         Map<PlayerId, PlayerState> initialPlayerState = new EnumMap<>(PlayerId.class);
         initialPlayerState.put(initialPlayer, PlayerState.initial(initialPlayer1Cards));
         initialPlayerState.put(initialPlayer.next(), PlayerState.initial(initialPlayer2Cards));
-
-        initialPlayerState.forEach((k,v)-> System.out.print(k+" gamestate "));
-        System.out.println();
-
         return new GameState(initialTickets, initialCardState, initialPlayer, initialPlayerState, null);
     }
 
