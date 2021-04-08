@@ -140,7 +140,8 @@ public class GameTest {
 
         @Override
         public int drawSlot() {
-            return getRandomNumber(-1, 4);
+            return -1;
+//            return getRandomNumber(-1, 4);
         }
 
         @Override
@@ -158,6 +159,11 @@ public class GameTest {
             SortedBag<Card> chosenAdditionalCards = options.get(getRandomNumber(0, options.size() - 1));
             System.out.println("ChosenAdditionalCards : " + chosenAdditionalCards);
             return chosenAdditionalCards;
+        }
+
+        @Override
+        public String toString() {
+            return playerNames.get(ownId);
         }
 
     }
