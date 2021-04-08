@@ -62,11 +62,9 @@ public final class Game {
                     currentPlayer.updateState(currentGameState, currentPlayerState);
                     int slot = currentPlayer.drawSlot();
                     if (0 <= slot && slot <= 4) {
-                        System.out.println("1 " + currentGameState.cardState().faceUpCards());
                         sendInfoToBoth(currentInfo.drewVisibleCard(currentGameState.cardState().faceUpCard(slot)), players);
                         currentGameState = currentGameState.withDrawnFaceUpCard(slot);
                     } else if (slot == Constants.DECK_SLOT) {
-                        System.out.println("2");
                         sendInfoToBoth(currentInfo.drewBlindCard(), players);
                         currentGameState = currentGameState.withBlindlyDrawnCard();
                     }
