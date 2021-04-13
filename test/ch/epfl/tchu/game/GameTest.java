@@ -29,7 +29,7 @@ public class GameTest {
 
     @Test
     void BeacoupDeTests(){
-        int[][] scores = new int[1000][2];
+        int[][] scores = new int[10][2];
         PrintToTxt.createFile(scores.length);
         for (int i = 0; i < scores.length; i++) {
             int randomSeed = getRandomNumber(0,1000000000);
