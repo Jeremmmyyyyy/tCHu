@@ -11,7 +11,6 @@ public class GameTest {
 
     private final static long randomSeed = 10;
 
-    //TODO Faire une boucle avec des radomSeed différents
 
     // Les joueurs ne peuvent / veulent jamais lorsqu'il y a un coût additionnel;
     @Test
@@ -57,7 +56,6 @@ public class GameTest {
 //        });
 //    }
 
-    //TODO Problème de pluriel sur lastTurnBegins dans info
     private static final class TestPlayer implements Player {
         private static final int TURN_LIMIT = 1000;
 

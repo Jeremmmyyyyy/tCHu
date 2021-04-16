@@ -3,7 +3,7 @@ package ch.epfl.testFinaux;
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
 import ch.epfl.tchu.game.Route.Level;
-import ch.epfl.tchu.TestRandomizer;
+import ch.epfl.tchu.gui.TestRandomizer;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;

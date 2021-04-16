@@ -1,7 +1,7 @@
 package ch.epfl.testFinaux;
 
 
-import ch.epfl.tchu.TestRandomizer;
+import ch.epfl.tchu.gui.TestRandomizer;
 import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.PublicCardState;
 import org.junit.jupiter.api.Test;

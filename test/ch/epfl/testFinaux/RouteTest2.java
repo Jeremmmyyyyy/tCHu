@@ -6,7 +6,7 @@ import ch.epfl.tchu.game.Color;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Route.Level;
 import ch.epfl.tchu.game.Station;
-import ch.epfl.tchu.TestRandomizer;
+import ch.epfl.tchu.gui.TestRandomizer;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
