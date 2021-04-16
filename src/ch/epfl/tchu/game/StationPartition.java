@@ -52,6 +52,7 @@ public final class StationPartition implements StationConnectivity {
         public Builder(int stationCount) {
             Preconditions.checkArgument(stationCount >= 0);
             stationPartition = new int[stationCount];
+
             for (int i = 0; i < stationCount; ++i) {
                 stationPartition[i] = i;
             }
@@ -64,9 +65,11 @@ public final class StationPartition implements StationConnectivity {
          */
         private int representative(int stationId) {
             int representative = stationPartition[stationId];
+
             while (representative != stationPartition[representative]) {
                 representative = stationPartition[representative];
             }
+
             return representative;
         }
 
@@ -86,6 +89,7 @@ public final class StationPartition implements StationConnectivity {
          * @return a new instance of StationPartition
          */
         public StationPartition build() {
+
             for (int i = 0; i < stationPartition.length; ++i) {
                 stationPartition[i] = representative(i);
             }

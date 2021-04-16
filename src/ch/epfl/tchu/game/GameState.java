@@ -56,6 +56,7 @@ public final class GameState extends PublicGameState {
         Map<PlayerId, PlayerState> initialPlayerState = new EnumMap<>(PlayerId.class);
         initialPlayerState.put(initialPlayer, PlayerState.initial(initialPlayer1Cards));
         initialPlayerState.put(initialPlayer.next(), PlayerState.initial(initialPlayer2Cards));
+
         return new GameState(initialTickets, initialCardState, initialPlayer, initialPlayerState, null);
     }
 
@@ -80,7 +81,7 @@ public final class GameState extends PublicGameState {
 
     /**
      * Returns a given amount of tickets from the deck
-     * @param count number of top tickets to ret    urn
+     * @param count number of top tickets to return
      * @return the first count tickets of the attribute tickets
      * @throws IllegalArgumentException if count isn't in [0,tickets.size()]
      */
@@ -149,6 +150,7 @@ public final class GameState extends PublicGameState {
      */
     public GameState withInitiallyChosenTickets(PlayerId playerId, SortedBag<Ticket> chosenTickets) {
         Preconditions.checkArgument(playerState(playerId).tickets().isEmpty());
+
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(playerId, playerState(playerId).withAddedTickets(chosenTickets));
         return new GameState(tickets, cardState, currentPlayerId(), newPlayerState, lastPlayer());
@@ -182,6 +184,7 @@ public final class GameState extends PublicGameState {
      */
     public GameState withChosenAdditionalTickets(SortedBag<Ticket> drawnTickets, SortedBag<Ticket> chosenTickets){
         Preconditions.checkArgument(drawnTickets.contains(chosenTickets));
+
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(), currentPlayerState().withAddedTickets(chosenTickets));
         return new GameState(tickets.withoutTopCards(drawnTickets.size()), cardState, currentPlayerId(),
@@ -198,10 +201,12 @@ public final class GameState extends PublicGameState {
      */
     public GameState withDrawnFaceUpCard(int slot){
         Preconditions.checkArgument(canDrawCards());
+
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(),
                 currentPlayerState().withAddedCard(cardState.faceUpCard(slot)));
-        return new GameState(tickets, cardState.withDrawnFaceUpCard(slot), currentPlayerId(), newPlayerState, lastPlayer());
+        return new GameState(tickets, cardState.withDrawnFaceUpCard(slot), currentPlayerId(),
+                newPlayerState, lastPlayer());
     }
 
     /**
@@ -211,6 +216,7 @@ public final class GameState extends PublicGameState {
      */
     public GameState withBlindlyDrawnCard(){
         Preconditions.checkArgument(canDrawCards());
+
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(),
                 currentPlayerState().withAddedCard(cardState.topDeckCard()));
@@ -228,6 +234,7 @@ public final class GameState extends PublicGameState {
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(),
                 currentPlayerState().withClaimedRoute(route, cards));
-        return new GameState(tickets, cardState.withMoreDiscardedCards(cards), currentPlayerId(), newPlayerState, lastPlayer());
+        return new GameState(tickets, cardState.withMoreDiscardedCards(cards), currentPlayerId(),
+                newPlayerState, lastPlayer());
     }
 }

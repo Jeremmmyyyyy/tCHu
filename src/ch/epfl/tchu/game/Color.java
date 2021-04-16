@@ -22,6 +22,7 @@ public enum Color {
      * List of all the colors of the enum
      */
     public static final List<Color> ALL = List.of(Color.values());
+
     /**
      * size of the ALL list : number of all the colors
      */

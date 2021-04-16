@@ -97,6 +97,7 @@ public class GameTest {
         private PlayerId ownId;
         private SortedBag<Ticket> tickets;
         private int numberOfInfoReceived = 0;
+        private boolean hasDrawnTickets = false;
 
         public TestPlayer(long randomSeed, List<Route> allRoutes) {
             this.rng = new Random(randomSeed);
@@ -158,8 +159,14 @@ public class GameTest {
             }
             if (claimableRoutes.isEmpty()) {
 //                System.out.println("DRAW_CARDS ");
-                PrintToTxt.writeToFile("DRAW_CARDS "+ "\n");
-                return TurnKind.DRAW_CARDS;
+                if (!gameState.canDrawTickets()) {
+                    PrintToTxt.writeToFile("DRAW_CARDS "+ "\n");
+                    return TurnKind.DRAW_CARDS;
+                }
+                else {
+                    PrintToTxt.writeToFile("DRAW_TICKETS "+ "\n");
+                    return TurnKind.DRAW_TICKETS;
+                }
             } else {
                 int routeIndex = rng.nextInt(claimableRoutes.size());
                 Route route = claimableRoutes.get(routeIndex);

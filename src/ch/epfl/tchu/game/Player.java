@@ -5,14 +5,14 @@ import ch.epfl.tchu.SortedBag;
 import java.util.List;
 import java.util.Map;
 /**
- * Interface for all the informations that could be asked for a player
+ * Interface for all the information that could be asked for a player
  *
  * @author Jérémy Barghorn (328403)
  */
 public interface Player {
 
     /**
-     * Enum representing the tree different actions a player has during his turn
+     * Enum representing the three different possible actions a player has during his turn
      */
     enum TurnKind{
         DRAW_TICKETS,
@@ -20,7 +20,7 @@ public interface Player {
         CLAIM_ROUTE;
 
         /**
-         * List containing all the options a player have during his turn
+         * List containing all the options a player has during his turn
          **/
         public static final List<TurnKind> ALL = List.of(TurnKind.values());
     }
@@ -33,8 +33,8 @@ public interface Player {
     void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames);
 
     /**
-     * Called each time an information is communicated to a player during the game
-     * @param info that ahs to be transmitted : generally created with Info.java
+     * Called each time an information is communicated to the player during the game
+     * @param info that has to be transmitted : generally created with Info.java
      */
     void receiveInfo(String info);
 
@@ -77,19 +77,19 @@ public interface Player {
     int drawSlot();
 
     /**
-     * Called if the player try to take control of a route
+     * Called if the player tries to take control of a route
      * @return the route that the player try to control
      */
     Route claimedRoute();
 
     /**
-     * Called if the player try to take a route and ask him for the initial cards
+     * Called if the player tries to take a route and ask him for the initial cards
      * @return the cards that are given by the player
      */
     SortedBag<Card> initialClaimCards();
 
     /**
-     * Called if a player try to take control of a tunnel and additional cards are required
+     * Called if a player tries to take control of a tunnel and additional cards are required
      * @param options list of the possible additional cards combinations (empty if the player can't control or don't want to control the route
      * @return a SortedBag
      */

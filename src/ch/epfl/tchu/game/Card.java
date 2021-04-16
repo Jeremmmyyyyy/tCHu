@@ -26,7 +26,7 @@ public enum Card {
      */
     public static final List<Card> ALL = List.of(Card.values());
     /**
-     * size of the ALL list : number of all the Cards
+     * Size of the ALL list : number of all the Cards
      */
     public static final int COUNT = ALL.size();
     /**
@@ -44,7 +44,6 @@ public enum Card {
      * If null returns null
      * @param color Color of the card
      * @return The type of the Card
-     *
      */
     public static Card of (Color color){
         for (Card card : CARS) {
@@ -54,7 +53,6 @@ public enum Card {
         }
         return null;
     }
-
 
     /**
      * @return Color

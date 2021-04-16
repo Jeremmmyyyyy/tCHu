@@ -6,21 +6,24 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * immutable class that represents all the informations and cards of the board that are known by the players
- * author Jérémy Barghorn (328403)
+ * Immutable class that represents all the information and cards of the board that are known by the players
+ *
+ * @author Jérémy Barghorn (328403)
  */
 public class PublicCardState {
+
     /**
      * List of 5 Cards that are shown on the board, final because we want an immutable class
      */
     private final List<Card> faceUpCards;
+
     /**
-     * final integer values for the size of the deck and discard
+     * Final integer values for the size of the deck and discard
      */
     private final int deckSize, discardSize;
 
     /**
-     * create the board infos and set the cards that are known by the player
+     * Creates the board info and sets the cards that are known by the player
      * @param faceUpCards List of Cards that represent the 5 cards that are shown on the board
      * @param deckSize size of the deck
      * @param discardSize size of the discard
@@ -38,7 +41,7 @@ public class PublicCardState {
     }
 
     /**
-     * return the total size of all the cards that are given to PublicCardState
+     * Returns the total size of all the cards that are given to PublicCardState
      * @return the sum of the faceUpCards, the deck size and the discard size
      */
     public int totalSize(){
