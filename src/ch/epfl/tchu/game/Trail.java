@@ -43,6 +43,7 @@ public final class  Trail {
             listOfTrailsToExtend.add(new Trail(route.station1(), route.station2(), List.of(route), route.length()));
             listOfTrailsToExtend.add(new Trail(route.station2(), route.station1(), List.of(route), route.length()));
         }
+
         Trail longestTrail = new Trail(null, null, null, 0);
         while(!listOfTrailsToExtend.isEmpty()){
             //refreshes the longestTrail at each step
@@ -51,15 +52,20 @@ public final class  Trail {
                     longestTrail = trail;
                 }
             }
+
             List<Trail> newListOfTrailsToExtend = new ArrayList<>();
             for (Trail trailToExtend : listOfTrailsToExtend) {
+
                 List<Route> prolongations = trailToExtend.possibleProlongations(routes);
+
                 for(Route prolongation : prolongations){
                     List<Route> listOfRoutesInTheTrail = new ArrayList<>();
+
                     //trailToExtend.routesOfTrail is final, hence the for loop to copy its content
                     for(Route route: trailToExtend.routesOfTrail){
                         listOfRoutesInTheTrail.add(route);
                     }
+
                     listOfRoutesInTheTrail.add(prolongation); //extends the list of routes of the current trail
                     //constructs a new trail from the extended list of routes
                     Trail newTrail = new Trail(trailToExtend.station1(),
@@ -69,6 +75,7 @@ public final class  Trail {
                     newListOfTrailsToExtend.add(newTrail);
                     //finishedTrails.add(newTrail);
                 }
+
                 if(trailToExtend.length > longestTrail.length) {
                     longestTrail = trailToExtend;
                 }
@@ -87,7 +94,9 @@ public final class  Trail {
      */
     private List<Route> possibleProlongations(List<Route> routes) {
         List<Route> prolongations = new ArrayList<>();
+
         for(Route possibleProlongation : routes) {
+
             if(possibleProlongation.stations().contains(station2)  //looks for a possible link between stations
                     && !routesOfTrail.contains(possibleProlongation)){
 
@@ -106,6 +115,7 @@ public final class  Trail {
         List<String> routesOfTrailString = new ArrayList<>();
         routesOfTrailString.add(station1.toString());
         Station previousStation = station1;
+
         for (Route route : routesOfTrail) {
             Station nextStation = route.stationOpposite(previousStation);
             routesOfTrailString.add(nextStation.toString());

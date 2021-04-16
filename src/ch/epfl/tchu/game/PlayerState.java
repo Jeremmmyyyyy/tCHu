@@ -15,7 +15,7 @@ public final class PlayerState extends PublicPlayerState{
     private final SortedBag<Card> cards;
 
     /**
-     * create a new player state
+     * Creates a new player state
      * @param tickets SortedBag of all the tickets of a player
      * @param cards SortedBag of all the cards of a player
      * @param routes List of the routes of a player
@@ -38,7 +38,7 @@ public final class PlayerState extends PublicPlayerState{
     }
 
     /**
-     * return a SortedBag of tickets
+     * Returns a SortedBag of tickets
      * @return a SortedBag of tickets
      */
     public SortedBag<Ticket> tickets(){
@@ -46,7 +46,7 @@ public final class PlayerState extends PublicPlayerState{
     }
 
     /**
-     * Add a new ticket to the ticket list
+     * Adds a new ticket to the ticket list
      * @param newTickets SortedBag of Tickets that is added to the cards
      * @return a new PlayerState with the newTickets added to the actual cards
      */
@@ -55,7 +55,7 @@ public final class PlayerState extends PublicPlayerState{
     }
 
     /**
-     * return all the cards of a PlayerState
+     * Returns all the cards of a PlayerState
      * @return all the cards of a PlayerState
      */
     public SortedBag<Card> cards(){
@@ -63,7 +63,7 @@ public final class PlayerState extends PublicPlayerState{
     }
 
     /**
-     * Add the given card to the list of cards
+     * Adds the given card to the list of cards
      * @param card to add to the cards
      * @return a new PlayerState where the card is added to the cards
      */
@@ -72,7 +72,7 @@ public final class PlayerState extends PublicPlayerState{
     }
 
     /**
-     * Add the SortedBag of card to the actual cards
+     * Adds the SortedBag of card to the actual cards
      * @param additionalCards SortedBag that is added to the actual cards
      * @return a new PlayerState where the SortedBag is added to the cards
      */
@@ -81,7 +81,7 @@ public final class PlayerState extends PublicPlayerState{
     }
 
     /**
-     * check if a player can take the control of the given route
+     * Checks if a player can take the control of the given route
      * @param route that is tested
      * @return true if the route can be taken false otherwise
      */
@@ -90,13 +90,15 @@ public final class PlayerState extends PublicPlayerState{
     }
 
     /**
-     * Give a List of all the cards combination that can be used to take control of a route
+     * Gives a List of all the cards combination that can be used to take control of a route
      * @param route to analyse
      * @return a List of all the SortedBags containing the possible combinations of cards to take the given route
      */
     public List<SortedBag<Card>> possibleClaimCards(Route route){
         Preconditions.checkArgument(carCount() >= route.length());
+
         List<SortedBag<Card>> possibleClaimCards = new ArrayList<>();
+
         for(SortedBag<Card> possibleCards : route.possibleClaimCards()){
             if (cards.contains(possibleCards)){
                 possibleClaimCards.add(possibleCards);
@@ -106,7 +108,7 @@ public final class PlayerState extends PublicPlayerState{
     }
 
     /**
-     * Give a List of all the possible card combinations that are possibly required to take a tunnel
+     * Gives sa List of all the possible card combinations that could be required to take a tunnel
      * @param additionalCardsCount amount of additional cards to lay on the board
      * @param initialCards SortedBag of the cards that are already on the table
      * @param drawnCards SortedBag of the drawnCards
@@ -116,8 +118,10 @@ public final class PlayerState extends PublicPlayerState{
      * @throws IllegalArgumentException if there are more than 2 types of cards in the initialCards
      * @throws IllegalArgumentException if the drawnCards are not equal to 3
      */
-    public List<SortedBag<Card>> possibleAdditionalCards(int additionalCardsCount, SortedBag<Card> initialCards, SortedBag<Card> drawnCards){
-        Preconditions.checkArgument(additionalCardsCount >= 1 && additionalCardsCount <=3);
+    public List<SortedBag<Card>> possibleAdditionalCards(int additionalCardsCount, SortedBag<Card> initialCards,
+                                                         SortedBag<Card> drawnCards){
+        Preconditions.checkArgument(additionalCardsCount >= 1 &&
+                                    additionalCardsCount <= Constants.ADDITIONAL_TUNNEL_CARDS);
         Preconditions.checkArgument(!initialCards.isEmpty());
         Map<Card, Integer> initialTypes =  initialCards.toMap();
         Preconditions.checkArgument(initialTypes.size() <= 2);
@@ -126,17 +130,20 @@ public final class PlayerState extends PublicPlayerState{
         SortedBag<Card> cardDifference = cards.difference(initialCards);
         SortedBag.Builder<Card> cardBuilder = new SortedBag.Builder<>();
         for (Card card : cardDifference) {
-            if(initialCards.contains(card) || card==Card.LOCOMOTIVE){
+            if(initialCards.contains(card) || card == Card.LOCOMOTIVE){
                 cardBuilder.add(card);
             }
         }
         SortedBag<Card> remainingCards = cardBuilder.build();
-        if(remainingCards.size()>=additionalCardsCount){
+
+        if(remainingCards.size() >= additionalCardsCount){
+
             Set<SortedBag<Card>> cardsSet = remainingCards.subsetsOfSize(additionalCardsCount);
             List<SortedBag<Card>> possibleAdditionalCards = new ArrayList<>(cardsSet);
             possibleAdditionalCards.sort(
                     Comparator.comparingInt(cs -> cs.countOf(Card.LOCOMOTIVE)));
             return possibleAdditionalCards;
+
         }else{
             return List.of();
         }

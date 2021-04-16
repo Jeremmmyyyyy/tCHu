@@ -32,10 +32,12 @@ public class PublicPlayerState {
         this.routes = List.copyOf(routes);
         int carsUsed = 0;
         int totalPoints = 0;
+
         for(Route route : routes){
             carsUsed += route.length();
             totalPoints += route.claimPoints();
         }
+
         carCount = Constants.INITIAL_CAR_COUNT - carsUsed;
         claimPoints = totalPoints;
     }

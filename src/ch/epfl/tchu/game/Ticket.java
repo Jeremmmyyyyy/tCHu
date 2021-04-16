@@ -25,12 +25,14 @@ public final class Ticket implements Comparable<Ticket> {
         Preconditions.checkArgument(!trips.equals(List.of()));
         boolean sameDeparture = true;
         String departure = trips.get(0).from().name();
+
         for(Trip trip: trips){
             if (!trip.from().name().equals(departure)) {
                 sameDeparture = false;
                 break;
             }
         }
+
         Preconditions.checkArgument(sameDeparture);
         this.trips = List.copyOf(trips);
         text = computeText(this.trips);
@@ -63,9 +65,11 @@ public final class Ticket implements Comparable<Ticket> {
     private static String computeText(List<Trip> trips) {
         Trip firstTrip = trips.get(0);
         String from = String.format("%s - ", firstTrip.from().name());
+
         if (trips.size() == 1) { //in case of a single ticket
             return from + String.format("%s (%s)", firstTrip.to().name(), firstTrip.points());
         }
+
         TreeSet<String> orderedDestinations = new TreeSet<>(); //to avoid repetition and work on a sorted list
         for(Trip trip: trips){
             orderedDestinations.add(String.format("%s (%s)", trip.to().name(), trip.points()));

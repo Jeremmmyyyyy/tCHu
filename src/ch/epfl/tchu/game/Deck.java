@@ -64,7 +64,7 @@ public final class Deck<C extends Comparable<C>> {
     }
 
     /**
-     * Return the deck this without the top card
+     * Returns the deck this without the top card
      * @return the same deck as this without the top card
      * @throws IllegalArgumentException if the deck is empty
      */

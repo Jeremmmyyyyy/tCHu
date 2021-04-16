@@ -123,18 +123,22 @@ public final class Route {
     public List<SortedBag<Card>> possibleClaimCards() {
         List<SortedBag<Card>> possibleClaimCards = new ArrayList<>();
         int locomotiveAmount;
+
         if (level.equals(Level.OVERGROUND)) {
             locomotiveAmount = 0;
         } else {
             locomotiveAmount = length;
         }
+
         for (int i = 0; i <= locomotiveAmount; i++) {
             if (color == null) {
+
                 for (Card card : Card.CARS) {
                     if(!possibleClaimCards.contains(SortedBag.of(locomotiveAmount, Card.LOCOMOTIVE))){
                         possibleClaimCards.add(SortedBag.of(length - i, card, i, Card.LOCOMOTIVE));
                     }
                 }
+
             } else {
                 possibleClaimCards.add(SortedBag.of(length - i, Card.of(color), i, Card.LOCOMOTIVE));
             }
@@ -154,7 +158,9 @@ public final class Route {
         Preconditions.checkArgument(level.equals(Level.UNDERGROUND));
         Preconditions.checkArgument(drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
         int numberOfAdditionalClaimCards = 0;
+
         for(Card drawnCard: drawnCards){
+
             if(drawnCard.equals(Card.LOCOMOTIVE)){
                 numberOfAdditionalClaimCards += 1;
             }else{
@@ -162,6 +168,7 @@ public final class Route {
                     numberOfAdditionalClaimCards += 1;
                 }
             }
+
         }
         return numberOfAdditionalClaimCards;
     }
