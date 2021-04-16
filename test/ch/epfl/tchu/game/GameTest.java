@@ -27,50 +27,50 @@ public class GameTest {
         // Seed 9149849847L = player 2 puis player 1 // Seed 2000 Player 1 puis player 2
     }
 
-    @Test
-    void BeacoupDeTests(){
-        int[][] scores = new int[10][2];
-        PrintToTxt.createFile(scores.length);
-        for (int i = 0; i < scores.length; i++) {
-            int randomSeed = getRandomNumber(0,1000000000);
-
-            TestPlayer player1 = new TestPlayer(randomSeed, ChMapPublic.ALL_ROUTES);
-            TestPlayer player2 = new TestPlayer(randomSeed, ChMapPublic.ALL_ROUTES);
-            Map<PlayerId, String> playerNames = new TreeMap<>();
-            playerNames.putIfAbsent(PlayerId.PLAYER_1, "Alice");
-            playerNames.putIfAbsent(PlayerId.PLAYER_2, "Bob");
-            Map<PlayerId, Player> players = new TreeMap<>();
-            players.putIfAbsent(PlayerId.PLAYER_1, player1);
-            players.putIfAbsent(PlayerId.PLAYER_2, player2);
-
-            Game.play(players, playerNames, SortedBag.of(ChMapPublic.ALL_TICKETS), new Random(randomSeed));
-            try{
-                scores[i][0] = Integer.parseInt(player1.tab[5]);
-                scores[i][1] = Integer.parseInt(player1.tab[8]);
-            }catch (NullPointerException e){}
-
-            if (i%10 == 0 && i !=0){
-                System.out.println("Nombre de parties jouées " + i);
-
-            }
-
-        }
-        try{
-            double moyenneGagnant = 0;
-            double moyennePerdant = 0;
-
-            for (int i = 0; i < scores.length; i++) {
-                System.out.println(scores[i][0] +" " + scores[i][1]);
-                moyenneGagnant +=  scores[i][0];
-                moyennePerdant +=  scores[i][1];
-            }
-            moyenneGagnant = moyenneGagnant/scores.length;
-            moyennePerdant = moyenneGagnant/scores.length;
-
-            System.out.println("Moyenne Gagnant " + moyenneGagnant + " | " + moyennePerdant);
-        }catch (NullPointerException e ){}
-
-    }
+//    @Test
+//    void BeacoupDeTests(){
+//        int[][] scores = new int[10][2];
+//        PrintToTxt.createFile(scores.length);
+//        for (int i = 0; i < scores.length; i++) {
+//            int randomSeed = getRandomNumber(0,1000000000);
+//
+//            TestPlayer player1 = new TestPlayer(randomSeed, ChMapPublic.ALL_ROUTES);
+//            TestPlayer player2 = new TestPlayer(randomSeed, ChMapPublic.ALL_ROUTES);
+//            Map<PlayerId, String> playerNames = new TreeMap<>();
+//            playerNames.putIfAbsent(PlayerId.PLAYER_1, "Alice");
+//            playerNames.putIfAbsent(PlayerId.PLAYER_2, "Bob");
+//            Map<PlayerId, Player> players = new TreeMap<>();
+//            players.putIfAbsent(PlayerId.PLAYER_1, player1);
+//            players.putIfAbsent(PlayerId.PLAYER_2, player2);
+//
+//            Game.play(players, playerNames, SortedBag.of(ChMapPublic.ALL_TICKETS), new Random(randomSeed));
+//            try{
+//                scores[i][0] = Integer.parseInt(player1.tab[5]);
+//                scores[i][1] = Integer.parseInt(player1.tab[8]);
+//            }catch (NullPointerException e){}
+//
+//            if (i%10 == 0 && i !=0){
+//                System.out.println("Nombre de parties jouées " + i);
+//
+//            }
+//
+//        }
+//        try{
+//            double moyenneGagnant = 0;
+//            double moyennePerdant = 0;
+//
+//            for (int i = 0; i < scores.length; i++) {
+//                System.out.println(scores[i][0] +" " + scores[i][1]);
+//                moyenneGagnant +=  scores[i][0];
+//                moyennePerdant +=  scores[i][1];
+//            }
+//            moyenneGagnant = moyenneGagnant/scores.length;
+//            moyennePerdant = moyenneGagnant/scores.length;
+//
+//            System.out.println("Moyenne Gagnant " + moyenneGagnant + " | " + moyennePerdant);
+//        }catch (NullPointerException e ){}
+//
+//    }
 
 
 
