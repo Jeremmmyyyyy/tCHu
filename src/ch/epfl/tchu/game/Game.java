@@ -7,11 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
+/**
+ * class that plays a whole game once started
+ *
+ * @author Yann Ennassih (329978)
+ * @author Jérémy Barghorn (328403)
+ */
 public final class Game {
 
-
-    public static void play(Map<PlayerId, Player> players, Map<PlayerId, String> playerNames, SortedBag<Ticket> tickets, Random rng){
+    /**
+     * class that plays a whole game once started
+     * @param players map of PLayerID and Players that knows all the actions during the course of the game
+     * @param playerNames Map that associate the Id of the player to it's literal name
+     * @param tickets SortedBag containing all the tickets
+     * @param rng Random generator used to shuffle the cards
+     */
+    public static void play(Map<PlayerId, Player> players, Map<PlayerId, String> playerNames, SortedBag<Ticket> tickets,
+                            Random rng){
         Preconditions.checkArgument(players.size() == 2);
         Preconditions.checkArgument(playerNames.size() == 2);
 
@@ -39,6 +51,7 @@ public final class Game {
         boolean lastTurnHasBegun = false;
 
         while (!gameEnds) {
+
             PlayerId currentPlayerId = currentGameState.currentPlayerId();
             Player currentPlayer = players.get(currentPlayerId);
             PlayerState currentPlayerState = currentGameState.playerState(currentPlayerId);
@@ -50,6 +63,7 @@ public final class Game {
             Player.TurnKind turnKind = currentPlayer.nextTurn();
 
             if (turnKind.equals(Player.TurnKind.DRAW_TICKETS)) {
+
                 sendInfoToBoth(currentInfo.drewTickets(Constants.IN_GAME_TICKETS_COUNT), players);
                 SortedBag<Ticket> drawnTickets = currentGameState.topTickets(Constants.IN_GAME_TICKETS_COUNT);
                 SortedBag<Ticket> keptTickets = currentPlayer.chooseTickets(drawnTickets);
@@ -57,14 +71,19 @@ public final class Game {
                 currentGameState = currentGameState.withChosenAdditionalTickets(drawnTickets, keptTickets);
 
             } else if (turnKind.equals(Player.TurnKind.DRAW_CARDS)) {
+
                 for (int i = 0; i < 2; ++i) {
                     currentGameState = withCardsRecreatedFromDeckIfDeckEmpty(currentGameState, rng);
                     updateStates(players, currentGameState, playerOrder);
                     int slot = currentPlayer.drawSlot();
+
                     if (0 <= slot && slot < Constants.FACE_UP_CARDS_COUNT) {
+
                         sendInfoToBoth(currentInfo.drewVisibleCard(currentGameState.cardState().faceUpCard(slot)), players);
                         currentGameState = currentGameState.withDrawnFaceUpCard(slot);
+
                     } else if (slot == Constants.DECK_SLOT) {
+
                         sendInfoToBoth(currentInfo.drewBlindCard(), players);
                         currentGameState = currentGameState.withBlindlyDrawnCard();
                     }
@@ -113,10 +132,12 @@ public final class Game {
                 } else if (claimedRoute.level() == Route.Level.OVERGROUND) {
                     currentGameState = currentGameState.withClaimedRoute(claimedRoute, initialClaimCards);
                     sendInfoToBoth(currentInfo.claimedRoute(claimedRoute, initialClaimCards), players);
-                }//TODO un joueur peut il jouer CLAIM_ROUTE sans pouvoir la claim ??? donc boucle else ici + test canClaimRoute en haut
+                }
             }
+
             if (currentGameState.currentPlayerId().equals(currentGameState.lastPlayer())) {
                 gameEnds = true;
+
             }
             currentGameState = currentGameState.forNextTurn();
             if (currentGameState.lastPlayer() != null && !lastTurnHasBegun) {
@@ -136,19 +157,24 @@ public final class Game {
         int points2 = currentGameState.playerState(PlayerId.PLAYER_2).finalPoints();
 
         if(trail1.length() > trail2.length()){
-            sendInfoToBoth(info1.getsLongestTrailBonus(trail1), players);
-            points1 += Constants.LONGEST_TRAIL_BONUS_POINTS;
-        }else if(trail1.length() < trail2.length()){
-            sendInfoToBoth(info2.getsLongestTrailBonus(trail2), players);
-            points2 += Constants.LONGEST_TRAIL_BONUS_POINTS;
-        }else{
-            sendInfoToBoth(info1.getsLongestTrailBonus(trail1), players);
-            sendInfoToBoth(info2.getsLongestTrailBonus(trail2), players);
-            points1 += Constants.LONGEST_TRAIL_BONUS_POINTS;
-            points2 += Constants.LONGEST_TRAIL_BONUS_POINTS;
-        } // TODO methode
 
+            sendInfoToBoth(info1.getsLongestTrailBonus(trail1), players);
+            points1 += Constants.LONGEST_TRAIL_BONUS_POINTS;
+
+        }else if(trail1.length() < trail2.length()){
+
+            sendInfoToBoth(info2.getsLongestTrailBonus(trail2), players);
+            points2 += Constants.LONGEST_TRAIL_BONUS_POINTS;
+
+        }else{
+
+            sendInfoToBoth(info1.getsLongestTrailBonus(trail1), players);
+            sendInfoToBoth(info2.getsLongestTrailBonus(trail2), players);
+            points1 += Constants.LONGEST_TRAIL_BONUS_POINTS;
+            points2 += Constants.LONGEST_TRAIL_BONUS_POINTS;
+        }
         if(points1 > points2){
+
             sendInfoToBoth(info1.won(points1, points2), players);
         }else if(points1 < points2){
             sendInfoToBoth(info2.won(points2, points1), players);
@@ -157,16 +183,33 @@ public final class Game {
         }
     }
 
+    /**
+     * Private method that sends an Info string to the two players
+     * @param infoToSend String to send
+     * @param players list of the players whom the list should be sent
+     */
     private static void sendInfoToBoth(String infoToSend, Map<PlayerId, Player> players){
         players.forEach((K, v) -> v.receiveInfo(infoToSend));
     }
 
+    /**
+     * Private method that updates the state of the two players
+     * @param players Map of the two players
+     * @param currentGameState actual gameState
+     * @param playerOrder Random order of the two players
+     */
     private static void updateStates(Map<PlayerId, Player> players, GameState currentGameState, List<PlayerId> playerOrder){
         for(PlayerId playerId : playerOrder){
             players.get(playerId).updateState(currentGameState, currentGameState.playerState(playerId));
         }
     }
 
+    /**
+     * Private method that mix the cards from the discard and recreate the deck if empty
+     * @param currentGameState current GameState
+     * @param rng random seed to mix the cards
+     * @return the current gameState
+     */
     private static GameState withCardsRecreatedFromDeckIfDeckEmpty(GameState currentGameState, Random rng){
         return currentGameState.withCardsDeckRecreatedIfNeeded(rng);
     }
