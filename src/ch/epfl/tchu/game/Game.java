@@ -29,7 +29,7 @@ public final class Game {
 
         for(PlayerId playerId : playerOrder){
             Player player = players.get(playerId);
-            player.updateState(currentGameState, currentGameState.playerState(playerId));
+            updateStates(players, currentGameState, playerOrder);
             SortedBag<Ticket> chosenTickets = player.chooseInitialTickets();
             currentGameState = currentGameState.withInitiallyChosenTickets(playerId, chosenTickets);
             sendInfoToBoth(new Info(playerNames.get(playerId)).keptTickets(chosenTickets.size()), players);
@@ -46,7 +46,7 @@ public final class Game {
             Info currentInfo = new Info(currentPlayerName);
 
             sendInfoToBoth(currentInfo.canPlay(), players);
-            currentPlayer.updateState(currentGameState, currentPlayerState);
+            updateStates(players, currentGameState, playerOrder);
             Player.TurnKind turnKind = currentPlayer.nextTurn();
 
             if (turnKind.equals(Player.TurnKind.DRAW_TICKETS)) {
@@ -59,9 +59,9 @@ public final class Game {
             } else if (turnKind.equals(Player.TurnKind.DRAW_CARDS)) {
                 for (int i = 0; i < 2; ++i) {
                     currentGameState = withCardsRecreatedFromDeckIfDeckEmpty(currentGameState, rng);
-                    currentPlayer.updateState(currentGameState, currentPlayerState);
+                    updateStates(players, currentGameState, playerOrder);
                     int slot = currentPlayer.drawSlot();
-                    if (0 <= slot && slot <= 4) {
+                    if (0 <= slot && slot < Constants.FACE_UP_CARDS_COUNT) {
                         sendInfoToBoth(currentInfo.drewVisibleCard(currentGameState.cardState().faceUpCard(slot)), players);
                         currentGameState = currentGameState.withDrawnFaceUpCard(slot);
                     } else if (slot == Constants.DECK_SLOT) {
@@ -71,9 +71,12 @@ public final class Game {
                 }
 
             } else if (turnKind.equals(Player.TurnKind.CLAIM_ROUTE)) {
+
                 Route claimedRoute = currentPlayer.claimedRoute();
                 SortedBag<Card> initialClaimCards = currentPlayer.initialClaimCards();
+
                 if (claimedRoute.level() == Route.Level.UNDERGROUND) {
+
                     sendInfoToBoth(currentInfo.attemptsTunnelClaim(claimedRoute, initialClaimCards), players);
                     List<Card> drawnCardsList = new ArrayList<>();
                     for (int i = 0; i < Constants.ADDITIONAL_TUNNEL_CARDS; i++) {
@@ -87,15 +90,19 @@ public final class Game {
                     sendInfoToBoth(currentInfo.drewAdditionalCards(drawnCards, additionalCards), players);
 
                     if (additionalCards > 0) {
+
                         List<SortedBag<Card>> possibleAdditionalCards = currentPlayerState.
                                 possibleAdditionalCards(additionalCards, initialClaimCards, drawnCards);
+
                         if (!possibleAdditionalCards.isEmpty()) {
+
                             SortedBag<Card> claimCards =
                                     initialClaimCards.union(currentPlayer.chooseAdditionalCards(currentPlayerState.
                                     possibleAdditionalCards(additionalCards, initialClaimCards, drawnCards)));
                             currentGameState = currentGameState.withClaimedRoute(
                                     claimedRoute, claimCards);
                             sendInfoToBoth(currentInfo.claimedRoute(claimedRoute, claimCards), players);
+
                         } else {
                             sendInfoToBoth(currentInfo.didNotClaimRoute(claimedRoute), players);
                         }

@@ -32,7 +32,7 @@ public final class Ticket implements Comparable<Ticket> {
             }
         }
         Preconditions.checkArgument(sameDeparture);
-        this.trips = trips;
+        this.trips = List.copyOf(trips);
         text = computeText(this.trips);
     }
 
