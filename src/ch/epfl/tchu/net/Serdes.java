@@ -26,6 +26,4 @@ public final class Serdes{
     private Serdes(){
 
     }
-
-
 }
