@@ -2,6 +2,7 @@ package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.PrintToTxt;
 import ch.epfl.tchu.SortedBag;
+
 import ch.epfl.test.ChMapPublic;
 import org.junit.jupiter.api.Test;
 
