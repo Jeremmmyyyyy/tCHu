@@ -20,14 +20,22 @@ public class SerdesTest {
         List<Route> rs1 = ChMap.routes().subList(0, 2);
         Map<PlayerId, PublicPlayerState> ps = Map.of(
                 PlayerId.PLAYER_1, new PublicPlayerState(10, 11, rs1),
-                PlayerId.PLAYER_2, new PublicPlayerState(20, 21, List.of()));
+                PlayerId.PLAYER_2, new PublicPlayerState(20, 21, List.of())); //TODO List.of() poru routes
         PublicGameState gs =
                 new PublicGameState(40, cs, PlayerId.PLAYER_2, ps, null);
 
         String s = Serdes.PUBLIC_GAME_STATE_SERDE.serialize(gs);
         System.out.println(s);
-        System.out.println(Serdes.PUBLIC_GAME_STATE_SERDE.deserialize(s).cardState().faceUpCards() +" "+
-                Serdes.PUBLIC_GAME_STATE_SERDE.deserialize(s).cardState().faceUpCards());
+        PublicGameState deserialized = Serdes.PUBLIC_GAME_STATE_SERDE.deserialize(s);
+        System.out.println("\nFaceUpCards : " + deserialized.cardState().faceUpCards() +
+                "\nDeckSize : " + deserialized.cardState().deckSize() +
+                "\nDiscardSize : " + deserialized.cardState().discardsSize() +
+                "\nLastPlayer : " + deserialized.lastPlayer() +
+                "\nDiscardSize : " + deserialized.ticketsCount() +
+                "\nCurrentPlayerId : " + deserialized.currentPlayerId() +
+                "\nClaimedRoutes : " + deserialized.claimedRoutes()
+        );
+
 
     }
 
