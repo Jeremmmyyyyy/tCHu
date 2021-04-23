@@ -10,10 +10,9 @@ import java.util.*;
  *
  * @author Jérémy Barghorn (328403)
  */
-public final class Serdes{
-    private static Base64.Encoder encoder = Base64.getEncoder();
-    private static Base64.Decoder decoder = Base64.getDecoder();
+public final class Serdes {
 
+    //In order to make the class non instantiable
     private Serdes(){}
 
     /**
@@ -24,8 +23,8 @@ public final class Serdes{
      * Serde for the Strings (Serialize an object into a String in base 64, Deserialize an object from base 64)
      */
     public static final Serde<String> STRING_SERDE = Serde
-            .of(i -> encoder.encodeToString(i.getBytes(java.nio.charset.StandardCharsets.UTF_8)),
-                    s -> new String(decoder.decode(s), StandardCharsets.UTF_8));
+            .of(i -> Base64.getEncoder().encodeToString(i.getBytes(java.nio.charset.StandardCharsets.UTF_8)),
+                    s -> new String(Base64.getDecoder().decode(s), StandardCharsets.UTF_8));
     /**
      * Serde for the Enum PLayerId
      */
