@@ -38,7 +38,6 @@ public class SerdesTest {
                 "\nLastPlayer : " + deserialized.lastPlayer() +
                 "\nDiscardSize : " + deserialized.ticketsCount() +
                 "\nCurrentPlayerId : " + deserialized.currentPlayerId() +
-                "\nClaimedRoutes : " + deserialized.claimedRoutes()
-        );
+                "\nClaimedRoutes : " + deserialized.claimedRoutes());
     }
 }
