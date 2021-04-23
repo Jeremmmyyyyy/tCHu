@@ -10,10 +10,9 @@ import java.util.*;
  *
  * @author Jérémy Barghorn (328403)
  */
-public final class Serdes{
-    private static Base64.Encoder encoder = Base64.getEncoder();
-    private static Base64.Decoder decoder = Base64.getDecoder();
+public final class Serdes {
 
+    //In order to make the class non instantiable
     private Serdes(){}
 
     /**
@@ -24,8 +23,8 @@ public final class Serdes{
      * Serde for the Strings (Serialize an object into a String in base 64, Deserialize an object from base 64)
      */
     public static final Serde<String> STRING_SERDE = Serde
-            .of(i -> encoder.encodeToString(i.getBytes(java.nio.charset.StandardCharsets.UTF_8)),
-               s -> new String(decoder.decode(s), StandardCharsets.UTF_8));
+            .of(i -> Base64.getEncoder().encodeToString(i.getBytes(java.nio.charset.StandardCharsets.UTF_8)),
+                    s -> new String(Base64.getDecoder().decode(s), StandardCharsets.UTF_8));
     /**
      * Serde for the Enum PLayerId
      */
@@ -76,18 +75,18 @@ public final class Serdes{
      */
     public static final Serde<PublicCardState> PUBLIC_CARD_STATE_SERDE = Serde.
             of(cardState -> String.join(
-            ";",
-            LIST_CARD_SERDE.serialize(cardState.faceUpCards()),
-            INTEGER_SERDE.serialize(cardState.deckSize()),
-            INTEGER_SERDE.serialize(cardState.discardsSize())),
+                    ";",
+                    LIST_CARD_SERDE.serialize(cardState.faceUpCards()),
+                    INTEGER_SERDE.serialize(cardState.deckSize()),
+                    INTEGER_SERDE.serialize(cardState.discardsSize())),
 
-            string -> {
-                String[] split = string.split(";");
-                return new PublicCardState(
-                        LIST_CARD_SERDE.deserialize(split[0]),
-                        INTEGER_SERDE.deserialize(split[1]),
-                        INTEGER_SERDE.deserialize(split[2]));
-            });
+                    string -> {
+                        String[] split = string.split(";");
+                        return new PublicCardState(
+                                LIST_CARD_SERDE.deserialize(split[0]),
+                                INTEGER_SERDE.deserialize(split[1]),
+                                INTEGER_SERDE.deserialize(split[2]));
+                    });
 
     /**
      * Serde of PublicPlayerState, separated by ";"
@@ -104,7 +103,7 @@ public final class Serdes{
                         return new PublicPlayerState(
                                 INTEGER_SERDE.deserialize(split[0]),
                                 INTEGER_SERDE.deserialize(split[1]),
-                                LIST_ROUTE_SERDE.deserialize(split[2]));
+                                split.length == 2 ? List.of() : LIST_ROUTE_SERDE.deserialize(split[2])); //TODO indexOutOfBound
                     });
 
     /**
@@ -136,7 +135,7 @@ public final class Serdes{
                     PLAYER_ID_SERDE.serialize(gameState.currentPlayerId()),
                     PUBLIC_PLAYER_STATE_SERDE.serialize(gameState.playerState(PlayerId.PLAYER_1)),
                     PUBLIC_PLAYER_STATE_SERDE.serialize(gameState.playerState(PlayerId.PLAYER_2)),
-                    PLAYER_ID_SERDE.serialize(gameState.lastPlayer())),
+                    gameState.lastPlayer() == null ? "" : PLAYER_ID_SERDE.serialize(gameState.lastPlayer())), //TODO player null
 
                     string -> {
                         String[] split = string.split(":");
@@ -146,7 +145,7 @@ public final class Serdes{
                                 PLAYER_ID_SERDE.deserialize(split[2]),
                                 Map.of(PlayerId.PLAYER_1, PUBLIC_PLAYER_STATE_SERDE.deserialize(split[3]),
                                         PlayerId.PLAYER_2, PUBLIC_PLAYER_STATE_SERDE.deserialize(split[4])),
-                                PLAYER_ID_SERDE.deserialize(split[5]));
+                                split.length == 5 ? null : PLAYER_ID_SERDE.deserialize(split[5])); //TODO player null ET IndexOutOfBound dans le cas de null dou le test sur la longueur
                     });
 
 }
