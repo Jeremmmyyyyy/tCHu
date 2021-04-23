@@ -128,7 +128,7 @@ public final class Serdes{
     /**
      * Serde of PublicGameState, separated by ":"
      */
-    public static final Serde<PublicGameState> GAME_STATE_SERDE = Serde.
+    public static final Serde<PublicGameState> PUBLIC_GAME_STATE_SERDE = Serde.
             of(gameState -> String.join(
                     ":",
                     INTEGER_SERDE.serialize(gameState.ticketsCount()),
