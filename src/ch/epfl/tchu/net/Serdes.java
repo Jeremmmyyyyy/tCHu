@@ -4,6 +4,7 @@ import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Non instantiable final class that contains all the possible Serdes for the Game
@@ -81,7 +82,7 @@ public final class Serdes {
                     INTEGER_SERDE.serialize(cardState.discardsSize())),
 
                     string -> {
-                        String[] split = string.split(";");
+                        String[] split = string.split(Pattern.quote(";"), -1);
                         return new PublicCardState(
                                 LIST_CARD_SERDE.deserialize(split[0]),
                                 INTEGER_SERDE.deserialize(split[1]),
@@ -99,11 +100,11 @@ public final class Serdes {
                     LIST_ROUTE_SERDE.serialize(playerState.routes())),
 
                     string -> {
-                        String[] split = string.split(";");
+                        String[] split = string.split(Pattern.quote(";"), -1);
                         return new PublicPlayerState(
                                 INTEGER_SERDE.deserialize(split[0]),
                                 INTEGER_SERDE.deserialize(split[1]),
-                                split.length == 2 ? List.of() : LIST_ROUTE_SERDE.deserialize(split[2])); //TODO indexOutOfBound
+                                LIST_ROUTE_SERDE.deserialize(split[2])); //TODO indexOutOfBound
                     });
 
     /**
@@ -117,7 +118,7 @@ public final class Serdes {
                     LIST_ROUTE_SERDE.serialize(playerState.routes())),
 
                     string -> {
-                        String[] split = string.split(";");
+                        String[] split = string.split(Pattern.quote(";"), -1);
                         return new PlayerState(
                                 SORTED_BAG_TICKET_SERDE.deserialize(split[0]),
                                 SORTED_BAG_CARD_SERDE.deserialize(split[1]),
@@ -138,14 +139,14 @@ public final class Serdes {
                     gameState.lastPlayer() == null ? "" : PLAYER_ID_SERDE.serialize(gameState.lastPlayer())), //TODO player null
 
                     string -> {
-                        String[] split = string.split(":");
+                        String[] split = string.split(Pattern.quote(":"), -1);
                         return new PublicGameState(
                                 INTEGER_SERDE.deserialize(split[0]),
                                 PUBLIC_CARD_STATE_SERDE.deserialize(split[1]),
                                 PLAYER_ID_SERDE.deserialize(split[2]),
                                 Map.of(PlayerId.PLAYER_1, PUBLIC_PLAYER_STATE_SERDE.deserialize(split[3]),
                                         PlayerId.PLAYER_2, PUBLIC_PLAYER_STATE_SERDE.deserialize(split[4])),
-                                split.length == 5 ? null : PLAYER_ID_SERDE.deserialize(split[5])); //TODO player null ET IndexOutOfBound dans le cas de null dou le test sur la longueur
+                                split[5].isEmpty() ? null : PLAYER_ID_SERDE.deserialize(split[5])); //TODO player null ET IndexOutOfBound dans le cas de null dou le test sur la longueur
                     });
 
 }

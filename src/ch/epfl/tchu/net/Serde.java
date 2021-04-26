@@ -78,7 +78,7 @@ public interface Serde <T> {
 
             @Override
             public List<T> deserialize(String arg) {
-                return Stream.of(arg.split(Pattern.quote(separator), -1))
+                return arg.isEmpty() ? List.of() : Stream.of(arg.split(Pattern.quote(separator), -1))
                         .map(serde::deserialize)
                         .collect(Collectors.toList());
             }
