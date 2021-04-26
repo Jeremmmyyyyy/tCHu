@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
  * Non instantiable final class that contains all the possible Serdes for the Game
  *
  * @author Jérémy Barghorn (328403)
+ * @author Yann Ennassih (329978)
  */
 public final class Serdes {
 
