@@ -18,7 +18,7 @@ public class SerdesTest {
         List<SortedBag<Card>> sortedBags = List.of(SortedBag.of(2, BLUE, 3, BLACK), SortedBag.of(1, YELLOW, 2, RED), SortedBag.of(1, LOCOMOTIVE, 2, WHITE));
         String test2 = Serdes.LIST_SORTEDBAG_CARD_SERDE.serialize(sortedBags);
         System.out.println(test2);
-        System.out.println(Serdes.LIST_SORTEDBAG_CARD_SERDE.deserialize(test2) + "\n"); //TODO change l'ordre normal ?
+        System.out.println(Serdes.LIST_SORTEDBAG_CARD_SERDE.deserialize(test2) + "\n");
 
         List<Card> fu = List.of(RED, WHITE, BLUE, BLACK, RED);
         PublicCardState cs = new PublicCardState(fu, 30, 31);
