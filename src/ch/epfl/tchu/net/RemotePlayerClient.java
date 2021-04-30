@@ -5,6 +5,7 @@ import ch.epfl.tchu.game.PlayerId;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -28,60 +29,69 @@ public class RemotePlayerClient {
             BufferedReader r = new BufferedReader(new InputStreamReader(s.getInputStream(), US_ASCII));
             BufferedWriter w = new BufferedWriter(new OutputStreamWriter(s.getOutputStream(),US_ASCII))) {
 
-            String readLine = r.readLine();
+            String readLine;
 
-            while (readLine != null) {
+            while ((readLine = r.readLine()) != null) {
 
-                String[] m = r.readLine().split(Pattern.quote(" "), -1);
+                String[] m = readLine.split(Pattern.quote(" "), -1);
                 MessageId messageId = MessageId.valueOf(m[0]);
                 String o = "";
 
                 switch (messageId) {
 
                     case INIT_PLAYERS :
+                        List<String> l = Serdes.LIST_STRING_SERDE.deserialize(m[2]);
                         player.initPlayers(
                                 Serdes.PLAYER_ID_SERDE.deserialize(m[1]), Map.of(
-                                        PlayerId.PLAYER_1, Serdes.STRING_SERDE.deserialize((m[2])),
-                                        PlayerId.PLAYER_2, Serdes.STRING_SERDE.deserialize((m[3]))));
+                                        PlayerId.PLAYER_1, l.get(0),
+                                        PlayerId.PLAYER_2, l.get(1)));
+                        break;
                     case RECEIVE_INFO :
                         player.receiveInfo(Serdes.STRING_SERDE.deserialize(m[1]));
+                        break;
                     case UPDATE_STATE :
                         player.updateState(
                                 Serdes.PUBLIC_GAME_STATE_SERDE.deserialize(m[1]),
                                 Serdes.PLAYER_STATE_SERDE.deserialize(m[2]));
+                        break;
                     case SET_INITIAL_TICKETS :
                         player.setInitialTicketChoice(Serdes.SORTED_BAG_TICKET_SERDE.deserialize(m[1]));
+                        break;
                     case CHOOSE_INITIAL_TICKETS :
                         o = Serdes.SORTED_BAG_TICKET_SERDE.serialize(player.chooseInitialTickets());
+                        break;
                     case NEXT_TURN :
                         o = Serdes.TURN_KIND_SERDE.serialize(player.nextTurn());
+                        break;
                     case CHOOSE_TICKETS :
                         o = Serdes.SORTED_BAG_TICKET_SERDE.serialize(
                                 player.chooseTickets(Serdes.SORTED_BAG_TICKET_SERDE.deserialize(m[1])));
+                        break;
                     case DRAW_SLOT :
                         o = Serdes.INTEGER_SERDE.serialize(player.drawSlot());
+                        break;
                     case ROUTE :
                         o = Serdes.ROUTE_SERDE.serialize(player.claimedRoute());
+                        break;
                     case CARDS:
                         o = Serdes.SORTED_BAG_CARD_SERDE.serialize(player.initialClaimCards());
+                        break;
                     case CHOOSE_ADDITIONAL_CARDS:
                         o = Serdes.SORTED_BAG_CARD_SERDE.serialize(
                                 player.chooseAdditionalCards(Serdes.LIST_SORTEDBAG_CARD_SERDE.deserialize(m[1])));
+                        break;
                 }
-
                 w.write(o);
-                w.write("/n"); //TODO methode pour faire un message comme celui du proxy ?
+                w.write("\n"); //TODO methode pour faire un message comme celui du proxy ?
                 w.flush();
 
+//                readLine = r.readLine();
             }
 
 
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-
     }
-
-
 }
 

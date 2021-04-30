@@ -12,19 +12,16 @@ import java.util.Map;
 
 
 // TODO dans la consigne retour à la ligne
+
 public class RemotePlayerProxy implements Player {
     private final Socket SOCKET;
     private final BufferedReader READER;
     private final BufferedWriter WRITER;
 
-    public RemotePlayerProxy(Socket socket) {
+    public RemotePlayerProxy(Socket socket) throws IOException {
         this.SOCKET = socket;
-        try {
-            this.READER = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.US_ASCII));
-            this.WRITER = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.US_ASCII));
-        }catch (IOException e){
-            throw new UncheckedIOException(e);
-        }
+        this.READER = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.US_ASCII));
+        this.WRITER = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.US_ASCII));
     }
 
     @Override
