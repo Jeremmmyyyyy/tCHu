@@ -90,8 +90,8 @@ public class RemotePlayerProxy implements Player {
 
     private void sendMessage(String message)  {
         try {
-            WRITER.write(message);
-            WRITER.write('\n');
+            WRITER.write(message + "\n");
+//            WRITER.write('\n');
             WRITER.flush();
         }catch (IOException e){
             throw new UncheckedIOException(e);

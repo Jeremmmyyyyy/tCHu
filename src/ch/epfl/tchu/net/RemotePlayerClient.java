@@ -33,6 +33,8 @@ public class RemotePlayerClient {
 
             while ((readLine = r.readLine()) != null) {
 
+                System.out.println(readLine);
+
                 String[] m = readLine.split(Pattern.quote(" "), -1);
                 MessageId messageId = MessageId.valueOf(m[0]);
                 String o = "";
@@ -45,17 +47,21 @@ public class RemotePlayerClient {
                                 Serdes.PLAYER_ID_SERDE.deserialize(m[1]), Map.of(
                                         PlayerId.PLAYER_1, l.get(0),
                                         PlayerId.PLAYER_2, l.get(1)));
+                        o = null;
                         break;
                     case RECEIVE_INFO :
                         player.receiveInfo(Serdes.STRING_SERDE.deserialize(m[1]));
+                        o = null;
                         break;
                     case UPDATE_STATE :
                         player.updateState(
                                 Serdes.PUBLIC_GAME_STATE_SERDE.deserialize(m[1]),
                                 Serdes.PLAYER_STATE_SERDE.deserialize(m[2]));
+                        o = null;
                         break;
                     case SET_INITIAL_TICKETS :
                         player.setInitialTicketChoice(Serdes.SORTED_BAG_TICKET_SERDE.deserialize(m[1]));
+                        o = null;
                         break;
                     case CHOOSE_INITIAL_TICKETS :
                         o = Serdes.SORTED_BAG_TICKET_SERDE.serialize(player.chooseInitialTickets());
@@ -81,11 +87,11 @@ public class RemotePlayerClient {
                                 player.chooseAdditionalCards(Serdes.LIST_SORTEDBAG_CARD_SERDE.deserialize(m[1])));
                         break;
                 }
-                w.write(o);
-                w.write("\n"); //TODO methode pour faire un message comme celui du proxy ?
-                w.flush();
-
-//                readLine = r.readLine();
+                if(o != null){
+                    w.write(o);
+                    w.write("\n"); //TODO methode pour faire un message comme celui du proxy ?
+                    w.flush();
+                }
             }
 
 

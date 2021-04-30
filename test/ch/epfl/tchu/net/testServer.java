@@ -38,8 +38,10 @@ public final class testServer{
             remotePlayerProxy.initPlayers(PlayerId.PLAYER_1, playerNames);
             remotePlayerProxy.receiveInfo("receiveInfo works");
 //            remotePlayerProxy.updateState(publicGameState, playerState); // TODO marche pas
-            SortedBag<Ticket> tickets = remotePlayerProxy.chooseInitialTickets();
-            System.out.println(tickets);
+//            SortedBag<Ticket> tickets = remotePlayerProxy.chooseInitialTickets();
+//            System.out.println(tickets);
+            Player.TurnKind turnKind = remotePlayerProxy.nextTurn();
+            System.out.println("NextTurn is : " + turnKind);
 
 
             Thread.sleep(10000);

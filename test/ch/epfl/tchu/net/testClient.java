@@ -58,16 +58,16 @@ public class testClient {
         @Override
         public SortedBag<Ticket> chooseInitialTickets() {
             System.out.println("chooseInitialTickets() called");
+//            System.out.println(SortedBag.of(tickets));
             System.out.println("----------------------------------------");
-            System.out.println(SortedBag.of(tickets));
             return SortedBag.of(tickets);
         }
 
         @Override
         public TurnKind nextTurn() {
-
+            System.out.println("nextTurn() called");
             System.out.println("----------------------------------------");
-            return null;
+            return TurnKind.CLAIM_ROUTE;
         }
 
         @Override
