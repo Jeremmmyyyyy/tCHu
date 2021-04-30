@@ -38,6 +38,7 @@ public final class testServer{
             remotePlayerProxy.initPlayers(PlayerId.PLAYER_1, playerNames);
             remotePlayerProxy.receiveInfo("receiveInfo works");
             remotePlayerProxy.updateState(publicGameState, playerState);
+            remotePlayerProxy.setInitialTicketChoice(SortedBag.of(tickets));
             System.out.println("Choose initialTickets : " + remotePlayerProxy.chooseInitialTickets());
             System.out.println("chooseTickets : "+ remotePlayerProxy.chooseTickets(SortedBag.of(tickets)));
             System.out.println("NextTurn is : " + remotePlayerProxy.nextTurn());

@@ -2,7 +2,6 @@ package ch.epfl.tchu.net;
 
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
-import ch.epfl.test.ChMapPublic;
 
 import java.util.List;
 import java.util.Map;
@@ -18,10 +17,6 @@ public class testClient {
 
         System.out.println("Client Done");
     }
-
-
-
-
 
     private final static class TestPlayer implements Player {
         @Override
@@ -58,7 +53,6 @@ public class testClient {
         @Override
         public SortedBag<Ticket> chooseInitialTickets() {
             System.out.println("chooseInitialTickets() called");
-//            System.out.println(SortedBag.of(tickets));
             System.out.println("----------------------------------------");
             return SortedBag.of(tickets);
         }
