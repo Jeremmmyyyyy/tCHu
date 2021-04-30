@@ -72,9 +72,9 @@ public class testClient {
 
         @Override
         public SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) {
-
+            System.out.println("chooseTickets() called");
             System.out.println("----------------------------------------");
-            return null;
+            return SortedBag.of(tickets);
         }
 
         @Override
@@ -107,8 +107,8 @@ public class testClient {
 
         private static final Map<PlayerId, String> playerNames = Map.of(PlayerId.PLAYER_1, "BOB", PlayerId.PLAYER_2, "ALICE");
         private static final List<Card> cards = List.of(RED, WHITE, BLUE, BLACK, RED);
-        private static final List<Ticket> tickets = List.of(ChMapPublic.ALL_TICKETS.get(0), ChMapPublic.ALL_TICKETS.get(1), ChMapPublic.ALL_TICKETS.get(2), ChMapPublic.ALL_TICKETS.get(3));
-        private static final List<Route> routes = List.of(ChMapPublic.ALL_ROUTES.get(0), ChMapPublic.ALL_ROUTES.get(1), ChMapPublic.ALL_ROUTES.get(2), ChMapPublic.ALL_ROUTES.get(3));
+        private static final List<Ticket> tickets = List.of(ChMap.tickets().get(0), ChMap.tickets().get(1));
+        private static final List<Route> routes = List.of(ChMap.routes().get(0), ChMap.routes().get(1));
         private static final PublicCardState publicCardState = new PublicCardState(cards, 30, 31);
         private static final List<Route> routeList = ChMap.routes().subList(0, 2);
         private static final Map<PlayerId, PublicPlayerState> publicPlayerStateMap = Map.of(
