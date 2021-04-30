@@ -79,34 +79,35 @@ public class testClient {
 
         @Override
         public int drawSlot() {
-
+            System.out.println("drawSlot() called");
             System.out.println("----------------------------------------");
             return 0;
         }
 
         @Override
         public Route claimedRoute() {
-
+            System.out.println("claimedRoute() called");
             System.out.println("----------------------------------------");
-            return null;
+            return ChMap.routes().get(0);
         }
 
         @Override
         public SortedBag<Card> initialClaimCards() {
-
+            System.out.println("initialClaimCards() called");
             System.out.println("----------------------------------------");
-            return null;
+            return SortedBag.of(cards);
         }
 
         @Override
         public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) {
-
+            System.out.println("chooseAdditionalCards() called");
             System.out.println("----------------------------------------");
-            return null;
+            return SortedBag.of(cards2);
         }
 
         private static final Map<PlayerId, String> playerNames = Map.of(PlayerId.PLAYER_1, "BOB", PlayerId.PLAYER_2, "ALICE");
-        private static final List<Card> cards = List.of(RED, WHITE, BLUE, BLACK, RED);
+        private static final List<Card> cards = List.of(RED, WHITE, BLUE, RED, ORANGE);
+        private static final List<Card> cards2 = List.of(BLUE, BLUE, BLUE, RED, LOCOMOTIVE);
         private static final List<Ticket> tickets = List.of(ChMap.tickets().get(0), ChMap.tickets().get(1));
         private static final List<Route> routes = List.of(ChMap.routes().get(0), ChMap.routes().get(1));
         private static final PublicCardState publicCardState = new PublicCardState(cards, 30, 31);
