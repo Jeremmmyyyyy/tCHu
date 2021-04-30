@@ -37,7 +37,10 @@ public final class testServer{
 
             remotePlayerProxy.initPlayers(PlayerId.PLAYER_1, playerNames);
             remotePlayerProxy.receiveInfo("receiveInfo works");
-            remotePlayerProxy.updateState(publicGameState, playerState);
+//            remotePlayerProxy.updateState(publicGameState, playerState); // TODO marche pas
+            SortedBag<Ticket> tickets = remotePlayerProxy.chooseInitialTickets();
+            System.out.println(tickets);
+
 
             Thread.sleep(10000);
         }
