@@ -8,7 +8,7 @@ import ch.epfl.tchu.game.Ticket;
 public interface ActionHandlers {
 
     @FunctionalInterface
-    interface DrawTicketHandler {
+    interface DrawTicketsHandler {
         void onDrawTickets();
     }
 
