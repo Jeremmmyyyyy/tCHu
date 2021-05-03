@@ -2,7 +2,6 @@ package ch.epfl.tchu.gui;
 
 import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.ChMap;
-import ch.epfl.tchu.game.Color;
 import ch.epfl.tchu.game.Ticket;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
@@ -17,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+import java.util.List;
 
 
 final class DecksViewCreator {
@@ -29,6 +29,7 @@ final class DecksViewCreator {
         hBoxTickets.setId("hand-pane");
 
         ObservableList<Ticket> observableList = FXCollections.unmodifiableObservableList(FXCollections.observableList(ChMap.tickets()));
+        //TODO afficher que les cartes actuelles du joueur avec observableGameState
         ListView<Ticket> listView = new ListView<>(observableList);
         listView.setId("tickets");
 
@@ -50,20 +51,23 @@ final class DecksViewCreator {
         vBox.getStylesheets().addAll("decks.css", "colors.css");
         vBox.setId("card-pane");
 
+        List<Card> tempCards = List.of(Card.BLUE, Card.RED, Card.RED, Card.YELLOW, Card.LOCOMOTIVE); // TODO changer liste par valeur de l'attribut plus tard
 
+        vBox.getChildren().add(createButton("Cartes", 30.0));  // TODO remplacer par le pourcentage pour la jauge que le foreground
+        for (Card card : tempCards) { vBox.getChildren().add(stackPaneCreator(card, false)); }
+        vBox.getChildren().add(createButton("Tickets", 45.0)); // TODO remplacer par le pourcentage pour la jauge que le foreground
 
-
-
-
-
-
-        return null;
+//        vBox.getChildren().addAll( // TODO pas possible ??
+//                createButton("Cartes"),
+//                tempCards.forEach(t -> stackPaneCreator(t, false)),
+//                createButton("Tickets"));
+        return vBox;
     }
 
-    private static Button createButton(String buttonName){
+    private static Button createButton(String buttonName, Double percentage){
         Rectangle backgroundRectangle = new Rectangle(50, 5);
         backgroundRectangle.getStyleClass().add("background");
-        Rectangle foregroundRectangle = new Rectangle(50, 5);
+        Rectangle foregroundRectangle = new Rectangle(percentage, 5);
         foregroundRectangle.getStyleClass().add("foreground");
 
         Group group = new Group();
