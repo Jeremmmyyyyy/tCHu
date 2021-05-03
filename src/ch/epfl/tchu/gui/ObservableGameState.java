@@ -1,80 +1,85 @@
 package ch.epfl.tchu.gui;
 
+import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static ch.epfl.tchu.game.Constants.FACE_UP_CARD_SLOTS;
-import static ch.epfl.tchu.game.PlayerId.PLAYER_1;
-import static ch.epfl.tchu.game.PlayerId.PLAYER_2;
 
 public final class ObservableGameState {
 
     private final PlayerId playerId;
-    private final PublicGameState publicGameState;
-    private final PlayerState playerState;
 
-    private final IntegerProperty ticketPourcentage;
-    private final IntegerProperty cardPourcentage;
-    private final List<ObjectProperty<Card>> faceUpCards;
-    private final MapProperty<Route, PlayerId> routes; //TODO MapProperty ????
+    private IntegerProperty ticketPourcentage;
+    private IntegerProperty cardPourcentage;
+    private List<ObjectProperty<Card>> faceUpCards;
+    private MapProperty<Route, PlayerId> routes; //TODO MapProperty ????
 
-    private final IntegerProperty ticketCount1;
-    private final IntegerProperty ticketCount2;
-    private final IntegerProperty cardCount1;
-    private final IntegerProperty cardCount2;
-    private final IntegerProperty carCount1;
-    private final IntegerProperty carCount2;
-    private final IntegerProperty claimPoints1;
-    private final IntegerProperty claimPoints2;
+    private IntegerProperty ticketCount1; //TODO quel attribut en final ?
+    private IntegerProperty ticketCount2;
+    private IntegerProperty cardCount1;
+    private IntegerProperty cardCount2;
+    private IntegerProperty carCount1;
+    private IntegerProperty carCount2;
+    private IntegerProperty claimPoints1;
+    private IntegerProperty claimPoints2;
 
-    private final ObservableList<Ticket> ownTickets;
-    private final IntegerProperty[] carCountOnColor;
-    private final MapProperty<Route, Boolean> claimableRoutes;
+    private ObservableList<Ticket> ownTickets;
+    private IntegerProperty[] carCountOnColor;
+    private MapProperty<Route, Boolean> claimableRoutes;
 
 
     public ObservableGameState(PlayerId playerId) {
         this.playerId = playerId;
-        playerState = new PlayerState(null, null, null); //TODO CHANGER
-        publicGameState = new PublicGameState(0, null, null, null, null); //TODO CHANGER
 
-        ticketPourcentage = new SimpleIntegerProperty(100);
-        cardPourcentage = new SimpleIntegerProperty(100);
+//        ticketPourcentage = new SimpleIntegerProperty(100);
+//        cardPourcentage = new SimpleIntegerProperty(100);
+        ticketPourcentage = new SimpleIntegerProperty(0);
+        cardPourcentage = new SimpleIntegerProperty(0);
         faceUpCards = initializeFaceUpCards(); //TODO initialise 5 faceUpCards vide
         routes = initializeRoutes();
 
-        ticketCount1 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_1).ticketCount());
-        ticketCount2 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_2).ticketCount());
-        cardCount1 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_1).cardCount());
-        cardCount2 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_2).cardCount());
-        carCount1 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_1).carCount());
-        carCount2 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_2).carCount());
-        claimPoints1 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_1).claimPoints());
-        claimPoints2 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_2).claimPoints());
+//        ticketCount1 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_1).ticketCount());
+//        ticketCount2 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_2).ticketCount());
+//        cardCount1 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_1).cardCount());
+//        cardCount2 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_2).cardCount());
+//        carCount1 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_1).carCount());
+//        carCount2 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_2).carCount());
+//        claimPoints1 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_1).claimPoints());
+//        claimPoints2 = new SimpleIntegerProperty(publicGameState.playerState(PLAYER_2).claimPoints());
 
-        ownTickets = FXCollections.observableList(List.of()); //TODO initialise tickets vide
+        ticketCount1 = new SimpleIntegerProperty(0);
+        ticketCount2 = new SimpleIntegerProperty(0);
+        cardCount1 = new SimpleIntegerProperty(0);
+        cardCount2 = new SimpleIntegerProperty(0);
+        carCount1 = new SimpleIntegerProperty(0);
+        carCount2 = new SimpleIntegerProperty(0);
+        claimPoints1 = new SimpleIntegerProperty(0);
+        claimPoints2 = new SimpleIntegerProperty(0);
+
+//        ownTickets = FXCollections.observableList(List.of()); //TODO initialise tickets vide
+        ownTickets = null;
         carCountOnColor = new SimpleIntegerProperty[9]; //TODO tableau statique initialisé à 0 ?
-        claimableRoutes = initializeClaimableRoutes();
+        claimableRoutes = null;
     }
 
     public void setState(PublicGameState publicGameState, PlayerState playerState) {
-        PublicGameState newGameState = null;
+
+        ticketPourcentage = new SimpleIntegerProperty(publicGameState.ticketsCount() / ChMap.tickets().size()); //TODO pas de constante pour le nombre de tickets total ?
+        ticketPourcentage = new SimpleIntegerProperty(publicGameState.cardState().deckSize() / Constants.TOTAL_CARDS_COUNT); //TODO pas de constante pour le nombre de tickets total ?
+
 
         for (int slot : FACE_UP_CARD_SLOTS) {
-            Card newCard = newGameState.cardState().faceUpCard(slot);
+            Card newCard = publicGameState.cardState().faceUpCard(slot);
             faceUpCards.get(slot).set(newCard);
         }
-
     }
 
-    public ReadOnlyObjectProperty<Card> faceUpCard(int slot) {
-        return faceUpCards.get(slot);
-    }
+
 
     public ReadOnlyIntegerProperty ticketPourcentage() {
         return ticketPourcentage;
@@ -84,8 +89,10 @@ public final class ObservableGameState {
         return cardPourcentage;
     }
 
-    public ObservableList<Ticket> {
+    public ReadOnlyObjectProperty<Card> faceUpCard(int slot) {
+        return faceUpCards.get(slot);
     }
+
 
     private static List<ObjectProperty<Card>> initializeFaceUpCards() { //TODO POURQUOI INDIQUE COMME STATIC DANS L'ENONCE ??
         List<ObjectProperty<Card>> initialCards = new ArrayList<>();
@@ -103,8 +110,8 @@ public final class ObservableGameState {
         return initialRoutes;
     }
 
-    private MapProperty<Route, Boolean> initializeClaimableRoutes() {
-        MapProperty<Route, Boolean> claimableRoutes = new SimpleMapProperty<>();
+    private MapProperty<Route, Boolean> initializeClaimableRoutes(PublicGameState publicGameState, PlayerState playerState) {
+        MapProperty<Route, Boolean> claimableRoutes = new SimpleMapProperty<>(); //TODO MapPorperty ?
         for (Route r : ChMap.routes()) {
             claimableRoutes.put(r, playerId == publicGameState.currentPlayerId()
                     && routes.get(r) == null
@@ -113,11 +120,16 @@ public final class ObservableGameState {
         return claimableRoutes;
     }
 
-    public boolean canDrawTickets() {
+    public boolean canDrawTickets(PublicGameState publicGameState) {
         return publicGameState.canDrawTickets();
     }
 
-    public boolean canDrawCards() {
-
+    public boolean canDrawCards(PublicGameState publicGameState) {
+        return publicGameState.canDrawTickets();
     }
+
+    public List<SortedBag<Card>> possibleClaimCards(Route route, PlayerState playerState) {
+        return playerState.possibleClaimCards(route);
+    }
+
 }
