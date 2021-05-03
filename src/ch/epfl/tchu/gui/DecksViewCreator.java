@@ -50,7 +50,7 @@ final class DecksViewCreator {
     }
 
     public Node createCardsView(ObservableGameState observableGameState,
-                                ObjectProperty<ActionHandlers.DrawTicketHandler> drawTicketHandler,
+                                ObjectProperty<ActionHandlers.DrawTicketsHandler> drawTicketHandler,
                                 ObjectProperty<ActionHandlers.DrawCardHandler> drawCardHandler){
 
 
