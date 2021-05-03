@@ -3,7 +3,9 @@ package ch.epfl.tchu.gui;
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,21 +81,6 @@ public final class ObservableGameState {
         }
     }
 
-
-
-    public ReadOnlyIntegerProperty ticketPourcentage() {
-        return ticketPourcentage;
-    }
-
-    public ReadOnlyIntegerProperty cardPourcentage() {
-        return cardPourcentage;
-    }
-
-    public ReadOnlyObjectProperty<Card> faceUpCard(int slot) {
-        return faceUpCards.get(slot);
-    }
-
-
     private static List<ObjectProperty<Card>> initializeFaceUpCards() { //TODO POURQUOI INDIQUE COMME STATIC DANS L'ENONCE ??
         List<ObjectProperty<Card>> initialCards = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -132,4 +119,64 @@ public final class ObservableGameState {
         return playerState.possibleClaimCards(route);
     }
 
+
+
+    public ReadOnlyIntegerProperty ticketPourcentage() {
+        return ticketPourcentage;
+    }
+
+    public ReadOnlyIntegerProperty cardPourcentage() {
+        return cardPourcentage;
+    }
+
+    public ReadOnlyObjectProperty<Card> faceUpCard(int slot) {
+        return faceUpCards.get(slot);
+    }
+
+    public ReadOnlyMapProperty<Route, PlayerId> routes(){
+        return routes;
+    }
+
+    public ReadOnlyIntegerProperty ticketCount1(){
+        return ticketCount1;
+    }
+
+    public ReadOnlyIntegerProperty ticketCount2(){
+        return ticketCount2;
+    }
+
+    public ReadOnlyIntegerProperty cardCount1(){
+        return cardCount1;
+    }
+
+    public ReadOnlyIntegerProperty cardCount2(){
+        return cardCount2;
+    }
+
+    public ReadOnlyIntegerProperty carCount1(){
+        return carCount1;
+    }
+    public ReadOnlyIntegerProperty carCount2(){
+        return carCount2;
+    }
+
+    public ReadOnlyIntegerProperty claimPoints1(){
+        return claimPoints1;
+    }
+
+    public ReadOnlyIntegerProperty claimPoints2(){
+        return claimPoints2;
+    }
+
+    public ObservableList<Ticket> ownTickets(){ //TODO meilleur moyen ?
+        return FXCollections.unmodifiableObservableList(ownTickets);
+    }
+
+    public ReadOnlyIntegerProperty[] carCountOnColor(){
+        return carCountOnColor;
+    }
+
+    public ReadOnlyMapProperty<Route, Boolean> claimableRoutes(){
+        return claimableRoutes;
+    }
 }
