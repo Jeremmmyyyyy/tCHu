@@ -14,10 +14,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-import java.util.ArrayList;
 import java.util.List;
 
-class MapViewCreator {
+abstract class MapViewCreator {
+
+    public static final int RECTANGLE_WIDTH = 36;
+    public static final int RECTANGLE_HEIGHT = 12;
+    public static final int CIRCLE_RADIUS = 3;
+    public static final int CIRCLE_OFFSET = 6;
 
     public static Node createMapView(ObservableGameState observableGameState,
                                      ObjectProperty<ClaimRouteHandler> claimRouteHandler,
@@ -38,30 +42,27 @@ class MapViewCreator {
                 route.getChildren().add(cell);
             }
 
-            System.out.printf("\n%s %s %s", r.id(), r.level().toString(), r.color() != null ? r.color().toString() : "NEUTRAL");
             mapView.getChildren().add(route);
         }
 
         return mapView;
 
-
-
-
-
     }
 
     private static Group newCell() {
-        Rectangle rectangle = new Rectangle(36, 12);
+        Rectangle rectangle = new Rectangle(RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
         rectangle.getStyleClass().add("filled");
 
-        Circle c1 = new Circle(12,6,3);
-        Circle c2 = new Circle(24,6,3);
-        Group car = new Group(rectangle, c1, c2);
+        Circle circle1 = new Circle(RECTANGLE_WIDTH / 2 - CIRCLE_OFFSET, CIRCLE_OFFSET, CIRCLE_RADIUS);
+        Circle circle2 = new Circle(RECTANGLE_WIDTH / 2 + CIRCLE_OFFSET, CIRCLE_OFFSET, CIRCLE_RADIUS);
+        Group car = new Group(rectangle, circle1, circle2);
         car.getStyleClass().add("car");
-        Rectangle way = new Rectangle(36, 12);
+        Rectangle way = new Rectangle(RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
         way.getStyleClass().addAll("track", "filled");
+
         return new Group(way, car);
     }
+
     @FunctionalInterface
     interface CardChooser {
         void chooseCards(List<SortedBag<Card>> options, ChooseCardsHandler handler);
