@@ -1,9 +1,9 @@
 package ch.epfl.tchu.gui;
 
+import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.ChMap;
+import ch.epfl.tchu.game.Color;
 import ch.epfl.tchu.game.Ticket;
-import javafx.application.Application;
-import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,12 +13,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 final class DecksViewCreator {
 
-    public Node createHandView(ObservableGameState observableGameState){
+    public static Node createHandView(ObservableGameState observableGameState){
         HBox hBoxMain = new HBox();
         hBoxMain.getStylesheets().add("deck.css");
         hBoxMain.getStylesheets().add("colors.css");
@@ -29,7 +31,6 @@ final class DecksViewCreator {
         ObservableList<Ticket> observableList = FXCollections.unmodifiableObservableList(FXCollections.observableList(ChMap.tickets()));
         ListView<Ticket> listView = new ListView<Ticket>(observableList);
         listView.setId("tickets");
-
 
         hBoxMain.getChildren().addAll(hBoxTickets, listView);
 
@@ -42,16 +43,28 @@ final class DecksViewCreator {
         Text counter = new Text();
         counter.getStyleClass().add("count");
 
-        StackPane stackPaneBlack = new StackPane();
-        stackPaneBlack.getStyleClass().addAll("BLACK", "card");
-        stackPaneBlack.getChildren().addAll(rectangleOutside, rectangleInside, rectangleImage, counter);
+        List<StackPane> stackPaneList = new ArrayList<>();
+        for (Card color : Card.values()) {
+            StackPane stackPane = new StackPane();
+            if (color.color() == null){
+                stackPane.getStyleClass().addAll("NEUTRAL", "card");
+            }else{
+                stackPane.getStyleClass().addAll(color.color().toString(), "card");
+            }
+            stackPane.getChildren().addAll(rectangleOutside, rectangleInside, rectangleImage, counter);
+            stackPaneList.add(stackPane);
+        }
+        stackPaneList.forEach(stackPane -> hBoxTickets.getChildren().add(stackPane));
 
         return hBoxMain;
     }
 
-    public Node createCardsView(ObservableGameState observableGameState,
-                                ObjectProperty<ActionHandlers.DrawTicketsHandler> drawTicketHandler,
-                                ObjectProperty<ActionHandlers.DrawCardHandler> drawCardHandler){
+
+
+
+    public static Node createCardsView(ObservableGameState observableGameState,
+                                       ObjectProperty<ActionHandlers.DrawTicketsHandler> drawTicketHandler,
+                                       ObjectProperty<ActionHandlers.DrawCardHandler> drawCardHandler){
 
 
         return null;
