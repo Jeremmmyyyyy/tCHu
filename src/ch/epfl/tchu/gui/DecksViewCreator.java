@@ -61,9 +61,10 @@ final class DecksViewCreator {
 
 
 
+
     public static Node createCardsView(ObservableGameState observableGameState,
-                                ObjectProperty<ActionHandlers.DrawTicketsHandler> drawTicketHandler,
-                                ObjectProperty<ActionHandlers.DrawCardHandler> drawCardHandler){
+                                       ObjectProperty<ActionHandlers.DrawTicketsHandler> drawTicketHandler,
+                                       ObjectProperty<ActionHandlers.DrawCardHandler> drawCardHandler){
 
 
         return null;
