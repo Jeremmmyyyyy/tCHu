@@ -27,26 +27,20 @@ class MapViewCreator {
         mapView.getStylesheets().add("colors.css");
         mapView.getChildren().add(new ImageView());
 
-        List<Group> groups = new ArrayList<>();
-
         for (Route r : ChMap.routes()) {
-            Rectangle rectangle = new Rectangle(36, 12);
-            rectangle.getStyleClass().add("filled");
-            Circle c1 = new Circle(12,6,3);
-            Circle c2 = new Circle(24,6,3);
-            Group car = new Group(rectangle, c1, c2);
-            car.getStyleClass().add("car");
-            Rectangle way = new Rectangle(36, 12);
-            way.getStyleClass().addAll("track", "filled");
-            Group g2 = new Group(way, car);
-            g2.setId(r.id());
-            Group route = new Group(g2);
+            Group route = new Group();
             route.setId(r.id());
-            System.out.println(r.id() + " " + r.level().toString() + " " + r.color().toString());
-            route.getStyleClass().addAll("route", "UNDERGROUND", "NEUTRAL");
-            groups.add(route);
+            route.getStyleClass().addAll("route", r.level().toString(), r.color() != null ? r.color().toString() : "NEUTRAL");
+
+            for (int i = 1; i <= r.length(); i++) {
+                Group cell = newCell();
+                cell.setId(String.format("%s_%s", r.id(), i));
+                route.getChildren().add(cell);
+            }
+
+            System.out.printf("\n%s %s %s", r.id(), r.level().toString(), r.color() != null ? r.color().toString() : "NEUTRAL");
+            mapView.getChildren().add(route);
         }
-        mapView.getChildren().addAll(groups);
 
         return mapView;
 
@@ -56,6 +50,18 @@ class MapViewCreator {
 
     }
 
+    private static Group newCell() {
+        Rectangle rectangle = new Rectangle(36, 12);
+        rectangle.getStyleClass().add("filled");
+
+        Circle c1 = new Circle(12,6,3);
+        Circle c2 = new Circle(24,6,3);
+        Group car = new Group(rectangle, c1, c2);
+        car.getStyleClass().add("car");
+        Rectangle way = new Rectangle(36, 12);
+        way.getStyleClass().addAll("track", "filled");
+        return new Group(way, car);
+    }
     @FunctionalInterface
     interface CardChooser {
         void chooseCards(List<SortedBag<Card>> options, ChooseCardsHandler handler);
