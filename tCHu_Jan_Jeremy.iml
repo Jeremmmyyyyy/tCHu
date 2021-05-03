@@ -91,5 +91,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="OpenJFX11" level="application" />
+    <orderEntry type="library" name="OpenJFX 11" level="application" />
   </component>
 </module>
