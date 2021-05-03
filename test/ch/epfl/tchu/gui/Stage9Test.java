@@ -43,10 +43,11 @@ public final class Stage9Test extends Application {
 //        BorderPane mainPane =
 //                new BorderPane(mapView, null, cardsView, handView, null);
 
-        Node deckView = DecksViewCreator.createHandView(null);
+        Node handView = DecksViewCreator.createHandView(null);
+        Node cardsView = DecksViewCreator.createCardsView(null, null, null);
         Node mapView = MapViewCreator.createMapView(null, null, null);
         BorderPane mainPane =
-                new BorderPane(mapView, null, deckView, null, null);
+                new BorderPane(mapView, null, cardsView, handView, null);
         primaryStage.setScene(new Scene((mainPane)));
         primaryStage.show();
 //
