@@ -9,8 +9,7 @@ import javafx.collections.ObservableList;
 import java.util.*;
 
 import static ch.epfl.tchu.game.Constants.FACE_UP_CARDS_COUNT;
-import static ch.epfl.tchu.game.PlayerId.PLAYER_1;
-import static ch.epfl.tchu.game.PlayerId.PLAYER_2;
+import static ch.epfl.tchu.game.Constants.FACE_UP_CARD_SLOTS;
 
 public final class ObservableGameState {
 
@@ -37,12 +36,9 @@ public final class ObservableGameState {
         ticketPercentage = new SimpleIntegerProperty();
         cardPercentage = new SimpleIntegerProperty();
         faceUpCards = createFaceUpCards();
+        routes = createRoutes();
 
-
-        //TODO arraylist et pas de SimpleObjectProperty ?
-        routes = createRoutes(); //TODO hashMap et pas de SimpleObjectProperty ?
-
-        ticketCounts = createCounts(); //TODO pas besoin de SimpleIntegerProperty ??
+        ticketCounts = createCounts();
         cardCounts = createCounts();
         carCounts = createCounts();
         claimPoints = createCounts();
@@ -51,6 +47,50 @@ public final class ObservableGameState {
         carCountOnCard = createsCarCountOnCard(); //TODO pas de SimpleIntegerProperty ?
         claimableRoutes = createsClaimableRoutes(); //TODO pas de SimpleBooleanProperty ?
 
+    }
+
+
+
+    public void setState(PublicGameState publicGameState, PlayerState playerState) {
+
+        ticketPercentage.set(publicGameState.ticketsCount() * 100 / ChMap.tickets().size());
+        cardPercentage.set(publicGameState.cardState().deckSize() * 100 / Constants.TOTAL_CARDS_COUNT);
+        setFaceUpCards(publicGameState);
+        setRoutes(publicGameState);
+
+        ticketCounts.forEach((id, ticketCount) -> ticketCount.set(publicGameState.playerState(id).ticketCount()));
+        cardCounts.forEach((id, cardCount) -> cardCount.set(publicGameState.playerState(id).cardCount()));
+        carCounts.forEach((id, carCount) -> carCount.set(publicGameState.playerState(id).carCount()));
+        claimPoints.forEach((id, points) -> points.set(publicGameState.playerState(id).claimPoints()));
+
+        ownTickets.setAll(playerState.tickets().toList());  //TODO ne modifie pas la liste ?
+        setClaimableRoutes(publicGameState, playerState);
+        carCountOnCard.forEach((card, count) -> count.set(playerState.carCount()));
+
+    }
+
+    private void setFaceUpCards(PublicGameState publicGameState) {
+        for (int slot : FACE_UP_CARD_SLOTS) {
+            Card newCard = publicGameState.cardState().faceUpCard(slot);
+            faceUpCards.get(slot).set(newCard);
+        }
+    }
+
+    private void setRoutes(PublicGameState publicGameState) {
+        PlayerId.ALL.forEach(id -> {
+            for (Route r : publicGameState.playerState(id).routes()) {
+                routes.get(r).set(id);//TODO bien comme ca ?
+            }});
+    }
+
+    private void setClaimableRoutes(PublicGameState publicGameState, PlayerState playerState) {
+        claimableRoutes.forEach((route, claimable) -> { //TODO et comment faire un test sur la route voisine  en cas de route double ?
+            if (playerId == publicGameState.currentPlayerId() &&
+                    routes.get(route) == null &&
+                    playerState.canClaimRoute(route)) {
+                claimable.set(true);
+            }
+        });
     }
 
     private static List<ObjectProperty<Card>> createFaceUpCards() {
@@ -84,75 +124,6 @@ public final class ObservableGameState {
         ChMap.routes().forEach(r -> claimableRoutes.put(r, new SimpleBooleanProperty()));
         return claimableRoutes;
     }
-
-
-
-
-
-
-    public void setState(PublicGameState publicGameState, PlayerState playerState) {
-
-        List<PublicPlayerState> publicPlayerStates = List.of(
-                publicGameState.playerState(PLAYER_1),
-                publicGameState.playerState(PLAYER_2));
-
-        ticketPercentage.set(publicGameState.ticketsCount() / ChMap.tickets().size());
-        cardPercentage.set(publicGameState.cardState().deckSize() / Constants.TOTAL_CARDS_COUNT);
-//        setFaceUpCards(publicGameState);
-        setRoutes(publicPlayerStates);
-
-
-        //TODO pour ceux qui bouclent faire des stream non ???
-//        for (int i = 0; i < 2; i++) {
-//            ticketCounts[i] = new SimpleIntegerProperty(publicPlayerStates.get(i).ticketCount());
-//            carCounts[i] = new SimpleIntegerProperty(publicPlayerStates.get(i).carCount());
-//            cardCounts[i] = new SimpleIntegerProperty(publicPlayerStates.get(i).cardCount());
-//            claimPoints[i] = new SimpleIntegerProperty(publicPlayerStates.get(i).claimPoints());
-//        }
-
-//        ownTickets = FXCollections.observableList(playerState.tickets().toList());
-//        for (int i = 0; i < 9; i++) {
-//            carCountOnColor[i] = new SimpleIntegerProperty(playerState.cards().countOf(Card.values()[i])); //TODO bien ici ?
-//        }
-//        setClaimableRoutes(publicGameState, playerState);
-
-    }
-
-    public boolean canDrawTickets(PublicGameState publicGameState) {
-        return publicGameState.canDrawTickets();
-    }
-
-    public boolean canDrawCards(PublicGameState publicGameState) {
-        return publicGameState.canDrawTickets();
-    }
-
-    public List<SortedBag<Card>> possibleClaimCards(Route route, PlayerState playerState) {
-        return playerState.possibleClaimCards(route);
-    }
-
-//    private static void setFaceUpCards(PublicGameState publicGameState) { //TODO pourquoi indiquer comme static dans l'enonce ??
-//        for (int slot : FACE_UP_CARD_SLOTS) {
-//            Card newCard = publicGameState.cardState().faceUpCard(slot);
-//            faceUpCards.get(slot).set(newCard);
-//        }
-//    }
-
-    private void setRoutes(List<PublicPlayerState> publicPlayerStates) {
-        for (int i = 0; i < PlayerId.ALL.size(); i++) {
-            for (Route r : publicPlayerStates.get(i).routes()) {
-                routes.get  (r).set(PlayerId.values()[i]); //TODO bien comme ca ?
-            }
-        }
-    }
-
-//    private void setClaimableRoutes(PublicGameState publicGameState, PlayerState playerState) {
-//        for (Route r : ChMap.routes()) {
-//            claimableRoutes.put(r, playerId == publicGameState.currentPlayerId()
-//                    && routes.get(r) == null
-//                    && playerState.canClaimRoute(r));
-//        }
-
-
 
     public ReadOnlyIntegerProperty ticketPercentage() {
         return ticketPercentage;
@@ -196,5 +167,17 @@ public final class ObservableGameState {
 
     public ReadOnlyBooleanProperty claimableRoutes(Route route){
         return claimableRoutes.get(route);
+    }
+
+    public boolean canDrawTickets(PublicGameState publicGameState) {
+        return publicGameState.canDrawTickets();
+    }
+
+    public boolean canDrawCards(PublicGameState publicGameState) {
+        return publicGameState.canDrawTickets();
+    }
+
+    public List<SortedBag<Card>> possibleClaimCards(Route route, PlayerState playerState) {
+        return playerState.possibleClaimCards(route);
     }
 }
