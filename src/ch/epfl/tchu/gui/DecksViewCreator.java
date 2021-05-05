@@ -4,6 +4,7 @@ import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.ChMap;
 import ch.epfl.tchu.game.Ticket;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -35,6 +36,7 @@ final class DecksViewCreator {
 
         hBoxMain.getChildren().addAll(listView, hBoxTickets);
 
+//        observableGameState.carCountOnColor();
 
         for (Card card : Card.ALL) {
             hBoxTickets.getChildren().add(stackPaneCreator(card, true));
