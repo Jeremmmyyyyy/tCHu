@@ -84,7 +84,7 @@ public final class ObservableGameState {
     }
 
     private void setClaimableRoutes(PublicGameState publicGameState, PlayerState playerState) {
-        claimableRoutes.forEach((route, claimable) -> { //TODO et comment faire un test sur la route voisine  en cas de route double ?
+        claimableRoutes.forEach((route, claimable) -> { //TODO FAIRE LE TEST DE LA ROUTE VOISINE DANS CHMAP ou pas ? (voir piazza)
             if (playerId == publicGameState.currentPlayerId() &&
                     routes.get(route) == null &&
                     playerState.canClaimRoute(route)) {

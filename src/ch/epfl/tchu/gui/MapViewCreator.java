@@ -3,6 +3,7 @@ package ch.epfl.tchu.gui;
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.ChMap;
+import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.gui.ActionHandlers.ChooseCardsHandler;
 import ch.epfl.tchu.gui.ActionHandlers.ClaimRouteHandler;
@@ -26,6 +27,7 @@ abstract class MapViewCreator {
     public static Node createMapView(ObservableGameState observableGameState,
                                      ObjectProperty<ClaimRouteHandler> claimRouteHandler,
                                      CardChooser cardChooser) {
+
         Pane mapView = new Pane();
         mapView.getStylesheets().add("map.css");
         mapView.getStylesheets().add("colors.css");
@@ -43,7 +45,20 @@ abstract class MapViewCreator {
             }
 
             mapView.getChildren().add(route);
+
+//            route.setOnMouseClicked(e -> {
+//                List<SortedBag<Card>> possibleClaimCards = observableGameState.possibleClaimCards(r);
+//                ClaimRouteHandler claimRouteH = …;
+//                ChooseCardsHandler chooseCardsH =
+//                        chosenCards -> claimRouteH.onClaimRoute(route, chosenCards);
+//                cardChooser.chooseCards(possibleClaimCards, chooseCardsH);
+//            });
+            observableGameState.routes(r).addListener((o, oV, nV) -> route.getStyleClass().add(nV.name()));
+            route.disableProperty().bind(
+                    claimRouteHandler.isNull().or(observableGameState.claimableRoutes(r).not()));
         }
+
+//        claimRouteHandler.get().onClaimRoute();
 
         return mapView;
 
