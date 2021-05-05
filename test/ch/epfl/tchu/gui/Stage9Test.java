@@ -24,14 +24,14 @@ public final class Stage9Test extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        ObservableGameState gameState = new ObservableGameState(PLAYER_1);
-
-        ObjectProperty<ClaimRouteHandler> claimRoute =
-                new SimpleObjectProperty<>(Stage9Test::claimRoute);
-        ObjectProperty<DrawTicketsHandler> drawTickets =
-                new SimpleObjectProperty<>(Stage9Test::drawTickets);
-        ObjectProperty<DrawCardHandler> drawCard =
-                new SimpleObjectProperty<>(Stage9Test::drawCard);
+//        ObservableGameState gameState = new ObservableGameState(PLAYER_1);
+//
+//        ObjectProperty<ClaimRouteHandler> claimRoute =
+//                new SimpleObjectProperty<>(Stage9Test::claimRoute);
+//        ObjectProperty<DrawTicketsHandler> drawTickets =
+//                new SimpleObjectProperty<>(Stage9Test::drawTickets);
+//        ObjectProperty<DrawCardHandler> drawCard =
+//                new SimpleObjectProperty<>(Stage9Test::drawCard);
 
 //        Node mapView = MapViewCreator
 //                .createMapView(gameState, claimRoute, Stage9Test::chooseCards);

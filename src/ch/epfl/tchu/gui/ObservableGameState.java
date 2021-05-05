@@ -16,8 +16,8 @@ public final class ObservableGameState {
 
     private final PlayerId playerId;
 
-    private IntegerProperty ticketPourcentage;
-    private IntegerProperty cardPourcentage;
+    private IntegerProperty ticketPercentage;
+    private IntegerProperty cardPercentage;
     private List<ObjectProperty<Card>> faceUpCards;
     private MapProperty<Route, PlayerId> routes; //TODO MapProperty ????
 
@@ -37,8 +37,8 @@ public final class ObservableGameState {
 
 //        ticketPourcentage = new SimpleIntegerProperty(100);
 //        cardPourcentage = new SimpleIntegerProperty(100);
-        ticketPourcentage = new SimpleIntegerProperty(0);
-        cardPourcentage = new SimpleIntegerProperty(0);
+        ticketPercentage = new SimpleIntegerProperty(0);
+        cardPercentage = new SimpleIntegerProperty(0);
         faceUpCards = null;
         routes = null;
 
@@ -68,8 +68,8 @@ public final class ObservableGameState {
                 publicGameState.playerState(PLAYER_1),
                 publicGameState.playerState(PLAYER_2));
 
-        ticketPourcentage = new SimpleIntegerProperty(publicGameState.ticketsCount() / ChMap.tickets().size()); //TODO pas de constante pour le nombre de tickets total ?
-        ticketPourcentage = new SimpleIntegerProperty(publicGameState.cardState().deckSize() / Constants.TOTAL_CARDS_COUNT);
+        ticketPercentage = new SimpleIntegerProperty(publicGameState.ticketsCount() / ChMap.tickets().size()); //TODO pas de constante pour le nombre de tickets total ?
+        cardPercentage = new SimpleIntegerProperty(publicGameState.cardState().deckSize() / Constants.TOTAL_CARDS_COUNT);
         setFaceUpCards(publicGameState);
         setRoutes(publicPlayerStates);
 
@@ -129,12 +129,12 @@ public final class ObservableGameState {
     }
 
 
-    public ReadOnlyIntegerProperty ticketPourcentage() {
-        return ticketPourcentage;
+    public ReadOnlyIntegerProperty ticketPercentage() {
+        return ticketPercentage;
     }
 
-    public ReadOnlyIntegerProperty cardPourcentage() {
-        return cardPourcentage;
+    public ReadOnlyIntegerProperty cardPercentage() {
+        return cardPercentage;
     }
 
     public ReadOnlyObjectProperty<Card> faceUpCard(int slot) {

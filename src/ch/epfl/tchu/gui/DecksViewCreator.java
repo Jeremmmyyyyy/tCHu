@@ -29,7 +29,7 @@ final class DecksViewCreator {
         hBoxTickets.setId("hand-pane");
 
         ObservableList<Ticket> observableList = FXCollections.unmodifiableObservableList(FXCollections.observableList(ChMap.tickets()));
-        //TODO afficher que les cartes actuelles du joueur avec observableGameState
+        //TODO afficher que les Tickets actuelles du joueur avec observableGameState
         ListView<Ticket> listView = new ListView<>(observableList);
         listView.setId("tickets");
 
@@ -53,9 +53,9 @@ final class DecksViewCreator {
 
         List<Card> tempCards = List.of(Card.BLUE, Card.RED, Card.RED, Card.YELLOW, Card.LOCOMOTIVE); // TODO changer liste par valeur de l'attribut plus tard
 
-        vBox.getChildren().add(createButton("Cartes", 30.0));  // TODO remplacer par le pourcentage pour la jauge que le foreground
+        vBox.getChildren().add(createButton("Cartes", 30));  // TODO remplacer par le pourcentage pour la jauge que le foreground
         for (Card card : tempCards) { vBox.getChildren().add(stackPaneCreator(card, false)); }
-        vBox.getChildren().add(createButton("Tickets", 45.0)); // TODO remplacer par le pourcentage pour la jauge que le foreground
+        vBox.getChildren().add(createButton("Tickets", 45)); // TODO remplacer par le pourcentage pour la jauge que le foreground
 
 //        vBox.getChildren().addAll( // TODO pas possible ??
 //                createButton("Cartes"),
@@ -64,7 +64,7 @@ final class DecksViewCreator {
         return vBox;
     }
 
-    private static Button createButton(String buttonName, Double percentage){
+    private static Button createButton(String buttonName, int percentage){
         Rectangle backgroundRectangle = new Rectangle(50, 5);
         backgroundRectangle.getStyleClass().add("background");
         Rectangle foregroundRectangle = new Rectangle(percentage, 5);
@@ -96,7 +96,6 @@ final class DecksViewCreator {
         }else{
             stackPane.getStyleClass().addAll(card.color().toString(), "card");
         }
-
         if (displayCounter){
             stackPane.getChildren().addAll(rectangleOutside, rectangleInside, rectangleImage, counter);
         }else{
