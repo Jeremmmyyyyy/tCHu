@@ -24,53 +24,48 @@ public final class Stage9Test extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-//        ObservableGameState gameState = new ObservableGameState(PLAYER_1);
-//
-//        ObjectProperty<ClaimRouteHandler> claimRoute =
-//                new SimpleObjectProperty<>(Stage9Test::claimRoute);
-//        ObjectProperty<DrawTicketsHandler> drawTickets =
-//                new SimpleObjectProperty<>(Stage9Test::drawTickets);
-//        ObjectProperty<DrawCardHandler> drawCard =
-//                new SimpleObjectProperty<>(Stage9Test::drawCard);
-//
-//        Node mapView = MapViewCreator
-//                .createMapView(gameState, claimRoute, Stage9Test::chooseCards);
-//        Node cardsView = DecksViewCreator
-//                .createCardsView(gameState, drawTickets, drawCard);
-//        Node handView = DecksViewCreator
-//                .createHandView(gameState);
-//
-//        BorderPane mainPane =
-//                new BorderPane(mapView, null, cardsView, handView, null);
+        ObservableGameState gameState = new ObservableGameState(PLAYER_1);
 
-        Node handView = DecksViewCreator.createHandView(null);
-        Node cardsView = DecksViewCreator.createCardsView(null, null, null);
-        Node mapView = MapViewCreator.createMapView(null, null, null);
+        ObjectProperty<ClaimRouteHandler> claimRoute =
+                new SimpleObjectProperty<>(Stage9Test::claimRoute);
+        ObjectProperty<DrawTicketsHandler> drawTickets =
+                new SimpleObjectProperty<>(Stage9Test::drawTickets);
+        ObjectProperty<DrawCardHandler> drawCard =
+                new SimpleObjectProperty<>(Stage9Test::drawCard);
+
+        Node mapView = MapViewCreator
+                .createMapView(gameState, claimRoute, Stage9Test::chooseCards);
+        Node cardsView = DecksViewCreator
+                .createCardsView(gameState, drawTickets, drawCard);
+        Node handView = DecksViewCreator
+                .createHandView(gameState);
+
         BorderPane mainPane =
                 new BorderPane(mapView, null, cardsView, handView, null);
+
         primaryStage.setScene(new Scene((mainPane)));
         primaryStage.show();
 
-//        setState(gameState);
+        setState(gameState);
     }
 
-//    private void setState(ObservableGameState gameState) {
-//        PlayerState p1State =
-//                new PlayerState(SortedBag.of(ChMap.tickets().subList(0, 3)),
-//                        SortedBag.of(1, Card.WHITE, 3, Card.RED),
-//                        ChMap.routes().subList(0, 3));
-//
-//        PublicPlayerState p2State =
-//                new PublicPlayerState(0, 0, ChMap.routes().subList(3, 6));
-//
-//        Map<PlayerId, PublicPlayerState> pubPlayerStates =
-//                Map.of(PLAYER_1, p1State, PlayerId.PLAYER_2, p2State);
-//        PublicCardState cardState =
-//                new PublicCardState(Card.ALL.subList(0, 5), 110 - 2 * 4 - 5, 0);
-//        PublicGameState publicGameState =
-//                new PublicGameState(36, cardState, PLAYER_1, pubPlayerStates, null);
-//        gameState.setState(publicGameState, p1State);
-//    }
+    private void setState(ObservableGameState gameState) {
+        PlayerState p1State =
+                new PlayerState(SortedBag.of(ChMap.tickets().subList(0, 3)),
+                        SortedBag.of(1, Card.WHITE, 3, Card.RED),
+                        ChMap.routes().subList(0, 3));
+
+        PublicPlayerState p2State =
+                new PublicPlayerState(0, 0, ChMap.routes().subList(3, 6));
+
+        Map<PlayerId, PublicPlayerState> pubPlayerStates =
+                Map.of(PLAYER_1, p1State, PlayerId.PLAYER_2, p2State);
+        PublicCardState cardState =
+                new PublicCardState(Card.ALL.subList(0, 5), 110 - 2 * 4 - 5, 0);
+        PublicGameState publicGameState =
+                new PublicGameState(36, cardState, PLAYER_1, pubPlayerStates, null);
+        gameState.setState(publicGameState, p1State);
+    }
 
 
     private static void claimRoute(Route route, SortedBag<Card> cards) {
