@@ -1,12 +1,10 @@
 package ch.epfl.tchu.gui;
 
 import ch.epfl.tchu.game.Card;
-import ch.epfl.tchu.game.ChMap;
 import ch.epfl.tchu.game.Constants;
 import ch.epfl.tchu.game.Ticket;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -19,7 +17,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 /**
  * Abstract class that creates the handView and the cardView of the graphical interface
@@ -50,11 +47,11 @@ abstract class DecksViewCreator {
 
         Map<Card, StackPane> cardStack = new HashMap<>();
         for (Card card : Card.ALL) {
-            StackPane s = stackPaneCreator(card, observableGameState.carCountOnCard(card), true);
-            s.visibleProperty().bind(Bindings.greaterThan(observableGameState.carCountOnCard(card), 0));
+            StackPane s = stackPaneCreator(card, observableGameState.cardCountOnColor(card), true);
+            s.visibleProperty().bind(Bindings.greaterThan(observableGameState.cardCountOnColor(card), 0));
             cardStack.put(card, s);
 
-            observableGameState.carCountOnCard(card).addListener((o, oV, nV)->{
+            observableGameState.cardCountOnColor(card).addListener((o, oV, nV)->{
                 if(nV.intValue()-oV.intValue() > 0){
                     s.getStyleClass().add(card.color() == null ? "NEUTRAL" : card.color().toString());
                 }else{

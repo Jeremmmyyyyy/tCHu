@@ -14,21 +14,21 @@ import static ch.epfl.tchu.game.Constants.FACE_UP_CARD_SLOTS;
 public final class ObservableGameState {
 
     private final PlayerId playerId;
-    private PublicGameState publicGameState; //TODO not final ? maj dans setState et utilisation dans les 3 methodes a la fin
+    private PublicGameState publicGameState;
     private PlayerState playerState;
 
     private final IntegerProperty ticketPercentage;
     private final IntegerProperty cardPercentage;
     private final List<ObjectProperty<Card>> faceUpCards;
-    private final Map<Route, ObjectProperty<PlayerId>> routes; //TODO comme ca ??
+    private final Map<Route, ObjectProperty<PlayerId>> routes;
 
     private final Map<PlayerId, IntegerProperty> ticketCounts;
     private final Map<PlayerId, IntegerProperty> cardCounts;
     private final Map<PlayerId, IntegerProperty> carCounts;
     private final Map<PlayerId, IntegerProperty> claimPoints;
 
-    private final ObservableList<Ticket> ownTickets; //TODO ou ObservableList<ObjectProperty<Ticket>>
-    private final Map<Card, IntegerProperty> carCountOnCard;
+    private final ObservableList<Ticket> ownTickets;
+    private final Map<Card, IntegerProperty> cardCountOnColor;
     private final Map<Route, BooleanProperty> claimableRoutes;
 
 
@@ -45,9 +45,9 @@ public final class ObservableGameState {
         carCounts = createCounts();
         claimPoints = createCounts();
 
-        ownTickets = FXCollections.observableArrayList(); //TODO ou unmodifiableList
-        carCountOnCard = createsCarCountOnCard(); //TODO pas de SimpleIntegerProperty ?
-        claimableRoutes = createsClaimableRoutes(); //TODO pas de SimpleBooleanProperty ?
+        ownTickets = FXCollections.observableArrayList();
+        cardCountOnColor = createsCardCountOnColor();
+        claimableRoutes = createsClaimableRoutes();
 
     }
 
@@ -66,9 +66,9 @@ public final class ObservableGameState {
         carCounts.forEach((id, carCount) -> carCount.set(publicGameState.playerState(id).carCount()));
         claimPoints.forEach((id, points) -> points.set(publicGameState.playerState(id).claimPoints()));
 
-        ownTickets.setAll(playerState.tickets().toList());  //TODO ne modifie pas la liste ?
+        ownTickets.setAll(playerState.tickets().toList());
         setClaimableRoutes(publicGameState, playerState);
-        carCountOnCard.forEach((card, count) -> count.set(playerState.cardCount()));
+        cardCountOnColor.forEach((card, count) -> count.set(playerState.cards().countOf(card)));
     }
 
     private void setFaceUpCards(PublicGameState publicGameState) {
@@ -81,7 +81,7 @@ public final class ObservableGameState {
     private void setRoutes(PublicGameState publicGameState) {
         PlayerId.ALL.forEach(id -> {
             for (Route r : publicGameState.playerState(id).routes()) {
-                routes.get(r).set(id);//TODO bien comme ca ?
+                routes.get(r).set(id);
             }
         });
     }
@@ -89,13 +89,14 @@ public final class ObservableGameState {
     private void setClaimableRoutes(PublicGameState publicGameState, PlayerState playerState) {
         claimableRoutes.forEach((route, claimable) -> { //TODO FAIRE LE TEST DE LA ROUTE VOISINE DANS CHMAP ou pas ? (voir piazza)
             if (playerId == publicGameState.currentPlayerId() &&
-                    routes.get(route) == null &&
+                    routes.get(route).get() == null &&
                     playerState.canClaimRoute(route)) {
 
                 claimable.set(true);
             }
         });
     }
+
 
     private static List<ObjectProperty<Card>> createFaceUpCards() {
         List<ObjectProperty<Card>> faceUpCards = new ArrayList<>();
@@ -121,10 +122,10 @@ public final class ObservableGameState {
         return counts;
     }
 
-    private static Map<Card, IntegerProperty> createsCarCountOnCard() {
-        Map<Card, IntegerProperty> carCountOnCard = new EnumMap<>(Card.class);
-        Card.ALL.forEach(c -> carCountOnCard.put(c, new SimpleIntegerProperty()));
-        return carCountOnCard;
+    private static Map<Card, IntegerProperty> createsCardCountOnColor() {
+        Map<Card, IntegerProperty> cardCountOnColor = new EnumMap<>(Card.class);
+        Card.ALL.forEach(c -> cardCountOnColor.put(c, new SimpleIntegerProperty()));
+        return cardCountOnColor;
     }
 
     private static Map<Route, BooleanProperty> createsClaimableRoutes() {
@@ -217,8 +218,8 @@ public final class ObservableGameState {
      * @param card you want to know the amount
      * @return the number of exemplars of a given card (ReadOnlyIntegerProperty)
      */
-    public ReadOnlyIntegerProperty carCountOnCard(Card card){
-      return carCountOnCard.get(card);
+    public ReadOnlyIntegerProperty cardCountOnColor(Card card){
+      return cardCountOnColor.get(card);
     }
 
     /**
