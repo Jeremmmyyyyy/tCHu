@@ -126,8 +126,7 @@ public final class ObservableGameState {
 
     private static Map<Card, IntegerProperty> createsCarCountOnCard() {
         Map<Card, IntegerProperty> carCountOnCard = new EnumMap<>(Card.class);
-        Card.CARS.forEach(c -> carCountOnCard.put(c, new SimpleIntegerProperty()));
-
+        Card.ALL.forEach(c -> carCountOnCard.put(c, new SimpleIntegerProperty()));
         return carCountOnCard;
     }
 
@@ -175,7 +174,7 @@ public final class ObservableGameState {
     }
 
     public ReadOnlyIntegerProperty carCountOnCard(Card card){
-        return carCountOnCard.get(card);
+      return carCountOnCard.get(card);
     }
 
     public ReadOnlyBooleanProperty claimableRoutes(Route route){

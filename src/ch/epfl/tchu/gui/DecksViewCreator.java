@@ -33,7 +33,7 @@ abstract class DecksViewCreator {
         hBoxTickets.setId("hand-pane");
 
         ObservableList<Ticket> observableList = FXCollections.unmodifiableObservableList(FXCollections.observableList(ChMap.tickets()));
-        //TODO afficher que les Tickets actuelles du joueur avec observableGameState
+        //TODO afficher que les Tickets actuels du joueur avec observableGameState
         ListView<Ticket> listView = new ListView<>(observableList);
         listView.setId("tickets");
 
@@ -78,7 +78,9 @@ abstract class DecksViewCreator {
             cardStack.put(i, s);
 
             observableGameState.faceUpCard(i).addListener((o, oV, nV)->{
-                s.getStyleClass().remove(oV.color().toString());
+                if(oV != null){
+                    s.getStyleClass().remove(oV.color().toString()); // TODO probleme
+                }
                 s.getStyleClass().add(nV.color().toString());
             });
         }
@@ -117,8 +119,10 @@ abstract class DecksViewCreator {
         rectangleImage.getStyleClass().add("train-image");
         Text counter = new Text();
         counter.getStyleClass().add("count");
-        counter.textProperty().bind(Bindings.convert(count)); //TODO juste comme ça
-        counter.visibleProperty().bind(Bindings.greaterThan(count, 0)); //TODO juste comme ça
+        if(count != null){
+            counter.textProperty().bind(Bindings.convert(count)); //TODO juste comme ça
+            counter.visibleProperty().bind(Bindings.greaterThan(count, 0)); //TODO juste comme ça
+        }
 
         StackPane stackPane = new StackPane();
         stackPane.getStyleClass().add("card");
