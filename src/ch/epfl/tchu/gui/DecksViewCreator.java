@@ -32,10 +32,10 @@ abstract class DecksViewCreator {
         HBox hBoxTickets = new HBox();
         hBoxTickets.setId("hand-pane");
 
-        ObservableList<Ticket> observableList = FXCollections.unmodifiableObservableList(FXCollections.observableList(ChMap.tickets()));
-        //TODO afficher que les Tickets actuels du joueur avec observableGameState
+        ObservableList<Ticket> observableList = observableGameState.ownTickets();
         ListView<Ticket> listView = new ListView<>(observableList);
         listView.setId("tickets");
+
 
         hBoxMain.getChildren().addAll(listView, hBoxTickets);
 
@@ -67,27 +67,35 @@ abstract class DecksViewCreator {
         VBox vBox = new VBox();
         vBox.getStylesheets().addAll("decks.css", "colors.css");
         vBox.setId("card-pane");
-        vBox.disableProperty().bind(drawCardHandler.isNull()); //TODO c'est juste ??
-        vBox.disableProperty().bind(drawTicketHandler.isNull()); //TODO c'est juste ??
+        vBox.disableProperty().bind(drawCardHandler.isNull());
+        vBox.disableProperty().bind(drawTicketHandler.isNull());
 
 
         Map<Integer, StackPane> cardStack = new HashMap<>();
 
-        for (int i = 0; i < Constants.FACE_UP_CARDS_COUNT; i++) {  //TODO c'est juste ??
+        for (int i = 0; i < Constants.FACE_UP_CARDS_COUNT; i++) {
             StackPane s = stackPaneCreator(observableGameState.faceUpCard(i).get(), null, false);
             cardStack.put(i, s);
 
             observableGameState.faceUpCard(i).addListener((o, oV, nV)->{
                 if(oV != null){
-                    s.getStyleClass().remove(oV.color().toString()); // TODO probleme
+                    s.getStyleClass().remove(oV.color().toString());
                 }
                 s.getStyleClass().add(nV.color().toString());
             });
         }
+        Button cartes = createButton("Cartes", observableGameState.cardPercentage());
+        cartes.setOnAction(e -> drawCardHandler.get().onDrawCard(-1));
+        Button tickets = createButton("Billets", observableGameState.ticketPercentage());
+        tickets.setOnAction(e -> drawTicketHandler.get().onDrawTickets());
 
-        vBox.getChildren().add(createButton("Cartes", observableGameState.cardPercentage()));
+        for (Integer key : cardStack.keySet()) {
+            cardStack.get(key).setOnMouseClicked(e -> drawCardHandler.get().onDrawCard(key));
+        }
+
+        vBox.getChildren().add(tickets);
         vBox.getChildren().addAll(cardStack.values());
-        vBox.getChildren().add(createButton("Tickets", observableGameState.ticketPercentage()));
+        vBox.getChildren().add(cartes);
 
 
         return vBox;
@@ -110,7 +118,7 @@ abstract class DecksViewCreator {
         return button;
     }
 
-    private static StackPane stackPaneCreator(Card card, ReadOnlyIntegerProperty count , Boolean displayCounter){ //TODO Card inutile
+    private static StackPane stackPaneCreator(Card card, ReadOnlyIntegerProperty count , Boolean displayCounter){
         Rectangle rectangleOutside = new Rectangle(60, 90);
         rectangleOutside.getStyleClass().add("outside");
         Rectangle rectangleInside = new Rectangle(40, 70);
@@ -120,8 +128,8 @@ abstract class DecksViewCreator {
         Text counter = new Text();
         counter.getStyleClass().add("count");
         if(count != null){
-            counter.textProperty().bind(Bindings.convert(count)); //TODO juste comme ça
-            counter.visibleProperty().bind(Bindings.greaterThan(count, 0)); //TODO juste comme ça
+            counter.textProperty().bind(Bindings.convert(count));
+            counter.visibleProperty().bind(Bindings.greaterThan(count, 1));
         }
 
         StackPane stackPane = new StackPane();

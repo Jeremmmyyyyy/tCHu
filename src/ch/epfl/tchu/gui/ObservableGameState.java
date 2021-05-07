@@ -70,8 +70,7 @@ public final class ObservableGameState {
 
         ownTickets.setAll(playerState.tickets().toList());  //TODO ne modifie pas la liste ?
         setClaimableRoutes(publicGameState, playerState);
-        carCountOnCard.forEach((card, count) -> count.set(playerState.carCount()));
-
+        carCountOnCard.forEach((card, count) -> count.set(playerState.cardCount()));
     }
 
     private void setFaceUpCards(PublicGameState publicGameState) {
