@@ -23,7 +23,7 @@ public class RemotePlayerClient {
         this.port = port;
     }
 
-    public void run() { //TODO check pour enlever le retour a la ligne /n
+    public void run() {
         try (
             Socket s = new Socket(name, port);
             BufferedReader r = new BufferedReader(new InputStreamReader(s.getInputStream(), US_ASCII));
@@ -89,7 +89,7 @@ public class RemotePlayerClient {
                 }
                 if(o != null){
                     w.write(o);
-                    w.write("\n"); //TODO methode pour faire un message comme celui du proxy ?
+                    w.write("\n");
                     w.flush();
                 }
             }

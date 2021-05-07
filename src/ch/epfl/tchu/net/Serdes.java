@@ -105,7 +105,7 @@ public final class Serdes {
                         return new PublicPlayerState(
                                 INTEGER_SERDE.deserialize(split[0]),
                                 INTEGER_SERDE.deserialize(split[1]),
-                                LIST_ROUTE_SERDE.deserialize(split[2])); //TODO indexOutOfBound
+                                LIST_ROUTE_SERDE.deserialize(split[2]));
                     });
 
     /**
@@ -137,7 +137,7 @@ public final class Serdes {
                     PLAYER_ID_SERDE.serialize(gameState.currentPlayerId()),
                     PUBLIC_PLAYER_STATE_SERDE.serialize(gameState.playerState(PlayerId.PLAYER_1)),
                     PUBLIC_PLAYER_STATE_SERDE.serialize(gameState.playerState(PlayerId.PLAYER_2)),
-                    gameState.lastPlayer() == null ? "" : PLAYER_ID_SERDE.serialize(gameState.lastPlayer())), //TODO player null
+                    gameState.lastPlayer() == null ? "" : PLAYER_ID_SERDE.serialize(gameState.lastPlayer())),
 
                     string -> {
                         String[] split = string.split(Pattern.quote(":"), -1);
@@ -147,7 +147,7 @@ public final class Serdes {
                                 PLAYER_ID_SERDE.deserialize(split[2]),
                                 Map.of(PlayerId.PLAYER_1, PUBLIC_PLAYER_STATE_SERDE.deserialize(split[3]),
                                         PlayerId.PLAYER_2, PUBLIC_PLAYER_STATE_SERDE.deserialize(split[4])),
-                                split[5].isEmpty() ? null : PLAYER_ID_SERDE.deserialize(split[5])); //TODO player null ET IndexOutOfBound dans le cas de null dou le test sur la longueur
+                                split[5].isEmpty() ? null : PLAYER_ID_SERDE.deserialize(split[5]));
                     });
 
 }

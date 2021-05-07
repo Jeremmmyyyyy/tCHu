@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 
-// TODO dans la consigne retour à la ligne
+
 
 public class RemotePlayerProxy implements Player {
     private final Socket SOCKET;
