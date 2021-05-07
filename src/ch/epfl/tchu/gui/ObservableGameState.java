@@ -14,20 +14,20 @@ import static ch.epfl.tchu.game.Constants.FACE_UP_CARD_SLOTS;
 public final class ObservableGameState {
 
     private final PlayerId playerId;
-    private PublicGameState publicGameState; //TODO not final ? maj dans setState et utilisation dans les 3 methodes a la fin
+    private PublicGameState publicGameState;
     private PlayerState playerState;
 
     private final IntegerProperty ticketPercentage;
     private final IntegerProperty cardPercentage;
     private final List<ObjectProperty<Card>> faceUpCards;
-    private final Map<Route, ObjectProperty<PlayerId>> routes; //TODO comme ca ??
+    private final Map<Route, ObjectProperty<PlayerId>> routes;
 
     private final Map<PlayerId, IntegerProperty> ticketCounts;
     private final Map<PlayerId, IntegerProperty> cardCounts;
     private final Map<PlayerId, IntegerProperty> carCounts;
     private final Map<PlayerId, IntegerProperty> claimPoints;
 
-    private final ObservableList<Ticket> ownTickets; //TODO ou ObservableList<ObjectProperty<Ticket>>
+    private final ObservableList<Ticket> ownTickets;
     private final Map<Card, IntegerProperty> carCountOnCard;
     private final Map<Route, BooleanProperty> claimableRoutes;
 
@@ -45,9 +45,9 @@ public final class ObservableGameState {
         carCounts = createCounts();
         claimPoints = createCounts();
 
-        ownTickets = FXCollections.observableArrayList(); //TODO ou unmodifiableList
-        carCountOnCard = createsCarCountOnCard(); //TODO pas de SimpleIntegerProperty ?
-        claimableRoutes = createsClaimableRoutes(); //TODO pas de SimpleBooleanProperty ?
+        ownTickets = FXCollections.observableArrayList();
+        carCountOnCard = createsCarCountOnCard();
+        claimableRoutes = createsClaimableRoutes();
 
     }
 
@@ -68,7 +68,7 @@ public final class ObservableGameState {
         carCounts.forEach((id, carCount) -> carCount.set(publicGameState.playerState(id).carCount()));
         claimPoints.forEach((id, points) -> points.set(publicGameState.playerState(id).claimPoints()));
 
-        ownTickets.setAll(playerState.tickets().toList());  //TODO ne modifie pas la liste ?
+        ownTickets.setAll(playerState.tickets().toList());
         setClaimableRoutes(publicGameState, playerState);
         carCountOnCard.forEach((card, count) -> count.set(playerState.carCount()));
 
@@ -84,7 +84,7 @@ public final class ObservableGameState {
     private void setRoutes(PublicGameState publicGameState) {
         PlayerId.ALL.forEach(id -> {
             for (Route r : publicGameState.playerState(id).routes()) {
-                routes.get(r).set(id);//TODO bien comme ca ?
+                routes.get(r).set(id);
             }
         });
     }
@@ -92,7 +92,7 @@ public final class ObservableGameState {
     private void setClaimableRoutes(PublicGameState publicGameState, PlayerState playerState) {
         claimableRoutes.forEach((route, claimable) -> { //TODO FAIRE LE TEST DE LA ROUTE VOISINE DANS CHMAP ou pas ? (voir piazza)
             if (playerId == publicGameState.currentPlayerId() &&
-                    routes.get(route) == null &&
+                    routes.get(route).get() == null &&
                     playerState.canClaimRoute(route)) {
 
                 claimable.set(true);
@@ -132,7 +132,7 @@ public final class ObservableGameState {
 
     private static Map<Route, BooleanProperty> createsClaimableRoutes() {
         Map<Route, BooleanProperty> claimableRoutes = new HashMap<>();
-        ChMap.routes().forEach(r -> claimableRoutes.put(r, new SimpleBooleanProperty()));
+        ChMap.routes().forEach(r -> claimableRoutes.put(r, new SimpleBooleanProperty())); //TODO initialise a true par defaut ou laisser false ??
         
         return claimableRoutes;
     }
@@ -169,7 +169,7 @@ public final class ObservableGameState {
         return claimPoints.get(playerId);
     }
 
-    public ObservableList<Ticket> ownTickets(){ //TODO meilleur moyen ?
+    public ObservableList<Ticket> ownTickets(){
         return FXCollections.unmodifiableObservableList(ownTickets);
     }
 
