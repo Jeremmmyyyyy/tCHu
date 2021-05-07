@@ -44,8 +44,7 @@ abstract class MapViewCreator {
             }
 
             //Handles a mouse click event
-            route.setOnMouseClicked(e -> {
-                cardChooser.chooseCards(observableGameState.possibleClaimCards(r),
+            route.setOnMouseClicked(e -> { cardChooser.chooseCards(observableGameState.possibleClaimCards(r),
                         chosenCards -> claimRouteHandler.get().onClaimRoute(r, chosenCards));
             });
 
