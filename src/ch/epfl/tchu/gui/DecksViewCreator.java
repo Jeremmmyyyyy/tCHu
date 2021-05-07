@@ -21,10 +21,18 @@ import javafx.scene.text.Text;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-
+/**
+ * Abstract class that creates the handView and the cardView of the graphical interface
+ *
+ * @author Jérémy Barghorn (328403)
+ */
 abstract class DecksViewCreator {
 
+    /**
+     * Create a HandView (bottom part of the GUI) given an observableGameState
+     * @param observableGameState observable gameState containing all the elements that are changing during the game
+     * @return Node containing the entire HandView
+     */
     public static Node createHandView(ObservableGameState observableGameState){
         HBox hBoxMain = new HBox();
         hBoxMain.getStylesheets().addAll("decks.css", "colors.css");
@@ -59,6 +67,13 @@ abstract class DecksViewCreator {
         return hBoxMain;
     }
 
+    /**
+     * Create a CardView (right part of the GUI) given an observableGameState
+     * @param observableGameState observable gameState containing all the elements that are changing during the game
+     * @param drawTicketHandler Interface that is used to handle how the tickets are drawn
+     * @param drawCardHandler Interface that is used to handle how the Cards are drawn
+     * @return Node containing the entire CardView
+     */
     public static Node createCardsView(ObservableGameState observableGameState,
                                        ObjectProperty<ActionHandlers.DrawTicketsHandler> drawTicketHandler,
                                        ObjectProperty<ActionHandlers.DrawCardHandler> drawCardHandler){

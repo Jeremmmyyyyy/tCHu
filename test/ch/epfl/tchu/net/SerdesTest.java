@@ -25,7 +25,7 @@ public class SerdesTest {
         List<Route> rs1 = ChMap.routes().subList(0, 2);
         Map<PlayerId, PublicPlayerState> ps = Map.of(
                 PlayerId.PLAYER_1, new PublicPlayerState(10, 11, rs1),
-                PlayerId.PLAYER_2, new PublicPlayerState(20, 21, List.of())); //TODO List.of() pour routes
+                PlayerId.PLAYER_2, new PublicPlayerState(20, 21, List.of()));
         PublicGameState gs =
                 new PublicGameState(40, cs, PlayerId.PLAYER_2, ps, null);
 

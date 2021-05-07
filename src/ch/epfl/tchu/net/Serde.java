@@ -32,7 +32,7 @@ public interface Serde <T> {
      * Create a serializer/deserializer function
      * @param serializer the function used to serialize an object
      * @param deserializer the function used to deserialize the String
-     * @param <T> type of the object to serialize // TODO 3 arguments ??
+     * @param <T> type of the object to serialize
      * @return an instance of Serde
      */
     static <T> Serde<T> of(Function<T, String> serializer, Function<String, T> deserializer) {
