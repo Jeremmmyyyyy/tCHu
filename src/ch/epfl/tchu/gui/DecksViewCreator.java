@@ -2,9 +2,10 @@ package ch.epfl.tchu.gui;
 
 import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.ChMap;
+import ch.epfl.tchu.game.Constants;
 import ch.epfl.tchu.game.Ticket;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -17,10 +18,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
-final class DecksViewCreator {
+abstract class DecksViewCreator {
 
     public static Node createHandView(ObservableGameState observableGameState){
         HBox hBoxMain = new HBox();
@@ -36,11 +39,22 @@ final class DecksViewCreator {
 
         hBoxMain.getChildren().addAll(listView, hBoxTickets);
 
-//        observableGameState.carCountOnColor();
 
+        Map<Card, StackPane> cardStack = new HashMap<>();
         for (Card card : Card.ALL) {
-            hBoxTickets.getChildren().add(stackPaneCreator(card, true));
+            StackPane s = stackPaneCreator(card, observableGameState.carCountOnCard(card), true);
+            s.visibleProperty().bind(Bindings.greaterThan(observableGameState.carCountOnCard(card), 0));
+            cardStack.put(card, s);
+
+            observableGameState.carCountOnCard(card).addListener((o, oV, nV)->{
+                if(nV.intValue()-oV.intValue() > 0){
+                    s.getStyleClass().add(card.color() == null ? "NEUTRAL" : card.color().toString());
+                }else{
+                    s.getStyleClass().remove(card.color() == null ? "NEUTRAL" : card.color().toString());
+                }
+            });
         }
+        hBoxTickets.getChildren().addAll(cardStack.values());
 
         return hBoxMain;
     }
@@ -49,28 +63,40 @@ final class DecksViewCreator {
                                        ObjectProperty<ActionHandlers.DrawTicketsHandler> drawTicketHandler,
                                        ObjectProperty<ActionHandlers.DrawCardHandler> drawCardHandler){
 
+
         VBox vBox = new VBox();
         vBox.getStylesheets().addAll("decks.css", "colors.css");
         vBox.setId("card-pane");
+        vBox.disableProperty().bind(drawCardHandler.isNull()); //TODO c'est juste ??
+        vBox.disableProperty().bind(drawTicketHandler.isNull()); //TODO c'est juste ??
 
-        List<Card> tempCards = List.of(Card.BLUE, Card.RED, Card.RED, Card.YELLOW, Card.LOCOMOTIVE); // TODO changer liste par valeur de l'attribut plus tard
 
-        vBox.getChildren().add(createButton("Cartes", 30));  // TODO remplacer par le pourcentage pour la jauge que le foreground
-        for (Card card : tempCards) { vBox.getChildren().add(stackPaneCreator(card, false)); }
-        vBox.getChildren().add(createButton("Tickets", 45)); // TODO remplacer par le pourcentage pour la jauge que le foreground
+        Map<Integer, StackPane> cardStack = new HashMap<>();
 
-//        vBox.getChildren().addAll( // TODO pas possible ??
-//                createButton("Cartes"),
-//                tempCards.forEach(t -> stackPaneCreator(t, false)),
-//                createButton("Tickets"));
+        for (int i = 0; i < Constants.FACE_UP_CARDS_COUNT; i++) {  //TODO c'est juste ??
+            StackPane s = stackPaneCreator(observableGameState.faceUpCard(i).get(), null, false);
+            cardStack.put(i, s);
+
+            observableGameState.faceUpCard(i).addListener((o, oV, nV)->{
+                s.getStyleClass().remove(oV.color().toString());
+                s.getStyleClass().add(nV.color().toString());
+            });
+        }
+
+        vBox.getChildren().add(createButton("Cartes", observableGameState.cardPercentage()));
+        vBox.getChildren().addAll(cardStack.values());
+        vBox.getChildren().add(createButton("Tickets", observableGameState.ticketPercentage()));
+
+
         return vBox;
     }
 
-    private static Button createButton(String buttonName, int percentage){
+    private static Button createButton(String buttonName, ReadOnlyIntegerProperty property){
         Rectangle backgroundRectangle = new Rectangle(50, 5);
         backgroundRectangle.getStyleClass().add("background");
-        Rectangle foregroundRectangle = new Rectangle(percentage, 5);
+        Rectangle foregroundRectangle = new Rectangle(property.multiply(50).divide(100).get(), 5);
         foregroundRectangle.getStyleClass().add("foreground");
+        foregroundRectangle.widthProperty().bind(property.multiply(50).divide(100));
 
         Group group = new Group();
         group.getChildren().addAll(backgroundRectangle, foregroundRectangle);
@@ -82,7 +108,7 @@ final class DecksViewCreator {
         return button;
     }
 
-    private static StackPane stackPaneCreator(Card card, Boolean displayCounter){
+    private static StackPane stackPaneCreator(Card card, ReadOnlyIntegerProperty count , Boolean displayCounter){ //TODO Card inutile
         Rectangle rectangleOutside = new Rectangle(60, 90);
         rectangleOutside.getStyleClass().add("outside");
         Rectangle rectangleInside = new Rectangle(40, 70);
@@ -91,13 +117,11 @@ final class DecksViewCreator {
         rectangleImage.getStyleClass().add("train-image");
         Text counter = new Text();
         counter.getStyleClass().add("count");
+        counter.textProperty().bind(Bindings.convert(count)); //TODO juste comme ça
+        counter.visibleProperty().bind(Bindings.greaterThan(count, 0)); //TODO juste comme ça
 
         StackPane stackPane = new StackPane();
-        if (card.color() == null){
-            stackPane.getStyleClass().addAll("NEUTRAL", "card");
-        }else{
-            stackPane.getStyleClass().addAll(card.color().toString(), "card");
-        }
+        stackPane.getStyleClass().add("card");
         if (displayCounter){
             stackPane.getChildren().addAll(rectangleOutside, rectangleInside, rectangleImage, counter);
         }else{
@@ -106,5 +130,4 @@ final class DecksViewCreator {
 
         return stackPane;
     }
-
 }
