@@ -14,6 +14,8 @@ import static ch.epfl.tchu.game.Constants.FACE_UP_CARD_SLOTS;
 public final class ObservableGameState {
 
     private final PlayerId playerId;
+    private PublicGameState publicGameState; //TODO not final ? maj dans setState et utilisation dans les 3 methodes a la fin
+    private PlayerState playerState;
 
     private final IntegerProperty ticketPercentage;
     private final IntegerProperty cardPercentage;
@@ -53,6 +55,9 @@ public final class ObservableGameState {
 
     public void setState(PublicGameState publicGameState, PlayerState playerState) {
 
+        this.publicGameState = publicGameState;
+        this.playerState = playerState;
+
         ticketPercentage.set(publicGameState.ticketsCount() * 100 / ChMap.tickets().size());
         cardPercentage.set(publicGameState.cardState().deckSize() * 100 / Constants.TOTAL_CARDS_COUNT);
         setFaceUpCards(publicGameState);
@@ -80,7 +85,8 @@ public final class ObservableGameState {
         PlayerId.ALL.forEach(id -> {
             for (Route r : publicGameState.playerState(id).routes()) {
                 routes.get(r).set(id);//TODO bien comme ca ?
-            }});
+            }
+        });
     }
 
     private void setClaimableRoutes(PublicGameState publicGameState, PlayerState playerState) {
@@ -88,6 +94,7 @@ public final class ObservableGameState {
             if (playerId == publicGameState.currentPlayerId() &&
                     routes.get(route) == null &&
                     playerState.canClaimRoute(route)) {
+
                 claimable.set(true);
             }
         });
@@ -95,33 +102,39 @@ public final class ObservableGameState {
 
     private static List<ObjectProperty<Card>> createFaceUpCards() {
         List<ObjectProperty<Card>> faceUpCards = new ArrayList<>();
+
         for (int i = 0; i < FACE_UP_CARDS_COUNT; i++) {
             faceUpCards.add(new SimpleObjectProperty<>());
         }
+
         return faceUpCards;
     }
 
     private static Map<Route, ObjectProperty<PlayerId>> createRoutes() {
         Map<Route, ObjectProperty<PlayerId>> routes = new HashMap<>();
         ChMap.routes().forEach(r -> routes.put(r, new SimpleObjectProperty<>()));
+
         return routes;
     }
 
     private static Map<PlayerId, IntegerProperty> createCounts() {
         Map<PlayerId, IntegerProperty> counts = new EnumMap<>(PlayerId.class);
         PlayerId.ALL.forEach(i -> counts.put(i, new SimpleIntegerProperty()));
+
         return counts;
     }
 
     private static Map<Card, IntegerProperty> createsCarCountOnCard() {
         Map<Card, IntegerProperty> carCountOnCard = new EnumMap<>(Card.class);
         Card.CARS.forEach(c -> carCountOnCard.put(c, new SimpleIntegerProperty()));
+
         return carCountOnCard;
     }
 
     private static Map<Route, BooleanProperty> createsClaimableRoutes() {
         Map<Route, BooleanProperty> claimableRoutes = new HashMap<>();
         ChMap.routes().forEach(r -> claimableRoutes.put(r, new SimpleBooleanProperty()));
+        
         return claimableRoutes;
     }
 
@@ -169,15 +182,15 @@ public final class ObservableGameState {
         return claimableRoutes.get(route);
     }
 
-    public boolean canDrawTickets(PublicGameState publicGameState) {
+    public boolean canDrawTickets() {
         return publicGameState.canDrawTickets();
     }
 
-    public boolean canDrawCards(PublicGameState publicGameState) {
+    public boolean canDrawCards() {
         return publicGameState.canDrawTickets();
     }
 
-    public List<SortedBag<Card>> possibleClaimCards(Route route, PlayerState playerState) {
+    public List<SortedBag<Card>> possibleClaimCards(Route route) {
         return playerState.possibleClaimCards(route);
     }
 }

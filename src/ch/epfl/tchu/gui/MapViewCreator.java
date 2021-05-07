@@ -3,7 +3,6 @@ package ch.epfl.tchu.gui;
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.ChMap;
-import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.gui.ActionHandlers.ChooseCardsHandler;
 import ch.epfl.tchu.gui.ActionHandlers.ClaimRouteHandler;
@@ -17,6 +16,9 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 
+/*
+
+ */
 abstract class MapViewCreator {
 
     public static final int RECTANGLE_WIDTH = 36;
@@ -28,40 +30,53 @@ abstract class MapViewCreator {
                                      ObjectProperty<ClaimRouteHandler> claimRouteHandler,
                                      CardChooser cardChooser) {
 
-        Pane mapView = new Pane();
-        mapView.getStylesheets().add("map.css");
-        mapView.getStylesheets().add("colors.css");
-        mapView.getChildren().add(new ImageView());
+        Pane mapView = createMapViewPane();
 
         for (Route r : ChMap.routes()) {
-            Group route = new Group();
-            route.setId(r.id());
-            route.getStyleClass().addAll("route", r.level().toString(), r.color() != null ? r.color().toString() : "NEUTRAL");
 
+            Group route = createRouteGroup(r);
+
+            //Loop for each cell of the route
             for (int i = 1; i <= r.length(); i++) {
                 Group cell = newCell();
                 cell.setId(String.format("%s_%s", r.id(), i));
                 route.getChildren().add(cell);
             }
 
-            mapView.getChildren().add(route);
+            //Handles a mouse click event
+            route.setOnMouseClicked(e -> {
+                cardChooser.chooseCards(observableGameState.possibleClaimCards(r),
+                        chosenCards -> claimRouteHandler.get().onClaimRoute(r, chosenCards));
+            });
 
-//            route.setOnMouseClicked(e -> {
-//                List<SortedBag<Card>> possibleClaimCards = observableGameState.possibleClaimCards(r);
-//                ClaimRouteHandler claimRouteH = …;
-//                ChooseCardsHandler chooseCardsH =
-//                        chosenCards -> claimRouteH.onClaimRoute(route, chosenCards);
-//                cardChooser.chooseCards(possibleClaimCards, chooseCardsH);
-//            });
+            //When a player claims or attempts to claim a route
             observableGameState.routes(r).addListener((o, oV, nV) -> route.getStyleClass().add(nV.name()));
-            route.disableProperty().bind(
-                    claimRouteHandler.isNull().or(observableGameState.claimableRoutes(r).not()));
-        }
+            route.disableProperty().bind(claimRouteHandler.isNull().or(observableGameState.claimableRoutes(r).not()));
 
-//        claimRouteHandler.get().onClaimRoute();
+            mapView.getChildren().add(route);
+        }
 
         return mapView;
 
+    }
+
+    private static Group createRouteGroup(Route r) {
+        Group route = new Group();
+        route.setId(r.id());
+        route.getStyleClass().addAll("route",
+                r.level().toString(),
+                r.color() != null ? r.color().toString() : "NEUTRAL");
+
+        return route;
+    }
+
+    private static Pane createMapViewPane() {
+        Pane mapView = new Pane();
+        mapView.getStylesheets().add("map.css");
+        mapView.getStylesheets().add("colors.css");
+        mapView.getChildren().add(new ImageView());
+
+        return mapView;
     }
 
     private static Group newCell() {
