@@ -10,12 +10,12 @@ import java.time.format.DateTimeFormatter;
 public class PrintToTxt {
     private static DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static LocalDateTime now = LocalDateTime.now();
-    private static int number;
+    private static String fileId;
 
-    public static void createFile(int numberOfTests){
+    public static void createFile(String fileName){
         try {
-            File myObj = new File(formatDate.format(now)  + " " +numberOfTests+ " Log.txt");
-            number = numberOfTests;
+            File myObj = new File(formatDate.format(now)  + " " +fileName+ ".txt");
+            fileId = fileName;
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
             } else {
@@ -29,7 +29,7 @@ public class PrintToTxt {
 
     public static void writeToFile(String textToWrite){
         try {
-            File f = new File(formatDate.format(now)  + " " +number+ " Log.txt");
+            File f = new File(formatDate.format(now)  + " " +fileId+ " Log.txt");
             PrintWriter pw = new PrintWriter(new FileOutputStream(f,true));
             pw.append(textToWrite);
             pw.close();
