@@ -117,19 +117,14 @@ public final class ObservableGameState {
      * @param playerState considered
      */
     private void setClaimableRoutes(PublicGameState publicGameState, PlayerState playerState) {
-        claimableRoutes.forEach((route, claimable) -> { //TODO FAIRE LE TEST DE LA ROUTE VOISINE DANS CHMAP ou pas ? (voir piazza)
-            if (
+        claimableRoutes.forEach((route, claimable) ->  //TODO FAIRE LE TEST DE LA ROUTE VOISINE DANS CHMAP ou pas ? (voir piazza)
+            claimable.set(
                     playerId == publicGameState.currentPlayerId() &&
-                    routes.get(route).get() == null &&
-                    !hasClaimedNeighbor(route, publicGameState) &&
-                    playerState.canClaimRoute(route)) {
-
-                claimable.set(true);
-            }
-        });
+                    !claimableRoute(route, publicGameState) &&
+                    playerState.canClaimRoute(route)));
     }
 
-    private boolean hasClaimedNeighbor(Route route, PublicGameState publicGameState) { //TODO inserer la ligne directement au dessus ou garder la methode ???
+    private boolean claimableRoute(Route route, PublicGameState publicGameState) { //TODO inserer la ligne directement au dessus ou garder la methode ???
         return publicGameState.claimedRoutes()
                 .stream()//TODO Bonne facon avec un stream ?
                 .filter(r -> r.length() != route.length()) //TODO gain en cout avec le filter ?
