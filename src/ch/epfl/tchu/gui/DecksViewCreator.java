@@ -18,12 +18,22 @@ import javafx.scene.text.Text;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static ch.epfl.tchu.gui.MapViewCreator.NEUTRAL;
+
 /**
  * Abstract class that creates the handView and the cardView of the graphical interface
  *
  * @author Jérémy Barghorn (328403)
  */
 abstract class DecksViewCreator {
+
+    private final static int RECTANGLE_WIDTH_OUT = 60;
+    private final static int RECTANGLE_WIDTH_IN = 40;
+    private final static int RECTANGLE_HEIGHT_OUT = 90;
+    private final static int RECTANGLE_HEIGHT_IN = 70;
+    private final static int BACK_RECTANGLE_WIDTH = 50;
+    private final static int BACK_RECTANGLE_HEIGHT = 5;
 
     /**
      * Create a HandView (bottom part of the GUI) given an observableGameState
@@ -53,9 +63,9 @@ abstract class DecksViewCreator {
 
             observableGameState.cardCountOnColor(card).addListener((o, oV, nV)->{
                 if(nV.intValue()-oV.intValue() > 0){
-                    s.getStyleClass().add(card.color() == null ? "NEUTRAL" : card.color().toString());
+                    s.getStyleClass().add(card.color() == null ? NEUTRAL : card.color().toString());
                 }else{
-                    s.getStyleClass().remove(card.color() == null ? "NEUTRAL" : card.color().toString());
+                    s.getStyleClass().remove(card.color() == null ? NEUTRAL : card.color().toString());
                 }
             });
         }
@@ -114,9 +124,9 @@ abstract class DecksViewCreator {
     }
 
     private static Button createButton(String buttonName, ReadOnlyIntegerProperty property){
-        Rectangle backgroundRectangle = new Rectangle(50, 5);
+        Rectangle backgroundRectangle = new Rectangle(BACK_RECTANGLE_WIDTH, BACK_RECTANGLE_HEIGHT);
         backgroundRectangle.getStyleClass().add("background");
-        Rectangle foregroundRectangle = new Rectangle(property.multiply(50).divide(100).get(), 5);
+        Rectangle foregroundRectangle = new Rectangle(property.multiply(50).divide(100).get(), BACK_RECTANGLE_HEIGHT);
         foregroundRectangle.getStyleClass().add("foreground");
         foregroundRectangle.widthProperty().bind(property.multiply(50).divide(100));
 
@@ -131,11 +141,11 @@ abstract class DecksViewCreator {
     }
 
     private static StackPane stackPaneCreator(Card card, ReadOnlyIntegerProperty count , Boolean displayCounter){
-        Rectangle rectangleOutside = new Rectangle(60, 90);
+        Rectangle rectangleOutside = new Rectangle(RECTANGLE_WIDTH_OUT, RECTANGLE_HEIGHT_OUT);
         rectangleOutside.getStyleClass().add("outside");
-        Rectangle rectangleInside = new Rectangle(40, 70);
+        Rectangle rectangleInside = new Rectangle(RECTANGLE_WIDTH_IN, RECTANGLE_HEIGHT_IN);
         rectangleInside.getStyleClass().addAll("filled", "inside");
-        Rectangle rectangleImage = new Rectangle(40, 70);
+        Rectangle rectangleImage = new Rectangle(RECTANGLE_WIDTH_IN, RECTANGLE_HEIGHT_IN);
         rectangleImage.getStyleClass().add("train-image");
         Text counter = new Text();
         counter.getStyleClass().add("count");

@@ -16,16 +16,27 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 
-/*
-
+/**
+ * Abstract class that creates the view of the graphical map
+ *
+ * @author Yann Ennassih (329978)
  */
 abstract class MapViewCreator {
 
-    public static final int RECTANGLE_WIDTH = 36;
-    public static final int RECTANGLE_HEIGHT = 12;
-    public static final int CIRCLE_RADIUS = 3;
-    public static final int CIRCLE_OFFSET = 6;
+    private static final int RECTANGLE_WIDTH = 36;
+    private static final int RECTANGLE_HEIGHT = 12;
+    private static final int CIRCLE_RADIUS = 3;
+    private static final int CIRCLE_OFFSET = 6;
 
+    public static final String NEUTRAL = "NEUTRAL";
+
+    /**
+     * Creates the view of the map
+     * @param observableGameState considered
+     * @param claimRouteHandler considered
+     * @param cardChooser considered
+     * @return the view of the map as a new JavaFX node
+     */
     public static Node createMapView(ObservableGameState observableGameState,
                                      ObjectProperty<ClaimRouteHandler> claimRouteHandler,
                                      CardChooser cardChooser) {
@@ -59,16 +70,25 @@ abstract class MapViewCreator {
 
     }
 
+    /**
+     * Called by createMapView(...), creates a node attached to a given route
+     * @param r the given route
+     * @return a new JavaFX group for the given route
+     */
     private static Group createRouteGroup(Route r) {
         Group route = new Group();
         route.setId(r.id());
         route.getStyleClass().addAll("route",
                 r.level().toString(),
-                r.color() != null ? r.color().toString() : "NEUTRAL");
+                r.color() != null ? r.color().toString() : NEUTRAL);
 
         return route;
     }
 
+    /**
+     * Called by createMapView(...), initializes the main mapView pane
+     * @return a new JavaFX pane for the mapView
+     */
     private static Pane createMapViewPane() {
         Pane mapView = new Pane();
         mapView.getStylesheets().add("map.css");
@@ -78,6 +98,10 @@ abstract class MapViewCreator {
         return mapView;
     }
 
+    /**
+     * Called by createMapView(...), constructs a new route cell
+     * @return a new JavaFX group for a new route cell
+     */
     private static Group newCell() {
         Rectangle rectangle = new Rectangle(RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
         rectangle.getStyleClass().add("filled");
@@ -92,6 +116,9 @@ abstract class MapViewCreator {
         return new Group(way, car);
     }
 
+    /**
+     * Interface for the player's card-chose strategy as chooseCards(...) function
+     */
     @FunctionalInterface
     interface CardChooser {
         void chooseCards(List<SortedBag<Card>> options, ChooseCardsHandler handler);

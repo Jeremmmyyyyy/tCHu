@@ -7,10 +7,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static ch.epfl.tchu.game.Constants.FACE_UP_CARDS_COUNT;
 import static ch.epfl.tchu.game.Constants.FACE_UP_CARD_SLOTS;
 
+/**
+ * Observes an entire GameState
+ *
+ * @author Yann Ennassih (329978)
+ */
 public final class ObservableGameState {
 
     private final PlayerId playerId;
@@ -112,8 +118,10 @@ public final class ObservableGameState {
      */
     private void setClaimableRoutes(PublicGameState publicGameState, PlayerState playerState) {
         claimableRoutes.forEach((route, claimable) -> { //TODO FAIRE LE TEST DE LA ROUTE VOISINE DANS CHMAP ou pas ? (voir piazza)
-            if (playerId == publicGameState.currentPlayerId() &&
+            if (
+                    playerId == publicGameState.currentPlayerId() &&
                     routes.get(route).get() == null &&
+                    !hasClaimedNeighbor(route, publicGameState) &&
                     playerState.canClaimRoute(route)) {
 
                 claimable.set(true);
@@ -121,6 +129,14 @@ public final class ObservableGameState {
         });
     }
 
+    private boolean hasClaimedNeighbor(Route route, PublicGameState publicGameState) { //TODO inserer la ligne directement au dessus ou garder la methode ???
+        return publicGameState.claimedRoutes()
+                .stream()//TODO Bonne facon avec un stream ?
+                .filter(r -> r.length() != route.length()) //TODO gain en cout avec le filter ?
+                .map(Route::stations)
+                .collect(Collectors.toList())
+                .contains(route.stations()); //TODO comme contains utilise equals, le test est fonctionnel ?
+    }
 
     /**
      * Constructs the initial faceUpCards list
@@ -254,7 +270,7 @@ public final class ObservableGameState {
      * Getter for the tickets of the player
      * @return an observable list of tickets owned by the player
      */
-    public ObservableList<Ticket> ownTickets(){ //TODO meilleur moyen ?
+    public ObservableList<Ticket> ownTickets(){
         return FXCollections.unmodifiableObservableList(ownTickets);
     }
 
