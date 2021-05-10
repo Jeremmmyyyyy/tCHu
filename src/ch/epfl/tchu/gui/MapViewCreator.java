@@ -91,8 +91,7 @@ abstract class MapViewCreator {
      */
     private static Pane createMapViewPane() {
         Pane mapView = new Pane();
-        mapView.getStylesheets().add("map.css");
-        mapView.getStylesheets().add("colors.css");
+        mapView.getStylesheets().addAll("map.css", "colors.css");
         mapView.getChildren().add(new ImageView());
 
         return mapView;
@@ -105,9 +104,9 @@ abstract class MapViewCreator {
     private static Group newCell() {
         Rectangle rectangle = new Rectangle(RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
         rectangle.getStyleClass().add("filled");
-
         Circle circle1 = new Circle(RECTANGLE_WIDTH / 2 - CIRCLE_OFFSET, CIRCLE_OFFSET, CIRCLE_RADIUS);
         Circle circle2 = new Circle(RECTANGLE_WIDTH / 2 + CIRCLE_OFFSET, CIRCLE_OFFSET, CIRCLE_RADIUS);
+
         Group car = new Group(rectangle, circle1, circle2);
         car.getStyleClass().add("car");
         Rectangle way = new Rectangle(RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
