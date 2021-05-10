@@ -4,6 +4,7 @@ import ch.epfl.tchu.game.PlayerId;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
@@ -20,8 +21,8 @@ abstract class InfoViewCreator {
 
     private static final int CIRCLE_RADIUS = 5;
 
-    public static void  createInfoView(PlayerId playerId, Map<PlayerId, String> playerNames,
-                               ObservableGameState observableGameState, ObservableList<Text> gameMessages) {
+    public static Node createInfoView(PlayerId playerId, Map<PlayerId, String> playerNames,
+                                      ObservableGameState observableGameState, ObservableList<Text> gameMessages) {
 
         VBox vBox = new VBox();
         vBox.getStylesheets().addAll("info.css", "colors.css");
@@ -41,7 +42,6 @@ abstract class InfoViewCreator {
             playerVBox.setId("player-stats");
 
             TextFlow playerStats = new TextFlow();
-            playerStats.getStyleClass().add(id == PLAYER_1 ? "PLAYER_1" : "PLAYER_2");
             Circle circle = new Circle(CIRCLE_RADIUS);
             Text text = new Text();
             text.textProperty().bind(Bindings.format(StringsFr.PLAYER_STATS,
@@ -52,7 +52,16 @@ abstract class InfoViewCreator {
                     observableGameState.claimPoints(id)));
             circle.getStyleClass().add("filled");
 
+            playerStats.getStyleClass().add(id == PLAYER_1 ? "PLAYER_1" : "PLAYER_2");
             playerStats.getChildren().addAll(circle, text);
+
+            playerVBox.getChildren().add(playerStats);
+            vBox.getChildren().add(playerVBox);
         }
+
+        vBox.getChildren().addAll(separator, messages);
+
+
+        return vBox;
     }
 }

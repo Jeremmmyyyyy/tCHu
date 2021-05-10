@@ -55,8 +55,14 @@ abstract class MapViewCreator {
             }
 
             //Handles a mouse click event
-            route.setOnMouseClicked(e -> { cardChooser.chooseCards(observableGameState.possibleClaimCards(r),
-                        chosenCards -> claimRouteHandler.get().onClaimRoute(r, chosenCards));
+            route.setOnMouseClicked(e -> {
+                List<SortedBag<Card>> possibleClaimCards = observableGameState.possibleClaimCards(r);
+                if (possibleClaimCards.size() == 1) {
+                    claimRouteHandler.get().onClaimRoute(r, possibleClaimCards.get(0));
+                } else {
+                    cardChooser.chooseCards(observableGameState.possibleClaimCards(r),
+                            chosenCards -> claimRouteHandler.get().onClaimRoute(r, chosenCards));
+                }
             });
 
             //When a player claims or attempts to claim a route
