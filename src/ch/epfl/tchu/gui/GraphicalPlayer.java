@@ -1,26 +1,29 @@
 package ch.epfl.tchu.gui;
 
-import ch.epfl.tchu.game.PlayerId;
-import ch.epfl.tchu.game.PlayerState;
-import ch.epfl.tchu.game.PublicGameState;
+import ch.epfl.tchu.Preconditions;
+import ch.epfl.tchu.SortedBag;
+import ch.epfl.tchu.game.*;
 import ch.epfl.tchu.gui.ActionHandlers.ClaimRouteHandler;
 import ch.epfl.tchu.gui.ActionHandlers.DrawCardHandler;
 import ch.epfl.tchu.gui.ActionHandlers.DrawTicketsHandler;
-import com.sun.javafx.collections.ElementObservableListDecorator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
+import javafx.stage.StageStyle;
 import java.util.Map;
-import java.util.Queue;
+
 
 public class GraphicalPlayer {
 
@@ -33,6 +36,8 @@ public class GraphicalPlayer {
     private final ObjectProperty<DrawTicketsHandler> drawTicketHandler;
     private final ObjectProperty<DrawCardHandler> drawCardHandler;
     private final ObjectProperty<ClaimRouteHandler> claimRouteHandler;
+
+    private final Stage mainStage;
 
 
     public GraphicalPlayer(PlayerId playerId, Map<PlayerId, String> playerNames){
@@ -52,7 +57,7 @@ public class GraphicalPlayer {
                 .createHandView(observableGameState);
         Node infoView = InfoViewCreator.createInfoView(playerId, playerNames, observableGameState, gameMessages);
 
-        Stage mainStage = new Stage();
+        mainStage = new Stage();
         BorderPane borderPane = new BorderPane(mapView, null, cardsView, handView, infoView);
         mainStage.setScene(borderPane.getScene());
 
@@ -81,7 +86,36 @@ public class GraphicalPlayer {
         this.claimRouteHandler.set(claimRouteHandler);
     }
 
-    public void chooseTickets(){}
+    public void chooseTickets(SortedBag<Ticket> tickets, ActionHandlers.DrawTicketsHandler drawTicketsHandler){
+        Preconditions.checkArgument(tickets.size() == Constants.IN_GAME_TICKETS_COUNT);
+        Preconditions.checkArgument(tickets.size() == Constants.INITIAL_TICKETS_COUNT);
+
+        //Boîtes de dialogue modales
+        Stage choiceStage = new Stage(StageStyle.UTILITY);
+        choiceStage.initOwner(mainStage);
+        choiceStage.initModality(Modality.APPLICATION_MODAL);
+
+        VBox vBox = new VBox();
+        vBox.getStylesheets().add("chooser.css");
+
+        //Remplace les % de la constante par le nombre de tickets
+        Text textForTextFlow = new Text(StringsFr.CHOOSE_TICKETS.replace("%", String.valueOf(tickets.size())));
+        TextFlow textFlow = new TextFlow(textForTextFlow);
+
+        ObservableList<Ticket> ticketObservableList = FXCollections.observableList(tickets.toList());
+        ListView<Ticket> listView = new ListView<>(ticketObservableList);
+        //Rend la sélection multiple possible sur la liste
+        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        Button button = new Button("Choisir");
+        button.setOnAction(e ->  drawTicketsHandler.onDrawTickets(listView.getSelectionModel().getSelectedItems())); //TODO
+
+        vBox.getChildren().addAll(textFlow, listView, button);
+        choiceStage.setScene(vBox.getScene());
+        choiceStage.show();
+
+
+    }
 
     public void drawCard(DrawCardHandler drawCardHandler){
         this.drawCardHandler.set(drawCardHandler);
