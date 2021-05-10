@@ -22,13 +22,15 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
+import static javafx.application.Platform.isFxApplicationThread;
+
 public class GraphicalPlayer {
 
     private final int NUMBER_OF_DISPLAYED_MESSAGES = 5;
     private final ObservableGameState observableGameState;
     private final PlayerId playerId;
     private final Map<PlayerId, String> playerNames;
-    private ObservableList<Text> gameMessages = new SimpleListProperty<>();
+    private final ObservableList<Text> gameMessages = new SimpleListProperty<>();
 
     private final ObjectProperty<DrawTicketsHandler> drawTicketHandler;
     private final ObjectProperty<DrawCardHandler> drawCardHandler;
@@ -36,6 +38,8 @@ public class GraphicalPlayer {
 
 
     public GraphicalPlayer(PlayerId playerId, Map<PlayerId, String> playerNames){
+        assert isFxApplicationThread();
+
         this.playerId = playerId;
         this.playerNames = playerNames;
         observableGameState = new ObservableGameState(playerId);
@@ -64,10 +68,14 @@ public class GraphicalPlayer {
     }
 
     public void setState(PublicGameState publicGameState, PlayerState playerState){
+        assert isFxApplicationThread();
+
         observableGameState.setState(publicGameState, playerState);
     }
 
     public void receiveInfo(String message){
+        assert isFxApplicationThread();
+
         if (gameMessages.size() == NUMBER_OF_DISPLAYED_MESSAGES){ //TODO bonne maniere de faire
             gameMessages.remove(0);
         }
@@ -76,6 +84,8 @@ public class GraphicalPlayer {
 
     public void startTurn(DrawTicketsHandler drawTicketsHandler, DrawCardHandler drawCardHandler,
                           ClaimRouteHandler claimRouteHandler){
+        assert isFxApplicationThread();
+
         this.drawTicketHandler.set(observableGameState.canDrawTickets() ? drawTicketsHandler : null); //TODO comme ca ?
         this.drawCardHandler.set(observableGameState.canDrawCards() ? drawCardHandler : null);
         this.claimRouteHandler.set(claimRouteHandler);
@@ -84,14 +94,21 @@ public class GraphicalPlayer {
     public void chooseTickets(){}
 
     public void drawCard(DrawCardHandler drawCardHandler){
+        assert isFxApplicationThread();
         this.drawCardHandler.set(drawCardHandler);
         this.drawTicketHandler.set(null); //TODO pour vider ??
         this.claimRouteHandler.set(null);
 
     }
 
-    public void chooseClaimCards(){}
+    public void chooseClaimCards(){
+        assert isFxApplicationThread();
 
-    public void chooseAdditionalCards(){}
+    }
+
+    public void chooseAdditionalCards(){
+        assert isFxApplicationThread();
+
+    }
 
 }
