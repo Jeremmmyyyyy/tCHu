@@ -147,6 +147,7 @@ abstract class DecksViewCreator {
         rectangleInside.getStyleClass().addAll("filled", "inside");
         Rectangle rectangleImage = new Rectangle(RECTANGLE_WIDTH_IN, RECTANGLE_HEIGHT_IN);
         rectangleImage.getStyleClass().add("train-image");
+
         Text counter = new Text();
         counter.getStyleClass().add("count");
         if(count != null){
