@@ -14,6 +14,8 @@ public final class  Trail {
     private final Station station2;
     private final List<Route> routesOfTrail;
 
+    public final static Trail EMPTY_TRAIL = new Trail(null, null, null, 0);
+
     /**
      * Private constructor of the class
      * @param station1 first station of the trail
@@ -44,7 +46,7 @@ public final class  Trail {
             listOfTrailsToExtend.add(new Trail(route.station2(), route.station1(), List.of(route), route.length()));
         }
 
-        Trail longestTrail = new Trail(null, null, null, 0);
+        Trail longestTrail = EMPTY_TRAIL;
         while(!listOfTrailsToExtend.isEmpty()){
             //refreshes the longestTrail at each step
             for (Trail trail : listOfTrailsToExtend) {
@@ -62,9 +64,7 @@ public final class  Trail {
                     List<Route> listOfRoutesInTheTrail = new ArrayList<>();
 
                     //trailToExtend.routesOfTrail is final, hence the for loop to copy its content
-                    for(Route route: trailToExtend.routesOfTrail){
-                        listOfRoutesInTheTrail.add(route);
-                    }
+                    listOfRoutesInTheTrail.addAll(trailToExtend.routesOfTrail);
 
                     listOfRoutesInTheTrail.add(prolongation); //extends the list of routes of the current trail
                     //constructs a new trail from the extended list of routes
@@ -74,10 +74,6 @@ public final class  Trail {
                             trailToExtend.length() + prolongation.length());
                     newListOfTrailsToExtend.add(newTrail);
                     //finishedTrails.add(newTrail);
-                }
-
-                if(trailToExtend.length > longestTrail.length) {
-                    longestTrail = trailToExtend;
                 }
             }
             listOfTrailsToExtend = newListOfTrailsToExtend;
@@ -112,6 +108,9 @@ public final class  Trail {
      */
     @Override
     public String toString() {
+        if (routesOfTrail == null) {
+            return "Empty trail";
+        }
         List<String> routesOfTrailString = new ArrayList<>();
         routesOfTrailString.add(station1.toString());
         Station previousStation = station1;

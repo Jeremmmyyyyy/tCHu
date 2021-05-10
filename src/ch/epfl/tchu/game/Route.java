@@ -24,7 +24,7 @@ public final class Route {
     }
 
     /**
-     * Create a route with id start station, end station, length, Overground or Underground, and color
+     * Creates a route with id start station, end station, length, Overground or Underground, and color
      * @param id of the route id form : "Station1(first three letters)_Station2_(first three letters)_1or2(depending on multiplicity of the route)
      * @param station1 first station of the route
      * @param station2 second station of the route
@@ -46,7 +46,7 @@ public final class Route {
     }
 
     /**
-     * return the id of the route
+     * Returns the id of the route
      * @return the id of the route
      */
     public String id() {
@@ -54,7 +54,7 @@ public final class Route {
     }
 
     /**
-     * return the first station of the route
+     * Returns the first station of the route
      * @return the first station of the route
      */
     public Station station1() {
@@ -62,7 +62,7 @@ public final class Route {
     }
 
     /**
-     * return the second station of the route
+     * Returns the second station of the route
      * @return the second station of the route
      */
     public Station station2() {
@@ -70,7 +70,7 @@ public final class Route {
     }
 
     /**
-     * return the length of the route
+     * Returns the length of the route
      * @return the length of the route
      */
     public int length() {
@@ -78,7 +78,7 @@ public final class Route {
     }
 
     /**
-     * return the level of the route
+     * Returns the level of the route
      * @return the level of the route
      */
     public Level level() {
@@ -86,7 +86,7 @@ public final class Route {
     }
 
     /**
-     * return the color of the route
+     * Returns the color of the route
      * @return the color of the route
      */
     public Color color() {
@@ -94,7 +94,7 @@ public final class Route {
     }
 
     /**
-     * return a list that contains the two stations of the route
+     * Returns a list that contains the two stations of the route
      * @return a list that contains the two stations of the route
      */
     public List<Station> stations(){
@@ -102,43 +102,30 @@ public final class Route {
     }
 
     /**
-     * return the other station of the route
+     * Returns the other station of the route
      * @param station of the route
      * @return the other station of the route
      */
     public Station stationOpposite(Station station){
-        if(station.equals(station1)){
-            return station2;
-        }else if(station.equals(station2)){
-            return station1;
-        }else{
-            throw new IllegalArgumentException();
-        }
+        Preconditions.checkArgument(station.equals(station1) || station.equals(station2));
+        return station.equals(station1) ? station2 : station1;
     }
 
     /**
-     * returns a list of all the cards that could be played to take a route sorted by increasing order of locomotives and colors
+     * Returns a list of all the cards that could be played to take a route sorted by increasing order of locomotives and colors
      * @return a list of all the cards that could be played to take a route
      */
     public List<SortedBag<Card>> possibleClaimCards() {
         List<SortedBag<Card>> possibleClaimCards = new ArrayList<>();
-        int locomotiveAmount;
-
-        if (level.equals(Level.OVERGROUND)) {
-            locomotiveAmount = 0;
-        } else {
-            locomotiveAmount = length;
-        }
+        int locomotiveAmount = level.equals(Level.OVERGROUND) ? 0 : length;
 
         for (int i = 0; i <= locomotiveAmount; i++) {
             if (color == null) {
-
                 for (Card card : Card.CARS) {
                     if(!possibleClaimCards.contains(SortedBag.of(locomotiveAmount, Card.LOCOMOTIVE))){
                         possibleClaimCards.add(SortedBag.of(length - i, card, i, Card.LOCOMOTIVE));
                     }
                 }
-
             } else {
                 possibleClaimCards.add(SortedBag.of(length - i, Card.of(color), i, Card.LOCOMOTIVE));
             }
@@ -147,7 +134,7 @@ public final class Route {
     }
 
     /**
-     * Compare the cards the player put on the table with the drawn cards and gives the amount of additional cards the player has to play
+     * Compares the cards the player put on the table with the drawn cards and gives the amount of additional cards the player has to play
      * @param claimCards the cards the player put on the table
      * @param drawnCards the 3 cards that are drawn
      * @return the amount of cards the player must additionally play
@@ -174,7 +161,7 @@ public final class Route {
     }
 
     /**
-     * returns the amount of points of a route
+     * Returns the amount of points of a route
      * @return the amount of points of a route
      */
     public int claimPoints() {

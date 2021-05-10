@@ -42,7 +42,7 @@ public final class StationPartition implements StationConnectivity {
      */
     public final static class Builder {
 
-        private int[] stationPartition;
+        private final int[] stationPartition;
 
         /**
          * Public constructor of the class Builder
@@ -64,7 +64,7 @@ public final class StationPartition implements StationConnectivity {
          * @return the id of the lead-station (representative) of the station s
          */
         private int representative(int stationId) {
-            int representative = stationPartition[stationId];
+            int representative = stationId;
 
             while (representative != stationPartition[representative]) {
                 representative = stationPartition[representative];

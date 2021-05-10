@@ -70,7 +70,7 @@ public final class Deck<C extends Comparable<C>> {
      */
     public Deck<C> withoutTopCard() {
         Preconditions.checkArgument(!isEmpty());
-        return new Deck<>(cards.subList(1, size()));
+        return withoutTopCards(1);
     }
 
     /**

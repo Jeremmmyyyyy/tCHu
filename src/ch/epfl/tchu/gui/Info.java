@@ -89,6 +89,8 @@ public final class Info {
             case LOCOMOTIVE:
                 cardName = StringsFr.LOCOMOTIVE_CARD;
                 break;
+            default:
+                throw new EnumConstantNotPresentException(Card.class, "Invalid enum type");
         }
         return cardName + StringsFr.plural(count);
     }

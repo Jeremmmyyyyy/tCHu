@@ -42,8 +42,8 @@ public final class Trip {
      * @throws IllegalArgumentException if points are negative or 0
      */
     public static List<Trip> all (List<Station> from, List<Station> to, int points){
-        Preconditions.checkArgument(!from.equals(List.of()));
-        Preconditions.checkArgument(!to.equals(List.of()));
+        Preconditions.checkArgument(!from.isEmpty());
+        Preconditions.checkArgument(!to.isEmpty());
         Preconditions.checkArgument(points>0);
         List<Trip> allPossibleConnections = new ArrayList<Trip>();
 

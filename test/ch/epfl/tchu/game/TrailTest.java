@@ -3,6 +3,7 @@ package ch.epfl.tchu.game;
 import ch.epfl.test.ChMapPublic;
 import org.junit.jupiter.api.Test;
 
+import java.io.LineNumberInputStream;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -84,6 +85,7 @@ class TrailTest {
                 ChMapPublic.ALL_ROUTES.get(83))));
         System.out.println(Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(77),ChMapPublic.ALL_ROUTES.get(78))));
         System.out.println(Trail.longest(List.of(ChMapPublic.ALL_ROUTES.get(77), ChMapPublic.ALL_ROUTES.get(78), ChMapPublic.ALL_ROUTES.get(30))));
+        System.out.println(Trail.longest(List.of()));
     }
 
     @Test

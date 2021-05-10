@@ -22,7 +22,7 @@ public final class Ticket implements Comparable<Ticket> {
      * or when at least two trips have different departure stations
      */
     public Ticket(List<Trip> trips){
-        Preconditions.checkArgument(!trips.equals(List.of()));
+        Preconditions.checkArgument(!trips.isEmpty());
         boolean sameDeparture = true;
         String departure = trips.get(0).from().name();
 

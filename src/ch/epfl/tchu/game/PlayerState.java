@@ -168,9 +168,7 @@ public final class PlayerState extends PublicPlayerState{
     private Set<Station> stations() {
         Set<Station> stations = new HashSet<>();
         for (Route route : routes()) {
-            for (Station routeStation : route.stations()) {
-                stations.add(routeStation);
-            }
+            stations.addAll(route.stations());
         }
         return stations;
     }
@@ -180,11 +178,11 @@ public final class PlayerState extends PublicPlayerState{
      * @return the total points the player has given its current tickets
      */
     public int ticketPoints() {
-        int maxStationIndex = 0, ticketsPoints = 0;
+        int maxStationIndex = -1, ticketsPoints = 0;
         for (Station station : stations()) {
             maxStationIndex = Math.max(station.id(), maxStationIndex);
         }
-        //maxStationIndex = the max index of the stations fo the claimed routes of the player
+        //maxStationIndex = the max index of the stations for the claimed routes of the player
         StationPartition.Builder connectivityBuilder = new StationPartition.Builder(maxStationIndex + 1);
         for (Route route : routes()) {
             connectivityBuilder.connect(route.station1(), route.station2());

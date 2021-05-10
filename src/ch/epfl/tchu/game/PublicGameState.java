@@ -19,6 +19,8 @@ public class PublicGameState {
     private final Map<PlayerId, PublicPlayerState> playerState;
     private final PlayerId lastPlayerId;
 
+    private final static int MIN_TO_DRAW = 5;
+
     /**
      * create a new gameState
      * @param ticketCount amount of tickets to the current gameState
@@ -36,7 +38,7 @@ public class PublicGameState {
                            Map<PlayerId, PublicPlayerState> playerState,
                            PlayerId lastPlayer){
         Preconditions.checkArgument(ticketCount >= 0);
-        Preconditions.checkArgument(playerState.size() == 2);
+        Preconditions.checkArgument(playerState.size() == PlayerId.COUNT);
         this.ticketCount = ticketCount;
         this.cardState = Objects.requireNonNull(cardState);
         this.currentPlayerId = Objects.requireNonNull(currentPlayerId);
@@ -73,7 +75,7 @@ public class PublicGameState {
      * @return true if the player can draw a card
      */
     public boolean canDrawCards(){
-        return cardState.deckSize() + cardState.discardsSize() >= 5;
+        return cardState.deckSize() + cardState.discardsSize() >= MIN_TO_DRAW;
     }
 
     /**
