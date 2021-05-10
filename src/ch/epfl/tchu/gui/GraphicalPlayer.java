@@ -3,20 +3,27 @@ package ch.epfl.tchu.gui;
 import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.PlayerState;
 import ch.epfl.tchu.game.PublicGameState;
+import com.sun.javafx.collections.ElementObservableListDecorator;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
 public class GraphicalPlayer {
 
+    private final int NUMBER_OF_DISPLAYED_MESSAGES = 5;
     private final ObservableGameState observableGameState;
     private final PlayerId playerId;
     private final Map<PlayerId, String> playerNames;
+    private ObservableList<Text> gameMessages = new SimpleListProperty<>();
 
 
     public GraphicalPlayer(PlayerId playerId, Map<PlayerId, String> playerNames){
@@ -48,7 +55,10 @@ public class GraphicalPlayer {
     }
 
     public void receiveInfo(String message){
-        Queue<String> infos = new LinkedList<>();
+        if (gameMessages.size() == NUMBER_OF_DISPLAYED_MESSAGES){ //TODO bonne maniere de faire
+            gameMessages.remove(0);
+        }
+        gameMessages.add(new Text(message));
     }
 
     public void startTurn(){}
