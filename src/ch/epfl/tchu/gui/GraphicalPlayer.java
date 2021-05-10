@@ -17,7 +17,7 @@ public class GraphicalPlayer {
     private final ObservableGameState observableGameState;
     private final PlayerId playerId;
     private final Map<PlayerId, String> playerNames;
-    private
+
 
     public GraphicalPlayer(PlayerId playerId, Map<PlayerId, String> playerNames){
         this.playerId = playerId;
