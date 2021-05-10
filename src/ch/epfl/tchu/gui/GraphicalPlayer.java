@@ -49,7 +49,7 @@ public class GraphicalPlayer {
         this.claimRouteHandler = new SimpleObjectProperty<>();
 
         Node mapView = MapViewCreator
-                .createMapView(observableGameState, claimRouteHandler, cardChooser);
+                .createMapView(observableGameState, claimRouteHandler, null);
         Node cardsView = DecksViewCreator
                 .createCardsView(observableGameState, drawTicketHandler, drawCardHandler);
         Node handView = DecksViewCreator

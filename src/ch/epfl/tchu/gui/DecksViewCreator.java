@@ -106,8 +106,8 @@ abstract class DecksViewCreator {
                 s.getStyleClass().add(nV.color().toString());
             });
         }
-        Button cartes = createButton("Cartes", observableGameState.cardPercentage());
-        cartes.setOnAction(e -> drawCardHandler.get().onDrawCard(-1));
+        Button cards = createButton("Cartes", observableGameState.cardPercentage());
+        cards.setOnAction(e -> drawCardHandler.get().onDrawCard(-1));
         Button tickets = createButton("Billets", observableGameState.ticketPercentage());
         tickets.setOnAction(e -> drawTicketHandler.get().onDrawTickets());
 
@@ -117,7 +117,7 @@ abstract class DecksViewCreator {
 
         vBox.getChildren().add(tickets);
         vBox.getChildren().addAll(cardStack.values());
-        vBox.getChildren().add(cartes);
+        vBox.getChildren().add(cards);
 
 
         return vBox;
