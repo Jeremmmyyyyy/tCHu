@@ -3,8 +3,13 @@ package ch.epfl.tchu.gui;
 import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.PlayerState;
 import ch.epfl.tchu.game.PublicGameState;
+import ch.epfl.tchu.gui.ActionHandlers.ClaimRouteHandler;
+import ch.epfl.tchu.gui.ActionHandlers.DrawCardHandler;
+import ch.epfl.tchu.gui.ActionHandlers.DrawTicketsHandler;
 import com.sun.javafx.collections.ElementObservableListDecorator;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
@@ -25,11 +30,19 @@ public class GraphicalPlayer {
     private final Map<PlayerId, String> playerNames;
     private ObservableList<Text> gameMessages = new SimpleListProperty<>();
 
+    private final ObjectProperty<DrawTicketsHandler> drawTicketHandler;
+    private final ObjectProperty<DrawCardHandler> drawCardHandler;
+    private final ObjectProperty<ClaimRouteHandler> claimRouteHandler;
+
 
     public GraphicalPlayer(PlayerId playerId, Map<PlayerId, String> playerNames){
         this.playerId = playerId;
         this.playerNames = playerNames;
         observableGameState = new ObservableGameState(playerId);
+
+        this.drawTicketHandler = new SimpleObjectProperty<>();
+        this.drawCardHandler = new SimpleObjectProperty<>();
+        this.claimRouteHandler = new SimpleObjectProperty<>();
 
         Node mapView = MapViewCreator
                 .createMapView(observableGameState, claimRouteHandler, cardChooser);
@@ -61,11 +74,21 @@ public class GraphicalPlayer {
         gameMessages.add(new Text(message));
     }
 
-    public void startTurn(){}
+    public void startTurn(DrawTicketsHandler drawTicketsHandler, DrawCardHandler drawCardHandler,
+                          ClaimRouteHandler claimRouteHandler){
+        this.drawTicketHandler.set(observableGameState.canDrawTickets() ? drawTicketsHandler : null); //TODO comme ca ?
+        this.drawCardHandler.set(observableGameState.canDrawCards() ? drawCardHandler : null);
+        this.claimRouteHandler.set(claimRouteHandler);
+    }
 
     public void chooseTickets(){}
 
-    public void drawCard(){}
+    public void drawCard(DrawCardHandler drawCardHandler){
+        this.drawCardHandler.set(drawCardHandler);
+        this.drawTicketHandler.set(null); //TODO pour vider ??
+        this.claimRouteHandler.set(null);
+
+    }
 
     public void chooseClaimCards(){}
 
