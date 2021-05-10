@@ -106,8 +106,8 @@ abstract class DecksViewCreator {
                 s.getStyleClass().add(nV.color().toString());
             });
         }
-        Button cartes = createButton("Cartes", observableGameState.cardPercentage());
-        cartes.setOnAction(e -> drawCardHandler.get().onDrawCard(-1)); //TODO set on action ok ?
+        Button cards = createButton("Cartes", observableGameState.cardPercentage());
+        cards.setOnAction(e -> drawCardHandler.get().onDrawCard(-1));
         Button tickets = createButton("Billets", observableGameState.ticketPercentage());
         tickets.setOnAction(e -> drawTicketHandler.get().onDrawTickets());
 
@@ -117,7 +117,7 @@ abstract class DecksViewCreator {
 
         vBox.getChildren().add(tickets);
         vBox.getChildren().addAll(cardStack.values());
-        vBox.getChildren().add(cartes);
+        vBox.getChildren().add(cards);
 
 
         return vBox;
@@ -140,7 +140,7 @@ abstract class DecksViewCreator {
         return button;
     }
 
-    private static StackPane stackPaneCreator(Card card, ReadOnlyIntegerProperty count , Boolean displayCounter){ //TODO enlever Card
+    private static StackPane stackPaneCreator(Card card, ReadOnlyIntegerProperty count , Boolean displayCounter){
         Rectangle rectangleOutside = new Rectangle(RECTANGLE_WIDTH_OUT, RECTANGLE_HEIGHT_OUT);
         rectangleOutside.getStyleClass().add("outside");
         Rectangle rectangleInside = new Rectangle(RECTANGLE_WIDTH_IN, RECTANGLE_HEIGHT_IN);

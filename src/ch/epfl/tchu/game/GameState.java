@@ -6,6 +6,7 @@ import ch.epfl.tchu.SortedBag;
 import java.lang.ref.SoftReference;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -32,8 +33,8 @@ public final class GameState extends PublicGameState {
             PlayerState> playerState, PlayerId lastPlayerId) {
         super(tickets.size(), cardState, currentPlayerId, Map.copyOf(playerState), lastPlayerId);
         this.playerState = Map.copyOf(playerState);
-        this.cardState = cardState;
-        this.tickets = tickets;
+        this.cardState = Objects.requireNonNull(cardState);
+        this.tickets = Objects.requireNonNull(tickets);
     }
 
     /**
@@ -86,7 +87,7 @@ public final class GameState extends PublicGameState {
      * @throws IllegalArgumentException if count isn't in [0,tickets.size()]
      */
     public SortedBag<Ticket> topTickets(int count) {
-        Preconditions.checkArgument( count >= 0 && count <= tickets.size());
+        Preconditions.checkArgument( 0 <= count && count <= ticketsCount());
         return tickets.topCards(count);
     }
 
@@ -97,7 +98,7 @@ public final class GameState extends PublicGameState {
      * @throws IllegalArgumentException if count isn't in [0,tickets.size()]
      */
     public GameState withoutTopTickets(int count) {
-        Preconditions.checkArgument(count >= 0 && count <= tickets.size());
+        Preconditions.checkArgument(0 <= count && count <= ticketsCount());
         return new GameState(tickets.withoutTopCards(count), cardState, currentPlayerId(), playerState, lastPlayer());
     }
 
@@ -137,8 +138,8 @@ public final class GameState extends PublicGameState {
      * @return a new GameState similar to this where the discarded cards becomes the new deck of cards
      */
     public GameState withCardsDeckRecreatedIfNeeded(Random rng) {
-        return new GameState(tickets, cardState.isDeckEmpty() ? cardState.withDeckRecreatedFromDiscards(rng): cardState,
-                currentPlayerId(), playerState, lastPlayer());
+        return cardState.isDeckEmpty() ? new GameState(tickets, cardState.withDeckRecreatedFromDiscards(rng),
+                currentPlayerId(), playerState, lastPlayer()) : this;
     }
 
     /**
