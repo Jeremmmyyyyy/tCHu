@@ -20,7 +20,7 @@ abstract class InfoViewCreator {
 
     private static final int CIRCLE_RADIUS = 5;
 
-    public void createInfoView(PlayerId playerId, Map<PlayerId, String> playerNames,
+    public static void  createInfoView(PlayerId playerId, Map<PlayerId, String> playerNames,
                                ObservableGameState observableGameState, ObservableList<Text> gameMessages) {
 
         VBox vBox = new VBox();
