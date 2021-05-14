@@ -57,7 +57,7 @@ abstract class DecksViewCreator {
 
         Map<Card, StackPane> cardStack = new HashMap<>();
         for (Card card : Card.ALL) {
-            StackPane s = stackPaneCreator(card, observableGameState.cardCountOnColor(card), true);
+            StackPane s = stackPaneCreator(observableGameState.cardCountOnColor(card), true);
             s.visibleProperty().bind(Bindings.greaterThan(observableGameState.cardCountOnColor(card), 0));
             cardStack.put(card, s);
 
@@ -96,7 +96,7 @@ abstract class DecksViewCreator {
         Map<Integer, StackPane> cardStack = new HashMap<>();
 
         for (int i = 0; i < Constants.FACE_UP_CARDS_COUNT; i++) {
-            StackPane s = stackPaneCreator(observableGameState.faceUpCard(i).get(), null, false);
+            StackPane s = stackPaneCreator(null, false);
             cardStack.put(i, s);
 
             observableGameState.faceUpCard(i).addListener((o, oV, nV)->{
@@ -140,7 +140,7 @@ abstract class DecksViewCreator {
         return button;
     }
 
-    private static StackPane stackPaneCreator(Card card, ReadOnlyIntegerProperty count , Boolean displayCounter){
+    private static StackPane stackPaneCreator(ReadOnlyIntegerProperty count , Boolean displayCounter){
         Rectangle rectangleOutside = new Rectangle(RECTANGLE_WIDTH_OUT, RECTANGLE_HEIGHT_OUT);
         rectangleOutside.getStyleClass().add("outside");
         Rectangle rectangleInside = new Rectangle(RECTANGLE_WIDTH_IN, RECTANGLE_HEIGHT_IN);
