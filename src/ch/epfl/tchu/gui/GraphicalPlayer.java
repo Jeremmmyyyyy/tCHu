@@ -116,9 +116,6 @@ public final class GraphicalPlayer {
             this.drawCardHandler.set(null);
         });
 
-
-        this.drawCardHandler.set(observableGameState.canDrawCards() ? drawCardHandler : null);
-        this.claimRouteHandler.set(claimRouteHandler);
     }
 
     public void chooseTickets(SortedBag<Ticket> tickets, ChooseTicketsHandler chooseTicketsHandler){
@@ -171,7 +168,7 @@ public final class GraphicalPlayer {
 
         this.drawCardHandler.set(drawSlot-> {
             drawCardHandler.onDrawCard(drawSlot);
-            this.drawTicketsHandler.set(null);
+            this.drawTicketsHandler.set(null); //TODO setValue ou set ??
             this.claimRouteHandler.set(null);
         });
 
