@@ -253,7 +253,6 @@ public final class GraphicalPlayer {
 
         VBox vBox = new VBox();
 
-
         Button button = new Button("Choisir");
 
         if (typeOfEntry){
