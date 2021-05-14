@@ -222,7 +222,8 @@ public final class GraphicalPlayer {
                               boolean typeOfEntry,
                               SortedBag<Ticket> tickets,
                               List<SortedBag<Card>> sortedBagList,
-                              boolean chooseMethod){
+                              boolean chooseMethod,
+                              ChooseCardsHandler chooseCardsHandler){
 
         Stage choiceStage = new Stage(StageStyle.UTILITY);
         choiceStage.initOwner(mainStage);
@@ -254,7 +255,7 @@ public final class GraphicalPlayer {
             }else{
 
                 button.disableProperty().bind(Bindings.lessThan((ObservableNumberValue) cardsView.getSelectionModel().getSelectedItems(), 1)); //TODO 1 ??
-                button.setOnAction(e ->  drawTicketHandler.onDrawTickets(cardsView.getSelectionModel().getSelectedItems())); //TODO
+                button.setOnAction(e ->  chooseCardsHandler.onChooseCards(SortedBag.of(cardsView.getSelectionModel().getSelectedItems()))); //TODO
             }
         }
 
