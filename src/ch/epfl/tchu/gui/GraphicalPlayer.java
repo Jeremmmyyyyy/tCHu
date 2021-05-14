@@ -44,7 +44,7 @@ public final class GraphicalPlayer {
     private final Map<PlayerId, String> playerNames;
     private final ObservableList<Text> gameMessages;
 
-    private final ObjectProperty<DrawTicketsHandler> drawTicketHandler;
+    private final ObjectProperty<DrawTicketsHandler> drawTicketsHandler;
     private final ObjectProperty<DrawCardHandler> drawCardHandler;
     private final ObjectProperty<ClaimRouteHandler> claimRouteHandler;
 
@@ -58,14 +58,14 @@ public final class GraphicalPlayer {
         observableGameState = new ObservableGameState(playerId);
         gameMessages = FXCollections.observableArrayList();
 
-        this.drawTicketHandler = new SimpleObjectProperty<>();
+        this.drawTicketsHandler = new SimpleObjectProperty<>();
         this.drawCardHandler = new SimpleObjectProperty<>();
         this.claimRouteHandler = new SimpleObjectProperty<>();
 
         Node mapView = MapViewCreator
                 .createMapView(observableGameState, claimRouteHandler, this::chooseClaimCards); //TODO cardChooser ?
         Node cardsView = DecksViewCreator
-                .createCardsView(observableGameState, drawTicketHandler, drawCardHandler);
+                .createCardsView(observableGameState, drawTicketsHandler, drawCardHandler);
         Node handView = DecksViewCreator
                 .createHandView(observableGameState);
         Node infoView = InfoViewCreator.createInfoView(playerId, playerNames, observableGameState, gameMessages);
@@ -100,11 +100,11 @@ public final class GraphicalPlayer {
 
         this.drawCardHandler.set(observableGameState.canDrawCards() ? drawSlot -> {
             drawCardHandler.onDrawCard(drawSlot);
-            this.drawTicketHandler.set(null);
+            this.drawTicketsHandler.set(null);
             this.claimRouteHandler.set(null);
         } : null);
 
-        this.drawTicketHandler.set(observableGameState.canDrawTickets() ? () -> {
+        this.drawTicketsHandler.set(observableGameState.canDrawTickets() ? () -> {
             drawTicketsHandler.onDrawTickets();
             this.drawCardHandler.set(null);
             this.claimRouteHandler.set(null);
@@ -112,7 +112,7 @@ public final class GraphicalPlayer {
 
         this.claimRouteHandler.set((route, cards) -> {
             claimRouteHandler.onClaimRoute(route, cards);
-            this.drawTicketHandler.set(null);
+            this.drawTicketsHandler.set(null);
             this.drawCardHandler.set(null);
         });
 
@@ -171,7 +171,7 @@ public final class GraphicalPlayer {
 
         this.drawCardHandler.set(drawSlot-> {
             drawCardHandler.onDrawCard(drawSlot);
-            this.drawTicketHandler.set(null);
+            this.drawTicketsHandler.set(null);
             this.claimRouteHandler.set(null);
         });
 
