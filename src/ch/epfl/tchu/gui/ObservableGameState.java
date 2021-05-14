@@ -283,7 +283,7 @@ public final class ObservableGameState {
      * @param route to claim
      * @return true if the route is claimable, false else, as ReadOnlyBooleanProperty
      */
-    public ReadOnlyBooleanProperty claimableRoutes(Route route){
+    public ReadOnlyBooleanProperty claimableRoute(Route route){
         return claimableRoutes.get(route);
     }
 

@@ -46,7 +46,6 @@ abstract class MapViewCreator {
         for (Route r : ChMap.routes()) {
 
             Group route = createRouteGroup(r);
-
             //Loop for each cell of the route
             for (int i = 1; i <= r.length(); i++) {
                 Group cell = newCell();
@@ -67,7 +66,7 @@ abstract class MapViewCreator {
 
             //When a player claims or attempts to claim a route
             observableGameState.routes(r).addListener((o, oV, nV) -> route.getStyleClass().add(nV.name()));
-            route.disableProperty().bind(claimRouteHandler.isNull().or(observableGameState.claimableRoutes(r).not()));
+            route.disableProperty().bind(claimRouteHandler.isNull().or(observableGameState.claimableRoute(r).not()));
 
             mapView.getChildren().add(route);
         }

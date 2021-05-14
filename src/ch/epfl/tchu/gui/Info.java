@@ -60,7 +60,7 @@ public final class Info {
      * @return name of the card, including plural form
      */
     public static String cardName(Card card, int count) {
-        String cardName = new String();
+        String cardName;
         switch (card) {
             case BLACK:
                 cardName = StringsFr.BLACK_CARD;
