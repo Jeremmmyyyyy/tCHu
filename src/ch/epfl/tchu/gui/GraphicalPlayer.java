@@ -31,6 +31,7 @@ import javafx.util.StringConverter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static ch.epfl.tchu.game.Constants.INITIAL_TICKETS_COUNT;
 import static ch.epfl.tchu.game.Constants.IN_GAME_TICKETS_COUNT;
@@ -46,7 +47,7 @@ public final class GraphicalPlayer {
     private final Map<PlayerId, String> playerNames;
     private final ObservableList<Text> gameMessages;
 
-    private final ObjectProperty<DrawTicketsHandler> drawTicketHandler;
+    private final ObjectProperty<DrawTicketsHandler> drawTicketsHandler;
     private final ObjectProperty<DrawCardHandler> drawCardHandler;
     private final ObjectProperty<ClaimRouteHandler> claimRouteHandler;
 
@@ -60,14 +61,14 @@ public final class GraphicalPlayer {
         observableGameState = new ObservableGameState(playerId);
         gameMessages = FXCollections.observableArrayList();
 
-        this.drawTicketHandler = new SimpleObjectProperty<>();
+        this.drawTicketsHandler = new SimpleObjectProperty<>();
         this.drawCardHandler = new SimpleObjectProperty<>();
         this.claimRouteHandler = new SimpleObjectProperty<>();
 
         Node mapView = MapViewCreator
                 .createMapView(observableGameState, claimRouteHandler, this::chooseClaimCards); //TODO cardChooser ?
         Node cardsView = DecksViewCreator
-                .createCardsView(observableGameState, drawTicketHandler, drawCardHandler);
+                .createCardsView(observableGameState, drawTicketsHandler, drawCardHandler);
         Node handView = DecksViewCreator
                 .createHandView(observableGameState);
         Node infoView = InfoViewCreator.createInfoView(playerId, playerNames, observableGameState, gameMessages);
@@ -100,9 +101,24 @@ public final class GraphicalPlayer {
                           ClaimRouteHandler claimRouteHandler){
         assert isFxApplicationThread();
 
-        this.drawTicketHandler.set(observableGameState.canDrawTickets() ? drawTicketsHandler : null);
-        this.drawCardHandler.set(observableGameState.canDrawCards() ? drawCardHandler : null);
-        this.claimRouteHandler.set(claimRouteHandler);
+        this.drawTicketsHandler.set(observableGameState.canDrawTickets() ? () -> {
+            drawTicketsHandler.onDrawTickets();
+            this.drawCardHandler.set(null);
+            this.claimRouteHandler.set(null);
+        } : null);
+        //TODO ne bloque pas les autres turnKind : voir aux tests
+        this.drawCardHandler.set(observableGameState.canDrawCards() ? drawSlot -> {
+            drawCardHandler.onDrawCard(drawSlot);
+            this.drawTicketsHandler.set(null);
+            this.claimRouteHandler.set(null);
+        } : null); //TODO demander assistant si good ? sinon jai r compris :(
+
+        this.claimRouteHandler.set(((route, cards) -> {
+            claimRouteHandler.onClaimRoute(route, cards);
+            this.drawCardHandler.set(null);
+            this.drawTicketsHandler.set(null);
+        }));
+
     }
 
     public void chooseTickets(SortedBag<Ticket> tickets, DrawTicketsHandler drawTicketsHandler){
@@ -118,38 +134,44 @@ public final class GraphicalPlayer {
         //TODO test
 
 
-//        //Boîtes de dialogue modales
-//        Stage choiceStage = new Stage(StageStyle.UTILITY);
-//        choiceStage.initOwner(mainStage);
-//        choiceStage.initModality(Modality.APPLICATION_MODAL);
-//
-//        VBox vBox = new VBox();
-//
-//        //Remplace les % de la constante par le nombre de tickets
-//        Text actionText = new Text(String.format(CHOOSE_TICKETS, ticketsSize, plural(ticketsSize)));
-//
-//        ListView<Ticket> ticketsView = new ListView<>(FXCollections.observableList(tickets.toList()));
-//        //Rend la sélection multiple possible sur la liste
-//        ticketsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//
-//        Button button = new Button("Choisir");
-////        button.disableProperty().bind(Bindings.size(ticketsView.getSelectionModel().getSelectedItems().size()) < ticketsSize - Constants.DISCARDABLE_TICKETS_COUNT);
-////        button.setOnAction(e ->  drawTicketsHandler.onDrawTickets(ticketsView.getSelectionModel().getSelectedItems())); //TODO
-//        button.disableProperty().bind(Bindings.lessThan(ticketsSize - Constants.DISCARDABLE_TICKETS_COUNT, (ObservableNumberValue) ticketsView.getSelectionModel().getSelectedItems()));
-//        vBox.getChildren().addAll(new TextFlow(actionText), ticketsView, button);
-//
-//        Scene scene = vBox.getScene();
-//        scene.getStylesheets().add("chooser.css");
-//
-//        choiceStage.setScene(vBox.getScene());
-//        choiceStage.show();
+        //Boîtes de dialogue modales
+        Stage choiceStage = new Stage(StageStyle.UTILITY);
+        choiceStage.initOwner(mainStage);
+        choiceStage.initModality(Modality.APPLICATION_MODAL);
+
+        VBox vBox = new VBox();
+
+        //Remplace les % de la constante par le nombre de tickets
+        Text actionText = new Text(String.format(CHOOSE_TICKETS, ticketsSize, plural(ticketsSize)));
+
+        ListView<Ticket> ticketsView = new ListView<>(FXCollections.observableList(tickets.toList()));
+        //Rend la sélection multiple possible sur la liste
+        ticketsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+
+        SortedBag.of(new ArrayList<>(ticketsView.getSelectionModel().getSelectedItems()));
+
+        Button button = new Button("Choisir");
+//        button.disableProperty().bind(Bindings.size(ticketsView.getSelectionModel().getSelectedItems().size()) < ticketsSize - Constants.DISCARDABLE_TICKETS_COUNT);
+//        button.setOnAction(e ->  drawTicketsHandler.onDrawTickets(ticketsView.getSelectionModel().getSelectedItems())); //TODO
+        button.disableProperty().bind(Bindings.lessThan(ticketsSize - Constants.DISCARDABLE_TICKETS_COUNT, (ObservableNumberValue) ticketsView.getSelectionModel().getSelectedItems()));
+        vBox.getChildren().addAll(new TextFlow(actionText), ticketsView, button);
+
+        Scene scene = vBox.getScene();
+        scene.getStylesheets().add("chooser.css");
+
+        choiceStage.setScene(vBox.getScene());
+        choiceStage.show();
     }
 
     public void drawCard(DrawCardHandler drawCardHandler){ //doit juste mettre à jour
         assert isFxApplicationThread();
-        this.drawCardHandler.set(drawCardHandler); //mettre lambda
-        this.drawTicketHandler.set(null); //TODO pour vider ??
-        this.claimRouteHandler.set(null);
+
+        this.drawCardHandler.set(drawSlot -> {
+            drawCardHandler.onDrawCard(drawSlot);
+            this.drawTicketsHandler.set(null);
+            this.claimRouteHandler.set(null);
+        });
 
     }
 
@@ -157,31 +179,31 @@ public final class GraphicalPlayer {
         assert isFxApplicationThread();
 
         stageCreator(new Text(CHOOSE_CARDS), false, null, initialClaimCards, true);
-//        //Boîtes de dialogue modales
-//        Stage choiceStage = new Stage(StageStyle.UTILITY);
-//        choiceStage.initOwner(mainStage);
-//        choiceStage.initModality(Modality.APPLICATION_MODAL);
-//
-//        VBox vBox = new VBox();
-//
-//        //Remplace les % de la constante par le nombre de tickets
-//        Text actionText = new Text(CHOOSE_CARDS);
-//
-//        ListView<SortedBag<Card>> cardsView = new ListView<>(FXCollections.observableList(initialClaimCards));
-//        //Rend la sélection multiple possible sur la liste
-//        cardsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//        cardsView.setCellFactory(v -> new TextFieldListCell<>(new CardBagStringConverter()));
-//
-//        Button button = new Button("Choisir");
-////        button.setOnAction(e ->  drawTicketHandler.onDrawTickets(cardsView.getSelectionModel().getSelectedItems())); //TODO
-//
-//        vBox.getChildren().addAll(new TextFlow(actionText), cardsView, button);
-//
-//        Scene scene = vBox.getScene();
-//        scene.getStylesheets().add("chooser.css");
-//
-//        choiceStage.setScene(vBox.getScene());
-//        choiceStage.show();
+        //Boîtes de dialogue modales
+        Stage choiceStage = new Stage(StageStyle.UTILITY);
+        choiceStage.initOwner(mainStage);
+        choiceStage.initModality(Modality.APPLICATION_MODAL);
+
+        VBox vBox = new VBox();
+
+        //Remplace les % de la constante par le nombre de tickets
+        Text actionText = new Text(CHOOSE_CARDS);
+
+        ListView<SortedBag<Card>> cardsView = new ListView<>(FXCollections.observableList(initialClaimCards));
+        //Rend la sélection multiple possible sur la liste
+        cardsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        cardsView.setCellFactory(v -> new TextFieldListCell<>(new CardBagStringConverter()));
+
+        Button button = new Button("Choisir");
+//        button.setOnAction(e ->  drawTicketHandler.onDrawTickets(cardsView.getSelectionModel().getSelectedItems())); //TODO
+
+        vBox.getChildren().addAll(new TextFlow(actionText), cardsView, button);
+
+        Scene scene = vBox.getScene();
+        scene.getStylesheets().add("chooser.css");
+
+        choiceStage.setScene(vBox.getScene());
+        choiceStage.show();
 
     }
 
@@ -250,7 +272,7 @@ public final class GraphicalPlayer {
             cardsView.setCellFactory(v -> new TextFieldListCell<>(new CardBagStringConverter()));
 
             if (chooseMethod){
-                button.setOnAction(e ->  drawTicketHandler.onDrawTickets(cardsView.getSelectionModel().getSelectedItems())); //TODO
+                button.setOnAction(e ->  drawTicketsHandler.onDrawTickets(cardsView.getSelectionModel().getSelectedItems())); //TODO
 
             }else{
 
