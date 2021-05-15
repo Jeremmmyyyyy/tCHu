@@ -1,25 +1,19 @@
 package ch.epfl.tchu.gui;
 
 import ch.epfl.tchu.SortedBag;
-import ch.epfl.tchu.game.Card;
-import ch.epfl.tchu.game.ChMap;
-import ch.epfl.tchu.game.PlayerId;
-import ch.epfl.tchu.game.PlayerState;
-import ch.epfl.tchu.game.PublicCardState;
-import ch.epfl.tchu.game.PublicGameState;
-import ch.epfl.tchu.game.PublicPlayerState;
-import ch.epfl.tchu.game.Ticket;
+import ch.epfl.tchu.game.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static ch.epfl.tchu.game.PlayerId.PLAYER_1;
 import static ch.epfl.tchu.game.PlayerId.PLAYER_2;
 
 public final class GraphicalPlayerTest extends Application {
+    public static void main(String[] args) { launch(args); }
+
     private void setState(GraphicalPlayer player) {
         // … construit exactement les mêmes états que la méthode setState
         // du test de l'étape 9

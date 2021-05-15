@@ -7,8 +7,6 @@ import ch.epfl.tchu.gui.ActionHandlers.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableIntegerValue;
-import javafx.beans.value.ObservableNumberValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -27,12 +25,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static ch.epfl.tchu.game.Constants.*;
+import static ch.epfl.tchu.game.Constants.INITIAL_TICKETS_COUNT;
+import static ch.epfl.tchu.game.Constants.IN_GAME_TICKETS_COUNT;
 import static ch.epfl.tchu.gui.StringsFr.*;
 import static javafx.application.Platform.isFxApplicationThread;
 
@@ -178,10 +176,11 @@ public final class GraphicalPlayer {
         //BIND
         VBox vBox = new VBox(new TextFlow(text), listView, button);
 
-        Scene scene = vBox.getScene();
-        scene.getStylesheets().add("chooser.css");
+//        Scene scene = vBox.getScene();
+//        scene.getStylesheets().add("chooser.css");
+        vBox.getStylesheets().add("chooser.css");
 
-        choiceStage.setScene(scene);
+        choiceStage.setScene(vBox.getScene());
         choiceStage.show();
 
         return choiceStage;
