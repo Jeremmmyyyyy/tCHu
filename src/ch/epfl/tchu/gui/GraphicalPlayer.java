@@ -153,14 +153,15 @@ public final class GraphicalPlayer {
     public void chooseClaimCards(List<SortedBag<Card>> initialClaimCards, ChooseCardsHandler chooseCardsHandler){
         assert isFxApplicationThread();
 
-        createCardsStage(true, initialClaimCards, chooseCardsHandler);
+        createCardsStage(true, new Text(CHOOSE_CARDS), initialClaimCards, chooseCardsHandler);
+
     }
 
     public void chooseAdditionalCards(List<SortedBag<Card>> possibleAdditionalCards,
                                       ChooseCardsHandler chooseCardsHandler){
         assert isFxApplicationThread();
 
-        createCardsStage(false, possibleAdditionalCards, chooseCardsHandler);
+        createCardsStage(false, new Text(CHOOSE_ADDITIONAL_CARDS), possibleAdditionalCards, chooseCardsHandler);
     }
 
 
@@ -169,7 +170,7 @@ public final class GraphicalPlayer {
         Stage choiceStage = new Stage(StageStyle.UTILITY);
         choiceStage.initOwner(mainStage);
         choiceStage.initModality(Modality.APPLICATION_MODAL);
-        choiceStage.setOnCloseRequest(Event::consume);
+//        choiceStage.setOnCloseRequest(Event::consume);
 
         //Rend la sélection multiple possible sur la liste
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -186,15 +187,15 @@ public final class GraphicalPlayer {
         return choiceStage;
     }
 
-    private void createCardsStage(boolean buttonCanBeDisabled, List<SortedBag<Card>> possibleAdditionalCards,
+    private void createCardsStage(boolean buttonCanBeDisabled, Text text, List<SortedBag<Card>> cards,
                                   ChooseCardsHandler chooseCardsHandler) {
 
-        ListView<SortedBag<Card>> cardsView = new ListView<>(FXCollections.observableList(possibleAdditionalCards));
+        ListView<SortedBag<Card>> cardsView = new ListView<>(FXCollections.observableList(cards));
         cardsView.setCellFactory(v -> new TextFieldListCell<>(new CardBagStringConverter()));
 
         Button button = new Button("Choisir");
 
-        Stage choiceStage = stageCreator(new Text(CHOOSE_ADDITIONAL_CARDS), button, cardsView);
+        Stage choiceStage = stageCreator(text, button, cardsView);
 
         if (buttonCanBeDisabled) {
             button.disableProperty().bind(Bindings.isEmpty(cardsView.getSelectionModel().getSelectedItems()).not());
