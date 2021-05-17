@@ -44,7 +44,10 @@ public final class GraphicalPlayerTest extends Application {
         setState(p);
 
         ActionHandlers.DrawTicketsHandler drawTicketsH =
-                () -> p.receiveInfo("Je tire des billets !");
+                () -> {
+            p.receiveInfo("Je tire des billets !");
+            p.chooseTickets(SortedBag.of(ChMap.tickets().subList(3,8)), s-> p.receiveInfo(String.valueOf(s.size())));
+                };
         ActionHandlers.DrawCardHandler drawCardH =
                 s -> p.receiveInfo(String.format("Je tire une carte de %s !", s));
         ActionHandlers.ClaimRouteHandler claimRouteH =

@@ -29,8 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static ch.epfl.tchu.game.Constants.INITIAL_TICKETS_COUNT;
-import static ch.epfl.tchu.game.Constants.IN_GAME_TICKETS_COUNT;
+import static ch.epfl.tchu.game.Constants.*;
 import static ch.epfl.tchu.gui.StringsFr.*;
 import static javafx.application.Platform.isFxApplicationThread;
 
@@ -62,7 +61,7 @@ public final class GraphicalPlayer {
         this.claimRouteHandler = new SimpleObjectProperty<>();
 
         Node mapView = MapViewCreator
-                .createMapView(observableGameState, claimRouteHandler, this::chooseClaimCards); //TODO cardChooser ?
+                .createMapView(observableGameState, claimRouteHandler, this::chooseClaimCards); //TODO demander comment ca marche
         Node cardsView = DecksViewCreator
                 .createCardsView(observableGameState, drawTicketsHandler, drawCardHandler);
         Node handView = DecksViewCreator
@@ -88,7 +87,7 @@ public final class GraphicalPlayer {
         if (gameMessages.size() == NUMBER_OF_DISPLAYED_MESSAGES){ //TODO bonne maniere de faire
             gameMessages.remove(0);
         }
-        gameMessages.add(new Text(message));
+        gameMessages.add(new Text(message + "\n"));
     }
 
     public void startTurn(DrawTicketsHandler drawTicketsHandler, DrawCardHandler drawCardHandler,
@@ -96,29 +95,34 @@ public final class GraphicalPlayer {
         assert isFxApplicationThread();
 
         this.drawCardHandler.set(observableGameState.canDrawCards() ? drawSlot -> {
-            drawCardHandler.onDrawCard(drawSlot);
+            drawCardHandler.onDrawCard(drawSlot); //TODO comme ca ?
             this.drawTicketsHandler.set(null);
             this.claimRouteHandler.set(null);
+            this.drawCardHandler.set(null);
         } : null);
 
-        this.drawTicketsHandler.set(observableGameState.canDrawTickets() ? () -> { //TODO comme ca ?
+        this.drawTicketsHandler.set(observableGameState.canDrawTickets() ? () -> {
             drawTicketsHandler.onDrawTickets();
             this.drawCardHandler.set(null);
             this.claimRouteHandler.set(null);
+            this.drawTicketsHandler.set(null);
         } : null);
 
         this.claimRouteHandler.set((route, cards) -> {
             claimRouteHandler.onClaimRoute(route, cards);
             this.drawTicketsHandler.set(null);
             this.drawCardHandler.set(null);
+            this.claimRouteHandler.set(null);
         });
 
     }
 
     public void chooseTickets(SortedBag<Ticket> tickets, ChooseTicketsHandler chooseTicketsHandler){
         assert isFxApplicationThread();
-        Preconditions.checkArgument(tickets.size() == IN_GAME_TICKETS_COUNT); //TODO ?
-        Preconditions.checkArgument(tickets.size() == INITIAL_TICKETS_COUNT);
+        System.out.println("entre dans chooseticket");
+
+        Preconditions.checkArgument(tickets.size() == INITIAL_TICKETS_COUNT ||
+                tickets.size() == IN_GAME_TICKETS_COUNT);
 
         ListView<Ticket> ticketsView = new ListView<>(FXCollections.observableList(tickets.toList()));
 
@@ -146,6 +150,7 @@ public final class GraphicalPlayer {
             drawCardHandler.onDrawCard(drawSlot);
             this.drawTicketsHandler.set(null); //TODO setValue ou set ??
             this.claimRouteHandler.set(null);
+            this.drawCardHandler.set(null); //TODO aussi cette ligne ?
         });
 
     }
@@ -153,8 +158,9 @@ public final class GraphicalPlayer {
     public void chooseClaimCards(List<SortedBag<Card>> initialClaimCards, ChooseCardsHandler chooseCardsHandler){
         assert isFxApplicationThread();
 
+        System.out.println("entre dans chooseClaimCards");
+
         createCardsStage(true, new Text(CHOOSE_CARDS), initialClaimCards, chooseCardsHandler);
-//
 //        ListView<SortedBag<Card>> cardsView = new ListView<>(FXCollections.observableList(initialClaimCards));
 //        cardsView.setCellFactory(v -> new TextFieldListCell<>(new CardBagStringConverter()));
 //
@@ -194,7 +200,7 @@ public final class GraphicalPlayer {
         Stage choiceStage = new Stage(StageStyle.UTILITY);
         choiceStage.initOwner(mainStage);
         choiceStage.initModality(Modality.APPLICATION_MODAL);
-//        choiceStage.setOnCloseRequest(Event::consume);
+        choiceStage.setOnCloseRequest(Event::consume);
 
         //Rend la sélection multiple possible sur la liste
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -258,18 +264,18 @@ public final class GraphicalPlayer {
 //            button.setOnAction(e ->  {
 //                ((ChooseTicketsHandler)actionHandler).onChooseTickets(SortedBag.of(ticketsView.getSelectionModel().getSelectedItems()));
 //                choiceStage.hide();
-//            }); //TODO
+//            });
 //
 //        }else{
 //
 //            ListView<SortedBag<Card>> cardsView = new ListView<>(FXCollections.observableList(sortedBagList));
 //            cardsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 //            cardsView.setCellFactory(v -> new TextFieldListCell<>(new CardBagStringConverter()));
-//            button.disableProperty().bind(Bindings.lessThan(Bindings.size(cardsView.getSelectionModel().getSelectedItems()), 1)); //TODO 1 ??
+//            button.disableProperty().bind(Bindings.lessThan(Bindings.size(cardsView.getSelectionModel().getSelectedItems()), 1));
 //            button.setOnAction(e ->  {
 //                choiceStage.hide();
 //                ((ChooseCardsHandler)actionHandler).onChooseCards(SortedBag.of(cardsView.getSelectionModel().getSelectedItem()));
-//            }); //TODO
+//            });
 //
 //        }
 //
