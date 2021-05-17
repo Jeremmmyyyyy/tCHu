@@ -221,7 +221,7 @@ public final class GraphicalPlayer {
         Stage choiceStage = stageCreator(text, button, cardsView);
 
         if (buttonCanBeDisabled) {
-            button.disableProperty().bind(Bindings.isEmpty(cardsView.getSelectionModel().getSelectedItems()).not());
+            button.disableProperty().bind(Bindings.isEmpty(cardsView.getSelectionModel().getSelectedItems()));
         }
         button.setOnAction(e -> {
             choiceStage.hide();
