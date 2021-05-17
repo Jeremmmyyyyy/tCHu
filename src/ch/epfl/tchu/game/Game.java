@@ -120,13 +120,13 @@ public final class Game {
                         if (additionalCards > 0) {
 
                             List<SortedBag<Card>> possibleAdditionalCards = currentPlayerState.
-                                    possibleAdditionalCards(additionalCards, initialClaimCards, drawnCards);
+                                    possibleAdditionalCards(additionalCards, initialClaimCards);
 
                             if (!possibleAdditionalCards.isEmpty()) {
 
                                 SortedBag<Card> claimCards =
                                         initialClaimCards.union(currentPlayer.chooseAdditionalCards(currentPlayerState.
-                                                possibleAdditionalCards(additionalCards, initialClaimCards, drawnCards)));
+                                                possibleAdditionalCards(additionalCards, initialClaimCards)));
                                 currentGameState = currentGameState.withClaimedRoute(
                                         claimedRoute, claimCards);
                                 sendInfoToBoth(currentInfo.claimedRoute(claimedRoute, claimCards), players);

@@ -72,15 +72,6 @@ public final class PlayerState extends PublicPlayerState{
     }
 
     /**
-     * Adds the SortedBag of card to the actual cards
-     * @param additionalCards SortedBag that is added to the actual cards
-     * @return a new PlayerState where the SortedBag is added to the cards
-     */
-    public PlayerState withAddedCards(SortedBag<Card> additionalCards){
-        return new PlayerState(tickets, cards.union(additionalCards), routes());
-    }
-
-    /**
      * Checks if a player can take the control of the given route
      * @param route that is tested
      * @return true if the route can be taken false otherwise
@@ -118,14 +109,12 @@ public final class PlayerState extends PublicPlayerState{
      * @throws IllegalArgumentException if there are more than 2 types of cards in the initialCards
      * @throws IllegalArgumentException if the drawnCards are not equal to 3
      */
-    public List<SortedBag<Card>> possibleAdditionalCards(int additionalCardsCount, SortedBag<Card> initialCards,
-                                                         SortedBag<Card> drawnCards){
+    public List<SortedBag<Card>> possibleAdditionalCards(int additionalCardsCount, SortedBag<Card> initialCards){
         Preconditions.checkArgument(additionalCardsCount >= 1 &&
                                     additionalCardsCount <= Constants.ADDITIONAL_TUNNEL_CARDS);
         Preconditions.checkArgument(!initialCards.isEmpty());
         Map<Card, Integer> initialTypes =  initialCards.toMap();
         Preconditions.checkArgument(initialTypes.size() <= 2);
-        Preconditions.checkArgument(drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
 
         SortedBag<Card> cardDifference = cards.difference(initialCards);
         SortedBag.Builder<Card> cardBuilder = new SortedBag.Builder<>();

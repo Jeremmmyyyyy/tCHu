@@ -201,7 +201,6 @@ public final class GameState extends PublicGameState {
      * @throws IllegalArgumentException if deckSize + discardsSize < 5
      */
     public GameState withDrawnFaceUpCard(int slot){
-        Preconditions.checkArgument(canDrawCards());
 
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(),
@@ -216,7 +215,6 @@ public final class GameState extends PublicGameState {
      * @throws IllegalArgumentException if deckSize + discardsSize < 5
      */
     public GameState withBlindlyDrawnCard(){
-        Preconditions.checkArgument(canDrawCards());
 
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(playerState);
         newPlayerState.replace(currentPlayerId(),

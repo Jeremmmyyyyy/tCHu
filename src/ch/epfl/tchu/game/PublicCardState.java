@@ -41,14 +41,6 @@ public class PublicCardState {
     }
 
     /**
-     * Returns the total size of all the cards that are given to PublicCardState
-     * @return the sum of the faceUpCards, the deck size and the discard size
-     */
-    public int totalSize(){
-        return faceUpCards.size() + deckSize + discardSize;
-    }
-
-    /**
      * return a copy of of the faceUpCards
      * @return a copy of the faceUpCards
      */
