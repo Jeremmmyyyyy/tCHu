@@ -154,6 +154,30 @@ public final class GraphicalPlayer {
         assert isFxApplicationThread();
 
         createCardsStage(true, new Text(CHOOSE_CARDS), initialClaimCards, chooseCardsHandler);
+//
+//        ListView<SortedBag<Card>> cardsView = new ListView<>(FXCollections.observableList(initialClaimCards));
+//        cardsView.setCellFactory(v -> new TextFieldListCell<>(new CardBagStringConverter()));
+//
+//        Button button = new Button("Choisir");
+//
+//        Stage choiceStage = new Stage(StageStyle.UTILITY);
+//        choiceStage.initOwner(mainStage);
+//        choiceStage.initModality(Modality.APPLICATION_MODAL);
+////        choiceStage.setOnCloseRequest(Event::consume);
+//
+//        //Rend la sélection multiple possible sur la liste
+//        cardsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+//        //BIND
+//        VBox vBox = new VBox(new Text(CHOOSE_CARDS), cardsView, button);
+//
+////        Scene scene = vBox.getScene();
+//        Scene scene = new Scene(vBox);
+//        scene.getStylesheets().add("chooser.css");
+////        vBox.getStylesheets().add("chooser.css");
+//
+//
+//        choiceStage.setScene(scene);
+//        choiceStage.show();
 
     }
 
@@ -177,11 +201,10 @@ public final class GraphicalPlayer {
         //BIND
         VBox vBox = new VBox(new TextFlow(text), listView, button);
 
-//        Scene scene = vBox.getScene();
-//        scene.getStylesheets().add("chooser.css");
-        vBox.getStylesheets().add("chooser.css");
+        Scene scene = new Scene(vBox);
+        scene.getStylesheets().add("chooser.css");
 
-        choiceStage.setScene(vBox.getScene());
+        choiceStage.setScene(scene);
         choiceStage.show();
 
         return choiceStage;
