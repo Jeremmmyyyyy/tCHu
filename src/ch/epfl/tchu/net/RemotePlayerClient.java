@@ -33,8 +33,6 @@ public class RemotePlayerClient {
 
             while ((readLine = r.readLine()) != null) {
 
-                System.out.println(readLine);
-
                 String[] m = readLine.split(Pattern.quote(" "), -1);
                 MessageId messageId = MessageId.valueOf(m[0]);
                 String o = "";
