@@ -14,10 +14,6 @@ public final class GraphicalPlayerAdapter implements Player {
 
     private GraphicalPlayer graphicalPlayer;
     private BlockingQueue<SortedBag<Ticket>> chooseInitialTickets;
-//    private BlockingQueue<Integer> drawCardHandler;
-//    private BlockingQueue<Integer> drawTicketsHandler;
-//    private BlockingQueue<SortedBag<Card>> claimRouteHandler;
-//    private BlockingQueue<Route> claimRouteHandler;
     private BlockingQueue<TurnKind> nextTurn;
     private BlockingQueue<SortedBag<Ticket>> chooseTickets;
     private BlockingQueue<Integer> drawSlot;
@@ -27,9 +23,6 @@ public final class GraphicalPlayerAdapter implements Player {
 
     public GraphicalPlayerAdapter (){
         chooseInitialTickets = new ArrayBlockingQueue<>(1);
-//        drawCardHandler = new ArrayBlockingQueue<>(1);
-//        drawTicketsHandler = new ArrayBlockingQueue<>(1);
-//        claimRouteHandler = new ArrayBlockingQueue<>(1);
         nextTurn = new ArrayBlockingQueue<>(1);
         chooseTickets = new ArrayBlockingQueue<>(1);
         drawSlot = new ArrayBlockingQueue<>(1);
@@ -65,15 +58,16 @@ public final class GraphicalPlayerAdapter implements Player {
 
     @Override
     public TurnKind nextTurn() {
+        TurnKind turnKind;
         runLater(()-> graphicalPlayer.startTurn(
-                e1 -> chooseInitialTickets.add(e1),
-                e2 -> drawSlot.add(e2),
+                e1 -> chooseInitialTickets.add(e1) ? turnKind = TurnKind.DRAW_TICKETS : null,
+                e2 -> drawSlot.add(e2) ? turnKind = TurnKind.DRAW_CARDS : null,
                 (e3, e4) -> {
-                    claimedRoute.add(e3);
+                    claimedRoute.add(e3) ? turnKind = TurnKind.CLAIM_ROUTE : null;
                     initialClaimCards.add(e4);
                 }));
 
-        return null;
+        return turnKind;
     }
 
     @Override
