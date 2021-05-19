@@ -18,7 +18,7 @@ import java.util.Random;
 import static ch.epfl.tchu.game.PlayerId.PLAYER_1;
 import static ch.epfl.tchu.game.PlayerId.PLAYER_2;
 
-public abstract class ServerMain extends Application  {
+public final class ServerMain extends Application  {
     public static void main(String[] args) { launch(args); }
 
     @Override

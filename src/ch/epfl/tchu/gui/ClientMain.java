@@ -4,7 +4,7 @@ import ch.epfl.tchu.net.RemotePlayerClient;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public abstract class ClientMain extends Application {
+public final class ClientMain extends Application {
     public static void main(String[] args) { launch(args); }
 
     @Override
