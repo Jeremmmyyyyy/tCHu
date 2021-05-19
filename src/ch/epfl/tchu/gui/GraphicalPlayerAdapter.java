@@ -62,15 +62,13 @@ public final class GraphicalPlayerAdapter implements Player {
                 //DrawCardsHandler
                 slot -> {
                     slotQueue.add(slot);
-                    turnQueue.add(TurnKind.DRAW_CARDS);
-                },
+                    turnQueue.add(TurnKind.DRAW_CARDS);},
 
                 //ClaimRouteHandler
                 (route, cards) -> {
                     routeQueue.add(route);
                     cardsQueue.add(cards);
-                    turnQueue.add(TurnKind.CLAIM_ROUTE);
-                })
+                    turnQueue.add(TurnKind.CLAIM_ROUTE);})
         );
         return turnQueue.take();
     }
