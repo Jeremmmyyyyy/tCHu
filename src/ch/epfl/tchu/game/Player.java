@@ -55,26 +55,26 @@ public interface Player {
      * Called at the beginning of the game : ask the player which 3 tickets he wants
      * @return the 3 chosen tickets
      */
-    SortedBag<Ticket> chooseInitialTickets() throws InterruptedException;
+    SortedBag<Ticket> chooseInitialTickets();
 
     /**
      * Called at the beginning of a turn to know which action the player wants to perform
      * @return the action the player wants to play during his turn
      */
-    TurnKind nextTurn() throws InterruptedException;
+    TurnKind nextTurn();
 
     /**
      * Called if the player wants to draw additional billets
      * @param options
      * @return
      */
-    SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) throws InterruptedException;
+    SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options);
 
     /**
      * Called if the player wants to draw Cards
      * @return 0-4 if the card is a faceUpCard or Constants.DECK_SLOT(-1) if drawn from the deck
      */
-    int drawSlot() throws InterruptedException;
+    int drawSlot();
 
     /**
      * Called if the player tries to take control of a route
@@ -93,5 +93,5 @@ public interface Player {
      * @param options list of the possible additional cards combinations (empty if the player can't control or don't want to control the route
      * @return a SortedBag
      */
-    SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) throws InterruptedException;
+    SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options);
 }
