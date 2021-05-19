@@ -13,27 +13,23 @@ import static javafx.application.Platform.runLater;
 public final class GraphicalPlayerAdapter implements Player {
 
     private GraphicalPlayer graphicalPlayer;
-    private BlockingQueue<SortedBag<Ticket>> chooseInitialTickets;
-    private BlockingQueue<TurnKind> nextTurn;
-    private BlockingQueue<SortedBag<Ticket>> chooseTickets;
-    private BlockingQueue<Integer> drawSlot;
-    private BlockingQueue<Route> claimedRoute;
-    private BlockingQueue<SortedBag<Card>> initialClaimCards;
-    private BlockingQueue<SortedBag<Card>> chooseAdditionalCards;
+    private BlockingQueue<SortedBag<Ticket>> ticketsQueue;
+    private BlockingQueue<TurnKind> turnQueue;
+    private BlockingQueue<Integer> slotQueue;
+    private BlockingQueue<Route> routeQueue;
+    private BlockingQueue<SortedBag<Card>> cardsQueue;
 
     public GraphicalPlayerAdapter (){
-        chooseInitialTickets = new ArrayBlockingQueue<>(1);
-        nextTurn = new ArrayBlockingQueue<>(1);
-        chooseTickets = new ArrayBlockingQueue<>(1);
-        drawSlot = new ArrayBlockingQueue<>(1);
-        claimedRoute = new ArrayBlockingQueue<>(1);
-        initialClaimCards = new ArrayBlockingQueue<>(1);
-        chooseAdditionalCards = new ArrayBlockingQueue<>(1);
+        ticketsQueue = new ArrayBlockingQueue<>(1);
+        turnQueue = new ArrayBlockingQueue<>(1);
+        slotQueue = new ArrayBlockingQueue<>(1);
+        routeQueue = new ArrayBlockingQueue<>(1);
+        cardsQueue = new ArrayBlockingQueue<>(1);
     }
 
     @Override
     public void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
-        runLater(()-> graphicalPlayer = new GraphicalPlayer(ownId, playerNames));
+        runLater(() -> graphicalPlayer = new GraphicalPlayer(ownId, playerNames));
     }
 
     @Override
@@ -48,59 +44,66 @@ public final class GraphicalPlayerAdapter implements Player {
 
     @Override
     public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
-        runLater(()-> graphicalPlayer.chooseTickets(tickets, e -> chooseInitialTickets.add(e))); //TODO put préférable ?
+        runLater(()-> graphicalPlayer.chooseTickets(tickets, ticketChoice -> ticketsQueue.add(ticketChoice)));
     }
 
     @Override
-    public SortedBag<Ticket> chooseInitialTickets() throws InterruptedException {
-        return chooseInitialTickets.take();
+    public SortedBag<Ticket> chooseInitialTickets() throws InterruptedException { //TODO bloc try and catch ou blc ?
+        return ticketsQueue.take();
     }
 
     @Override
-    public TurnKind nextTurn() {
-        TurnKind turnKind;
+    public TurnKind nextTurn() throws InterruptedException {
         runLater(()-> graphicalPlayer.startTurn(
-                e1 -> chooseInitialTickets.add(e1) ? turnKind = TurnKind.DRAW_TICKETS : null,
-                e2 -> drawSlot.add(e2) ? turnKind = TurnKind.DRAW_CARDS : null,
-                (e3, e4) -> {
-                    claimedRoute.add(e3) ? turnKind = TurnKind.CLAIM_ROUTE : null;
-                    initialClaimCards.add(e4);
-                }));
 
-        return turnKind;
+                //DrawTicketsHandler
+                () -> turnQueue.add(TurnKind.DRAW_TICKETS),
+
+                //DrawCardsHandler
+                slot -> {
+                    slotQueue.add(slot);
+                    turnQueue.add(TurnKind.DRAW_CARDS);
+                },
+
+                //ClaimRouteHandler
+                (route, cards) -> {
+                    routeQueue.add(route);
+                    cardsQueue.add(cards);
+                    turnQueue.add(TurnKind.CLAIM_ROUTE);
+                })
+        );
+        return turnQueue.take();
     }
 
     @Override
     public SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) throws InterruptedException {
         setInitialTicketChoice(options);
-        return chooseInitialTickets.take();
+        return ticketsQueue.take();
     }
 
     @Override
     public int drawSlot() throws InterruptedException {
-        int slot = drawSlot.peek();
-        drawSlot.remove(slot); //TODO pas ouf
-        if (slot != 0){
-            return slot;
-        }else {
-            runLater(()-> graphicalPlayer.drawCard(e -> drawSlot.add(e)));
-            return drawSlot.take();
+        if (!slotQueue.isEmpty()) {
+            return slotQueue.remove();
+        } else {
+            runLater(()-> graphicalPlayer.drawCard(slot -> slotQueue.add(slot)));
+            return slotQueue.take();
         }
     }
 
     @Override
     public Route claimedRoute() {
-        return claimedRoute.remove();
+        return routeQueue.remove();
     }
 
     @Override
     public SortedBag<Card> initialClaimCards() {
-        return initialClaimCards.remove();
+        return cardsQueue.remove();
     }
 
     @Override
     public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) throws InterruptedException {
-        runLater(()-> graphicalPlayer.chooseAdditionalCards(options, e-> chooseAdditionalCards.add(e)));
-        return chooseAdditionalCards.take();
+        runLater(()-> graphicalPlayer.chooseAdditionalCards(options, cards -> cardsQueue.add(cards)));
+        return cardsQueue.take();
     }
 }

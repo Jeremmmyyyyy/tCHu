@@ -61,7 +61,7 @@ public interface Player {
      * Called at the beginning of a turn to know which action the player wants to perform
      * @return the action the player wants to play during his turn
      */
-    TurnKind nextTurn();
+    TurnKind nextTurn() throws InterruptedException;
 
     /**
      * Called if the player wants to draw additional billets
