@@ -38,8 +38,6 @@ public final class GraphicalPlayer {
     private static final int NUMBER_OF_DISPLAYED_MESSAGES = 5;
 
     private final ObservableGameState observableGameState;
-    private final PlayerId playerId;
-    private final Map<PlayerId, String> playerNames; //TODO enlever ces deux attributs ??
     private final ObservableList<Text> gameMessages;
 
     private final ObjectProperty<DrawTicketsHandler> drawTicketsHandler;
@@ -51,8 +49,6 @@ public final class GraphicalPlayer {
     public GraphicalPlayer(PlayerId playerId, Map<PlayerId, String> playerNames){
         assert isFxApplicationThread();
 
-        this.playerId = playerId;
-        this.playerNames = playerNames;
         observableGameState = new ObservableGameState(playerId);
         gameMessages = FXCollections.observableArrayList();
 
