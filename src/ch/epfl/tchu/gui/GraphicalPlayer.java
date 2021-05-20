@@ -102,7 +102,7 @@ public final class GraphicalPlayer {
         } : null);
 
         this.drawTicketsHandler.set(observableGameState.canDrawTickets() ? () -> {
-            getaVoid(drawTicketsHandler);
+            drawTicketsHandler.onDrawTickets();
             this.drawCardHandler.set(null);
             this.claimRouteHandler.set(null);
             this.drawTicketsHandler.set(null);
@@ -115,10 +115,6 @@ public final class GraphicalPlayer {
             this.claimRouteHandler.set(null);
         });
 
-    }
-
-    private void getaVoid(DrawTicketsHandler drawTicketsHandler) {
-        drawTicketsHandler.onDrawTickets();
     }
 
     public void chooseTickets(SortedBag<Ticket> tickets, ChooseTicketsHandler chooseTicketsHandler){

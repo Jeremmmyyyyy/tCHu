@@ -14,6 +14,10 @@ import static ch.epfl.tchu.game.PlayerId.PLAYER_2;
 public final class Stage11Test extends Application {
     public static void main(String[] args) { launch(args); }
 
+    //TODO peuvent prendre deux routes l'une a cote de l'autre donc le test sur les routes voisines pas bon
+    //TODO ne laisse pas tirer la deuxieme carte : bloque entierement le jeu
+    //TODO carte sans couleur dans un des deck des joueurs : du coup carte sans couleur permet de chopper n'importe quelle route
+
     @Override
     public void start(Stage primaryStage) {
         SortedBag<Ticket> tickets = SortedBag.of(ChMap.tickets());
