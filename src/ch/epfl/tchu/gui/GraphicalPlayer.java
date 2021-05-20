@@ -83,7 +83,7 @@ public final class GraphicalPlayer {
         if (gameMessages.size() == NUMBER_OF_DISPLAYED_MESSAGES){ //TODO bonne maniere de faire
             gameMessages.remove(0);
         }
-        gameMessages.add(new Text(message + "\n"));
+        gameMessages.add(new Text(message + "\n")); //TODO faut avoir un saut de ligne entre les messages ?
     }
 
     public void startTurn(DrawTicketsHandler drawTicketsHandler, DrawCardHandler drawCardHandler,
