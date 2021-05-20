@@ -39,12 +39,14 @@ public final class GraphicalPlayerAdapter implements Player {
 
     @Override
     public void updateState(PublicGameState newState, PlayerState ownState) {
-        runLater(()-> graphicalPlayer.setState(newState, ownState));
+        runLater(()-> {
+            graphicalPlayer.setState(newState, ownState);
+        });
     }
 
     @Override
     public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
-        runLater(()-> graphicalPlayer.chooseTickets(tickets, ticketChoice -> ticketsQueue.add(ticketChoice)));
+        runLater(()-> graphicalPlayer.chooseTickets(tickets, ticketsQueue::add));
     }
 
     @Override
@@ -84,7 +86,7 @@ public final class GraphicalPlayerAdapter implements Player {
         if (!slotQueue.isEmpty()) {
             return slotQueue.remove();
         } else {
-            runLater(()-> graphicalPlayer.drawCard(slot -> slotQueue.add(slot)));
+            runLater(()-> graphicalPlayer.drawCard(slotQueue::add));
             return takeTry(slotQueue);
         }
     }
@@ -101,7 +103,7 @@ public final class GraphicalPlayerAdapter implements Player {
 
     @Override
     public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) {
-        runLater(()-> graphicalPlayer.chooseAdditionalCards(options, cards -> cardsQueue.add(cards)));
+        runLater(()-> graphicalPlayer.chooseAdditionalCards(options, cardsQueue::add));
         return takeTry(cardsQueue);
     }
 

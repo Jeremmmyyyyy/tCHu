@@ -123,7 +123,6 @@ public final class GraphicalPlayer {
 
     public void chooseTickets(SortedBag<Ticket> tickets, ChooseTicketsHandler chooseTicketsHandler){
         assert isFxApplicationThread();
-        System.out.println("entre dans chooseticket");
 
         Preconditions.checkArgument(tickets.size() == INITIAL_TICKETS_COUNT ||
                 tickets.size() == IN_GAME_TICKETS_COUNT);

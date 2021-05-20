@@ -96,14 +96,14 @@ abstract class DecksViewCreator {
         Map<Integer, StackPane> cardStack = new HashMap<>();
 
         for (int i = 0; i < Constants.FACE_UP_CARDS_COUNT; i++) {
-            StackPane s = stackPaneCreator(null, false);
-            cardStack.put(i, s);
+            StackPane faceUpCardPane = stackPaneCreator(null, false);
+            cardStack.put(i, faceUpCardPane);
 
             observableGameState.faceUpCard(i).addListener((o, oV, nV)->{
                 if(oV != null){
-                    s.getStyleClass().remove(oV.color().toString());
+                    faceUpCardPane.getStyleClass().remove(oV.color().toString());
                 }
-                s.getStyleClass().add(nV.color().toString());
+                faceUpCardPane.getStyleClass().add(nV.color() != null ? nV.color().toString() : NEUTRAL);
             });
         }
         Button cards = createButton("Cartes", observableGameState.cardPercentage());
