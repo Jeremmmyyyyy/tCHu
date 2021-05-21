@@ -90,6 +90,9 @@ public final class GraphicalPlayer {
                           ClaimRouteHandler claimRouteHandler){
         assert isFxApplicationThread();
 
+//        System.out.println("startTurn");
+//        this.drawCardHandler.addListener((o, ov, nV)-> System.out.println(nV));
+
         this.drawCardHandler.set(observableGameState.canDrawCards() ? drawSlot -> {
             drawCardHandler.onDrawCard(drawSlot); //TODO comme ca ?
             this.drawTicketsHandler.set(null);
@@ -142,10 +145,11 @@ public final class GraphicalPlayer {
         assert isFxApplicationThread();
 
         this.drawCardHandler.set(drawSlot-> {
-            drawCardHandler.onDrawCard(drawSlot);
-            this.drawTicketsHandler.set(null); //TODO setValue ou set ??
+            System.out.println("drawcard");
+            this.drawTicketsHandler.set(null);
             this.claimRouteHandler.set(null);
             this.drawCardHandler.set(null); //TODO aussi cette ligne ?
+            drawCardHandler.onDrawCard(drawSlot);
         });
 
     }

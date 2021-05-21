@@ -81,7 +81,7 @@ public final class Game {
                 case DRAW_CARDS:
 
                     for (int i = 0; i < 2; ++i) {
-                        currentGameState = currentGameState.withCardsDeckRecreatedIfNeeded(rng);;
+                        currentGameState = currentGameState.withCardsDeckRecreatedIfNeeded(rng);
                         updateStates(players, currentGameState, playerOrder);
                         int slot = currentPlayer.drawSlot();
 

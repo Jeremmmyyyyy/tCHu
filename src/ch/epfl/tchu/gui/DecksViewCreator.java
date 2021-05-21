@@ -89,8 +89,8 @@ abstract class DecksViewCreator {
         VBox vBox = new VBox();
         vBox.getStylesheets().addAll("decks.css", "colors.css");
         vBox.setId("card-pane");
-        vBox.disableProperty().bind(drawCardHandler.isNull());
-        vBox.disableProperty().bind(drawTicketHandler.isNull());
+        vBox.disableProperty().bind(drawCardHandler.isNull()); //TODO appliquer à chaque card / bouton
+//        vBox.disableProperty().bind(drawTicketHandler.isNull());
 
 
         Map<Integer, StackPane> cardStack = new HashMap<>();

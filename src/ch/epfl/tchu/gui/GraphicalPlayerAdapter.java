@@ -86,7 +86,10 @@ public final class GraphicalPlayerAdapter implements Player {
         if (!slotQueue.isEmpty()) {
             return slotQueue.remove();
         } else {
-            runLater(()-> graphicalPlayer.drawCard(slotQueue::add));
+            runLater(()-> graphicalPlayer.drawCard(e -> {
+                System.out.println("drawcardCalled");
+                slotQueue.add(e);
+            }));
             return takeTry(slotQueue);
         }
     }
