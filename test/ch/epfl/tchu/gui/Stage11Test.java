@@ -16,7 +16,9 @@ public final class Stage11Test extends Application {
 
     //TODO peuvent prendre deux routes l'une a cote de l'autre donc le test sur les routes voisines pas bon
     //TODO ne laisse pas tirer la deuxieme carte : bloque entierement le jeu
-    //TODO carte sans couleur dans un des deck des joueurs : du coup carte sans couleur permet de chopper n'importe quelle route
+    //TODO carte sans couleur dans un des deck des joueurs : du coup carte sans couleur permet de chopper n'importe quelle route PEUT ETRE REGLER MANQUAIT UN NEUTRAL DANS DECKVIEW   q
+    //TODO selection avec bouton controle ??
+
 
     @Override
     public void start(Stage primaryStage) {

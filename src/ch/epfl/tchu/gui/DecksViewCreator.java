@@ -1,6 +1,7 @@
 package ch.epfl.tchu.gui;
 
 import ch.epfl.tchu.game.Card;
+import ch.epfl.tchu.game.Color;
 import ch.epfl.tchu.game.Constants;
 import ch.epfl.tchu.game.Ticket;
 import javafx.beans.binding.Bindings;
@@ -63,9 +64,9 @@ abstract class DecksViewCreator {
 
             observableGameState.cardCountOnColor(card).addListener((o, oV, nV)->{
                 if(nV.intValue()-oV.intValue() > 0){
-                    s.getStyleClass().add(card.color() == null ? NEUTRAL : card.color().toString());
+                    s.getStyleClass().add(getColorClass(card));
                 }else{
-                    s.getStyleClass().remove(card.color() == null ? NEUTRAL : card.color().toString());
+                    s.getStyleClass().remove(getColorClass(card));
                 }
             });
         }
@@ -101,9 +102,9 @@ abstract class DecksViewCreator {
 
             observableGameState.faceUpCard(i).addListener((o, oV, nV)->{
                 if(oV != null){
-                    faceUpCardPane.getStyleClass().remove(oV.color().toString());
+                    faceUpCardPane.getStyleClass().remove(getColorClass(oV));
                 }
-                faceUpCardPane.getStyleClass().add(nV.color() != null ? nV.color().toString() : NEUTRAL);
+                faceUpCardPane.getStyleClass().add(getColorClass(nV));
             });
         }
         Button cards = createButton("Cartes", observableGameState.cardPercentage());
@@ -121,6 +122,10 @@ abstract class DecksViewCreator {
 
 
         return vBox;
+    }
+
+    private static String getColorClass(Card card) {
+        return card.color() == null ? NEUTRAL : card.color().toString();
     }
 
     private static Button createButton(String buttonName, ReadOnlyIntegerProperty property){
