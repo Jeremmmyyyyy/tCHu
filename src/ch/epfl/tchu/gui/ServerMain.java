@@ -23,7 +23,7 @@ public final class ServerMain extends Application  {
     public static void main(String[] args) { launch(args); }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws Exception { //TEST
         System.out.println("Server Started");
         if (!getParameters().getRaw().isEmpty()){
             playerNames = Map.of(
