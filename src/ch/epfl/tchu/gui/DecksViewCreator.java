@@ -89,8 +89,7 @@ abstract class DecksViewCreator {
         VBox vBox = new VBox();
         vBox.getStylesheets().addAll("decks.css", "colors.css");
         vBox.setId("card-pane");
-        vBox.disableProperty().bind(drawCardHandler.isNull()); //TODO appliquer à chaque card / bouton
-//        vBox.disableProperty().bind(drawTicketHandler.isNull());
+//        vBox.disableProperty().bind(drawCardHandler.isNull()); //TODO appliquer à chaque card / bouton
 
 
         Map<Integer, StackPane> cardStack = new HashMap<>();
@@ -105,10 +104,13 @@ abstract class DecksViewCreator {
                 }
                 faceUpCardPane.getStyleClass().add(nV.color() != null ? nV.color().toString() : NEUTRAL);
             });
+            faceUpCardPane.disableProperty().bind(drawCardHandler.isNull());
         }
         Button cards = createButton("Cartes", observableGameState.cardPercentage());
         cards.setOnAction(e -> drawCardHandler.get().onDrawCard(-1));
         Button tickets = createButton("Billets", observableGameState.ticketPercentage());
+        cards.disableProperty().bind(drawCardHandler.isNull());
+        tickets.disableProperty().bind(drawTicketHandler.isNull());
         tickets.setOnAction(e -> drawTicketHandler.get().onDrawTickets());
 
         for (Integer key : cardStack.keySet()) {
