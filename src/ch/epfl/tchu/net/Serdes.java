@@ -2,6 +2,8 @@ package ch.epfl.tchu.net;
 
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
+import ch.epfl.tchu.net.Serde;
+
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
