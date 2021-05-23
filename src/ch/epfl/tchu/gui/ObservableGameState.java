@@ -86,11 +86,6 @@ public final class ObservableGameState {
         setClaimableRoutes(publicGameState, playerState);
         cardCountOnColor.forEach((card, count) -> count.set(playerState.cards().countOf(card)));
 
-
-        System.out.println("\n========================================================\n PLAYER INFO of : " + playerId + " CURRENT PLAYER : " + publicGameState.currentPlayerId());
-        System.out.println("is current player ? :" + (playerId == publicGameState.currentPlayerId()));
-        System.out.println("OWNER : " + routes(ChMap.routes().get(63)));
-        System.out.println("Claimable : " + claimableRoute(ChMap.routes().get(63)));
     }
 
     /**
