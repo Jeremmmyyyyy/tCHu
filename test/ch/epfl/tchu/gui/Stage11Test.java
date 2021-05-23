@@ -23,6 +23,8 @@ public final class Stage11Test extends Application {
 
     //TODO points avec les billets pas pris en compte au cours du jeu quand on remplit l'objectif d'un billet....
 
+    //TODO points casse quand on prend une route de taille 4 fait + 5 au lieu de + 4
+
 
     @Override
     public void start(Stage primaryStage) {
