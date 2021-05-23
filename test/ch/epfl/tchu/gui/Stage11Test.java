@@ -19,6 +19,8 @@ public final class Stage11Test extends Application {
 
     //TODO SAUT DE LIGNE APRES "C'est a Kevin de jouer" ??
 
+    //TODO quand decide de ne pas choisir de cartes additionnelles peut encore jouer et produit une erreur
+
 
     @Override
     public void start(Stage primaryStage) {
