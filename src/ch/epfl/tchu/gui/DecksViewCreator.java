@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static ch.epfl.tchu.gui.MapViewCreator.NEUTRAL;
+import static ch.epfl.tchu.gui.StringsFr.CARDS;
+import static ch.epfl.tchu.gui.StringsFr.TICKETS;
 
 /**
  * Abstract class that creates the handView and the cardView of the graphical interface
@@ -109,9 +111,9 @@ abstract class DecksViewCreator {
             });
             faceUpCardPane.disableProperty().bind(drawCardHandler.isNull());
         }
-        Button cards = createButton("Cartes", observableGameState.cardPercentage());
+        Button cards = createButton(CARDS, observableGameState.cardPercentage());
         cards.setOnAction(e -> drawCardHandler.get().onDrawCard(-1));
-        Button tickets = createButton("Billets", observableGameState.ticketPercentage());
+        Button tickets = createButton(TICKETS, observableGameState.ticketPercentage());
         cards.disableProperty().bind(drawCardHandler.isNull());
         tickets.disableProperty().bind(drawTicketHandler.isNull());
         tickets.setOnAction(e -> drawTicketHandler.get().onDrawTickets());

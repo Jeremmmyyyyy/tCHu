@@ -90,20 +90,20 @@ public final class GraphicalPlayer {
                           ClaimRouteHandler claimRouteHandler){
         assert isFxApplicationThread();
 
-//        drawCardHandlerProperty.set(observableGameState.canDrawCards() ? drawSlot -> {
-//            drawCardHandler.onDrawCard(drawSlot);
-//            clearHandlerProperties();
-//        } : null);
-//
-//        drawTicketsHandlerProperty.set(observableGameState.canDrawTickets() ? () -> {
-//            drawTicketsHandler.onDrawTickets();
-//            clearHandlerProperties();
-//        } : null);
-//
-//        claimRouteHandlerProperty.set((route, cards) -> {
-//            claimRouteHandler.onClaimRoute(route, cards);
-//            clearHandlerProperties();
-//        });
+        drawCardHandlerProperty.set(observableGameState.canDrawCards() ? drawSlot -> {
+            drawCardHandler.onDrawCard(drawSlot);
+            clearHandlerProperties();
+        } : null);
+
+        drawTicketsHandlerProperty.set(observableGameState.canDrawTickets() ? () -> {
+            drawTicketsHandler.onDrawTickets();
+            clearHandlerProperties();
+        } : null);
+
+        claimRouteHandlerProperty.set((route, cards) -> {
+            claimRouteHandler.onClaimRoute(route, cards);
+            clearHandlerProperties();
+        });
 
         if (observableGameState.canDrawTickets()) {
             drawTicketsHandlerProperty.set(() -> {
@@ -145,12 +145,15 @@ public final class GraphicalPlayer {
 
         ListView<Ticket> ticketsView = new ListView<>(FXCollections.observableList(tickets.toList()));
 
-        Button button = new Button("Choisir");
+        Button button = new Button(CHOOSE);
 
         int ticketsSize = tickets.size();
 
         Stage choiceStage = stageCreator(
-                new Text(String.format(CHOOSE_TICKETS, ticketsSize, plural(ticketsSize))), button, ticketsView);
+                new Text(String.format(CHOOSE_TICKETS, ticketsSize - DISCARDABLE_TICKETS_COUNT,
+                        plural(ticketsSize - DISCARDABLE_TICKETS_COUNT))), button, ticketsView);
+
+        choiceStage.setTitle(TICKETS_CHOICE);
 
         button.disableProperty().bind(Bindings.lessThan(
                     Bindings.size(ticketsView.getSelectionModel().getSelectedItems()),
@@ -214,9 +217,11 @@ public final class GraphicalPlayer {
         ListView<SortedBag<Card>> cardsView = new ListView<>(FXCollections.observableList(cards));
         cardsView.setCellFactory(v -> new TextFieldListCell<>(new CardBagStringConverter()));
 
-        Button button = new Button("Choisir");
+        Button button = new Button(CHOOSE);
 
         Stage choiceStage = stageCreator(text, button, cardsView);
+
+        choiceStage.setTitle(CARDS_CHOICE);
 
         if (buttonCanBeDisabled) {
             button.disableProperty().bind(Bindings.isEmpty(cardsView.getSelectionModel().getSelectedItems()));
