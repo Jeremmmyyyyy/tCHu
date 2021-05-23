@@ -21,6 +21,8 @@ public final class Stage11Test extends Application {
 
     //TODO quand decide de ne pas choisir de cartes additionnelles peut encore jouer et produit une erreur
 
+    //TODO points avec les billets pas pris en compte au cours du jeu quand on remplit l'objectif d'un billet....
+
 
     @Override
     public void start(Stage primaryStage) {
