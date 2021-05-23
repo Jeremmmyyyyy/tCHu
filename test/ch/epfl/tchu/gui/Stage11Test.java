@@ -14,20 +14,18 @@ import static ch.epfl.tchu.game.PlayerId.PLAYER_2;
 public final class Stage11Test extends Application {
     public static void main(String[] args) { launch(args); }
 
-    //TODO peuvent prendre deux routes l'une a cote de l'autre donc le test sur les routes voisines pas bon
-    //TODO ne laisse pas tirer la deuxieme carte : bloque entierement le jeu
-    //TODO carte sans couleur dans un des deck des joueurs : du coup carte sans couleur permet de chopper n'importe quelle route PEUT ETRE REGLER MANQUAIT UN NEUTRAL DANS DECKVIEW   q
-    //TODO selection avec bouton controle ??
+    //TODO carte sans couleur dans un des deck des joueurs : du coup carte sans couleur permet de chopper n'importe quelle route PEUT ETRE REGLER MANQUAIT UN NEUTRAL DANS DECKVIEW
+    //TODO COULEUR NOIRE : SE COMPORTE COMME UNE LOCOMOTIVE VOIR SCREEN BUGCOULEURNOIRE
+
+    //TODO SAUT DE LIGNE APRES "C'est a Kevin de jouer" ??
 
 
     @Override
     public void start(Stage primaryStage) {
         SortedBag<Ticket> tickets = SortedBag.of(ChMap.tickets());
-        Map<PlayerId, String> names =
-                Map.of(PLAYER_1, "Kevin", PLAYER_2, "Jordan");
+        Map<PlayerId, String> names = Map.of(PLAYER_1, "Kevin", PLAYER_2, "Jordan");
         Map<PlayerId, Player> players =
-                Map.of(PLAYER_1, new GraphicalPlayerAdapter(),
-                        PLAYER_2, new GraphicalPlayerAdapter());
+                Map.of(PLAYER_1, new GraphicalPlayerAdapter(), PLAYER_2, new GraphicalPlayerAdapter());
         Random rng = new Random();
         new Thread(() -> Game.play(players, names, tickets, rng)).start();
     }

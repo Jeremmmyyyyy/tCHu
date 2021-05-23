@@ -71,7 +71,9 @@ public final class GraphicalPlayerAdapter implements Player {
                     routeQueue.add(route);
                     cardsQueue.add(cards);
                     turnQueue.add(TurnKind.CLAIM_ROUTE);})
+
         );
+
         return takeTry(turnQueue);
     }
 
@@ -86,10 +88,7 @@ public final class GraphicalPlayerAdapter implements Player {
         if (!slotQueue.isEmpty()) {
             return slotQueue.remove();
         } else {
-            runLater(()-> graphicalPlayer.drawCard(e -> {
-                System.out.println("drawcardCalled");
-                slotQueue.add(e);
-            }));
+            runLater(()-> graphicalPlayer.drawCard(slotQueue::add));
             return takeTry(slotQueue);
         }
     }

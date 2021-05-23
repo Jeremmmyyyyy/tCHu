@@ -9,8 +9,7 @@ import javafx.collections.ObservableList;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ch.epfl.tchu.game.Constants.FACE_UP_CARDS_COUNT;
-import static ch.epfl.tchu.game.Constants.FACE_UP_CARD_SLOTS;
+import static ch.epfl.tchu.game.Constants.*;
 
 /**
  * Observes an entire GameState
@@ -27,7 +26,7 @@ public final class ObservableGameState {
     private final IntegerProperty ticketPercentage;
     private final IntegerProperty cardPercentage;
     private final List<ObjectProperty<Card>> faceUpCards;
-    private final Map<Route, ObjectProperty<PlayerId>> routes;
+    private final Map<Route, ObjectProperty<PlayerId>> routesOwner;
 
     //Properties for both players
     private final Map<PlayerId, IntegerProperty> ticketCounts;
@@ -50,7 +49,7 @@ public final class ObservableGameState {
         ticketPercentage = new SimpleIntegerProperty();
         cardPercentage = new SimpleIntegerProperty();
         faceUpCards = createFaceUpCards();
-        routes = createRoutes();
+        routesOwner = createRoutes();
 
         ticketCounts = createCounts();
         cardCounts = createCounts();
@@ -74,7 +73,7 @@ public final class ObservableGameState {
         this.playerState = playerState;
 
         ticketPercentage.set(publicGameState.ticketsCount() * 100 / ChMap.tickets().size());
-        cardPercentage.set(publicGameState.cardState().deckSize() * 100 / Constants.TOTAL_CARDS_COUNT);
+        cardPercentage.set(publicGameState.cardState().deckSize() * 100 / TOTAL_CARDS_COUNT);
         setFaceUpCards(publicGameState);
         setRoutes(publicGameState);
 
@@ -86,6 +85,12 @@ public final class ObservableGameState {
         ownTickets.setAll(playerState.tickets().toList());
         setClaimableRoutes(publicGameState, playerState);
         cardCountOnColor.forEach((card, count) -> count.set(playerState.cards().countOf(card)));
+
+
+        System.out.println("\n========================================================\n PLAYER INFO of : " + playerId + " CURRENT PLAYER : " + publicGameState.currentPlayerId());
+        System.out.println("is current player ? :" + (playerId == publicGameState.currentPlayerId()));
+        System.out.println("OWNER : " + routes(ChMap.routes().get(63)));
+        System.out.println("Claimable : " + claimableRoute(ChMap.routes().get(63)));
     }
 
     /**
@@ -106,7 +111,7 @@ public final class ObservableGameState {
     private void setRoutes(PublicGameState publicGameState) {
         PlayerId.ALL.forEach(id -> {
             for (Route r : publicGameState.playerState(id).routes()) {
-                routes.get(r).set(id);
+                routesOwner.get(r).set(id);
             }
         });
     }
@@ -117,20 +122,19 @@ public final class ObservableGameState {
      * @param playerState considered
      */
     private void setClaimableRoutes(PublicGameState publicGameState, PlayerState playerState) {
-        claimableRoutes.forEach((route, claimable) ->  //TODO FAIRE LE TEST DE LA ROUTE VOISINE DANS CHMAP ou pas ? (voir piazza)
+        claimableRoutes.forEach((route, claimable) ->
             claimable.set(
                     playerId == publicGameState.currentPlayerId() &&
-                    !claimableRoute(route, publicGameState) &&
+                    claimableRoute(route, publicGameState) &&
                     playerState.canClaimRoute(route)));
     }
 
     private boolean claimableRoute(Route route, PublicGameState publicGameState) { //TODO inserer la ligne directement au dessus ou garder la methode ???
-        return publicGameState.claimedRoutes()
-                .stream()//TODO Bonne facon avec un stream ?
-                .filter(r -> r.length() != route.length()) //TODO gain en cout avec le filter ?
-                .map(Route::stations)
-                .collect(Collectors.toList())
-                .contains(route.stations()); //TODO comme contains utilise equals, le test est fonctionnel ?
+        for (Route claimedRoute : publicGameState.claimedRoutes()) {
+            if(claimedRoute.stations().contains(route.station1()) && claimedRoute.stations().contains(route.station2()))
+                return false;
+        }
+        return true;
     }
 
     /**
@@ -153,7 +157,9 @@ public final class ObservableGameState {
      */
     private static Map<Route, ObjectProperty<PlayerId>> createRoutes() {
         Map<Route, ObjectProperty<PlayerId>> routes = new HashMap<>();
-        ChMap.routes().forEach(r -> routes.put(r, new SimpleObjectProperty<>()));
+        ChMap.routes().forEach(r -> {
+            routes.put(r, new SimpleObjectProperty<>());
+        });
 
         return routes;
     }
@@ -222,7 +228,7 @@ public final class ObservableGameState {
      * or null if the route hasn't been claimed, as ReadOnlyObjectProperty
      */
     public ReadOnlyObjectProperty<PlayerId> routes(Route route){
-        return routes.get(route);
+        return routesOwner.get(route);
     }
 
     /**

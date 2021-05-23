@@ -40,9 +40,9 @@ public final class GraphicalPlayer {
     private final ObservableGameState observableGameState;
     private final ObservableList<Text> gameMessages;
 
-    private final ObjectProperty<DrawTicketsHandler> drawTicketsHandler;
-    private final ObjectProperty<DrawCardHandler> drawCardHandler;
-    private final ObjectProperty<ClaimRouteHandler> claimRouteHandler;
+    private final ObjectProperty<DrawTicketsHandler> drawTicketsHandlerProperty;
+    private final ObjectProperty<DrawCardHandler> drawCardHandlerProperty;
+    private final ObjectProperty<ClaimRouteHandler> claimRouteHandlerProperty;
 
     private final Stage mainStage;
 
@@ -52,14 +52,14 @@ public final class GraphicalPlayer {
         observableGameState = new ObservableGameState(playerId);
         gameMessages = FXCollections.observableArrayList();
 
-        this.drawTicketsHandler = new SimpleObjectProperty<>();
-        this.drawCardHandler = new SimpleObjectProperty<>();
-        this.claimRouteHandler = new SimpleObjectProperty<>();
+        drawTicketsHandlerProperty = new SimpleObjectProperty<>();
+        drawCardHandlerProperty = new SimpleObjectProperty<>();
+        claimRouteHandlerProperty = new SimpleObjectProperty<>();
 
         Node mapView = MapViewCreator
-                .createMapView(observableGameState, claimRouteHandler, this::chooseClaimCards); //TODO demander comment ca marche
+                .createMapView(observableGameState, claimRouteHandlerProperty, this::chooseClaimCards); //TODO demander comment ca marche
         Node cardsView = DecksViewCreator
-                .createCardsView(observableGameState, drawTicketsHandler, drawCardHandler);
+                .createCardsView(observableGameState, drawTicketsHandlerProperty, drawCardHandlerProperty);
         Node handView = DecksViewCreator
                 .createHandView(observableGameState);
         Node infoView = InfoViewCreator.createInfoView(playerId, playerNames, observableGameState, gameMessages);
@@ -83,37 +83,58 @@ public final class GraphicalPlayer {
         if (gameMessages.size() == NUMBER_OF_DISPLAYED_MESSAGES){ //TODO bonne maniere de faire
             gameMessages.remove(0);
         }
-        gameMessages.add(new Text(message + "\n"));
+        gameMessages.add(new Text(message));
     }
 
     public void startTurn(DrawTicketsHandler drawTicketsHandler, DrawCardHandler drawCardHandler,
                           ClaimRouteHandler claimRouteHandler){
         assert isFxApplicationThread();
 
-//        System.out.println("startTurn");
-//        this.drawCardHandler.addListener((o, ov, nV)-> System.out.println(nV));
+//        drawCardHandlerProperty.set(observableGameState.canDrawCards() ? drawSlot -> {
+//            drawCardHandler.onDrawCard(drawSlot);
+//            clearHandlerProperties();
+//        } : null);
+//
+//        drawTicketsHandlerProperty.set(observableGameState.canDrawTickets() ? () -> {
+//            drawTicketsHandler.onDrawTickets();
+//            clearHandlerProperties();
+//        } : null);
+//
+//        claimRouteHandlerProperty.set((route, cards) -> {
+//            claimRouteHandler.onClaimRoute(route, cards);
+//            clearHandlerProperties();
+//        });
 
-        this.drawCardHandler.set(observableGameState.canDrawCards() ? drawSlot -> {
-            drawCardHandler.onDrawCard(drawSlot); //TODO comme ca ?
-            this.drawTicketsHandler.set(null);
-            this.claimRouteHandler.set(null);
-            this.drawCardHandler.set(null);
-        } : null);
+        if (observableGameState.canDrawTickets()) {
+            drawTicketsHandlerProperty.set(() -> {
+                drawTicketsHandler.onDrawTickets();
+                drawCardHandlerProperty.set(null);
+                claimRouteHandlerProperty.set(null);
+            });
+        } else
+            drawTicketsHandlerProperty.set(null);
 
-        this.drawTicketsHandler.set(observableGameState.canDrawTickets() ? () -> {
-            drawTicketsHandler.onDrawTickets();
-            this.drawCardHandler.set(null);
-            this.claimRouteHandler.set(null);
-            this.drawTicketsHandler.set(null);
-        } : null);
+        if (observableGameState.canDrawCards()) {
+            drawCardHandlerProperty.set(drawSlot -> {
+                drawCardHandler.onDrawCard(drawSlot);
+                drawTicketsHandlerProperty.set(null);
+                claimRouteHandlerProperty.set(null);
+            });
+        } else
+            drawTicketsHandlerProperty.set(null);
 
-        this.claimRouteHandler.set((route, cards) -> {
+        claimRouteHandlerProperty.set((route, cards) -> {
             claimRouteHandler.onClaimRoute(route, cards);
-            this.drawTicketsHandler.set(null);
-            this.drawCardHandler.set(null);
-            this.claimRouteHandler.set(null);
+            drawTicketsHandlerProperty.set(null);
+            drawCardHandlerProperty.set(null);
         });
 
+    }
+
+    private void clearHandlerProperties() {
+        drawTicketsHandlerProperty.set(null);
+        drawCardHandlerProperty.set(null);
+        claimRouteHandlerProperty.set(null);
     }
 
     public void chooseTickets(SortedBag<Ticket> tickets, ChooseTicketsHandler chooseTicketsHandler){
@@ -144,12 +165,9 @@ public final class GraphicalPlayer {
     public void drawCard(DrawCardHandler drawCardHandler){ //doit juste mettre à jour
         assert isFxApplicationThread();
 
-        this.drawCardHandler.set(drawSlot-> {
-            System.out.println("drawcard");
-            this.drawTicketsHandler.set(null);
-            this.claimRouteHandler.set(null);
-            this.drawCardHandler.set(null); //TODO aussi cette ligne ?
+        this.drawCardHandlerProperty.set(drawSlot-> {
             drawCardHandler.onDrawCard(drawSlot);
+            clearHandlerProperties();
         });
 
     }
@@ -157,32 +175,7 @@ public final class GraphicalPlayer {
     public void chooseClaimCards(List<SortedBag<Card>> initialClaimCards, ChooseCardsHandler chooseCardsHandler){
         assert isFxApplicationThread();
 
-        System.out.println("entre dans chooseClaimCards");
-
         createCardsStage(true, new Text(CHOOSE_CARDS), initialClaimCards, chooseCardsHandler);
-//        ListView<SortedBag<Card>> cardsView = new ListView<>(FXCollections.observableList(initialClaimCards));
-//        cardsView.setCellFactory(v -> new TextFieldListCell<>(new CardBagStringConverter()));
-//
-//        Button button = new Button("Choisir");
-//
-//        Stage choiceStage = new Stage(StageStyle.UTILITY);
-//        choiceStage.initOwner(mainStage);
-//        choiceStage.initModality(Modality.APPLICATION_MODAL);
-////        choiceStage.setOnCloseRequest(Event::consume);
-//
-//        //Rend la sélection multiple possible sur la liste
-//        cardsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//        //BIND
-//        VBox vBox = new VBox(new Text(CHOOSE_CARDS), cardsView, button);
-//
-////        Scene scene = vBox.getScene();
-//        Scene scene = new Scene(vBox);
-//        scene.getStylesheets().add("chooser.css");
-////        vBox.getStylesheets().add("chooser.css");
-//
-//
-//        choiceStage.setScene(scene);
-//        choiceStage.show();
 
     }
 
@@ -201,9 +194,9 @@ public final class GraphicalPlayer {
         choiceStage.initModality(Modality.APPLICATION_MODAL);
         choiceStage.setOnCloseRequest(Event::consume);
 
-        //Rend la sélection multiple possible sur la liste
+        //Enables multiple selection
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        //BIND
+
         VBox vBox = new VBox(new TextFlow(text), listView, button);
 
         Scene scene = new Scene(vBox);
@@ -234,57 +227,6 @@ public final class GraphicalPlayer {
         });
 
     }
-
-//    private void stageCreator(Text text,
-//                              boolean typeOfEntry,
-//                              SortedBag<Ticket> tickets,
-//                              List<SortedBag<Card>> sortedBagList,
-//                              ActionHandlers actionHandler){
-//
-//        Stage choiceStage = new Stage(StageStyle.UTILITY);
-//        choiceStage.initOwner(mainStage);
-//        choiceStage.initModality(Modality.APPLICATION_MODAL);
-//        choiceStage.setOnCloseRequest(Event::consume);
-//
-//        VBox vBox = new VBox();
-//
-//        Button button = new Button("Choisir");
-//
-//        if (typeOfEntry){
-//
-//            ListView<Ticket> ticketsView = new ListView<>(FXCollections.observableList(tickets.toList()));
-//            //Rend la sélection multiple possible sur la liste
-//            ticketsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//            //BIND
-//            button.disableProperty().bind(Bindings.lessThan(
-//                    Bindings.size(ticketsView.getSelectionModel().getSelectedItems()),
-//                    tickets.size() - Constants.DISCARDABLE_TICKETS_COUNT));
-//            vBox.getChildren().addAll(new TextFlow(text), ticketsView, button);
-//            button.setOnAction(e ->  {
-//                ((ChooseTicketsHandler)actionHandler).onChooseTickets(SortedBag.of(ticketsView.getSelectionModel().getSelectedItems()));
-//                choiceStage.hide();
-//            });
-//
-//        }else{
-//
-//            ListView<SortedBag<Card>> cardsView = new ListView<>(FXCollections.observableList(sortedBagList));
-//            cardsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//            cardsView.setCellFactory(v -> new TextFieldListCell<>(new CardBagStringConverter()));
-//            button.disableProperty().bind(Bindings.lessThan(Bindings.size(cardsView.getSelectionModel().getSelectedItems()), 1));
-//            button.setOnAction(e ->  {
-//                choiceStage.hide();
-//                ((ChooseCardsHandler)actionHandler).onChooseCards(SortedBag.of(cardsView.getSelectionModel().getSelectedItem()));
-//            });
-//
-//        }
-//
-//        Scene scene = vBox.getScene();
-//        scene.getStylesheets().add("chooser.css");
-//
-//        choiceStage.setScene(vBox.getScene());
-//        choiceStage.show();
-//
-//    }
 
     static final class CardBagStringConverter extends StringConverter<SortedBag<Card>> {
 
