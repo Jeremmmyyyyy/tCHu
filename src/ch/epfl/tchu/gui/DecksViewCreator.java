@@ -4,6 +4,8 @@ import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.Color;
 import ch.epfl.tchu.game.Constants;
 import ch.epfl.tchu.game.Ticket;
+import ch.epfl.tchu.gui.ActionHandlers;
+import ch.epfl.tchu.gui.ObservableGameState;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;

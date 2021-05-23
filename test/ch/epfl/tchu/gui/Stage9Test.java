@@ -1,12 +1,12 @@
 package ch.epfl.tchu.gui;
 
-import ch.epfl.tchu.PrintToTxt;
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
 import ch.epfl.tchu.gui.ActionHandlers.ChooseCardsHandler;
 import ch.epfl.tchu.gui.ActionHandlers.ClaimRouteHandler;
 import ch.epfl.tchu.gui.ActionHandlers.DrawCardHandler;
 import ch.epfl.tchu.gui.ActionHandlers.DrawTicketsHandler;
+import ch.epfl.tchu.gui.DecksViewCreator;
 import javafx.application.Application;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
