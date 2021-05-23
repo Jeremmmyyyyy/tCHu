@@ -105,29 +105,29 @@ public final class GraphicalPlayer {
             clearHandlerProperties();
         });
 
-        if (observableGameState.canDrawTickets()) {
-            drawTicketsHandlerProperty.set(() -> {
-                drawTicketsHandler.onDrawTickets();
-                drawCardHandlerProperty.set(null);
-                claimRouteHandlerProperty.set(null);
-            });
-        } else
-            drawTicketsHandlerProperty.set(null);
-
-        if (observableGameState.canDrawCards()) {
-            drawCardHandlerProperty.set(drawSlot -> {
-                drawCardHandler.onDrawCard(drawSlot);
-                drawTicketsHandlerProperty.set(null);
-                claimRouteHandlerProperty.set(null);
-            });
-        } else
-            drawTicketsHandlerProperty.set(null);
-
-        claimRouteHandlerProperty.set((route, cards) -> {
-            claimRouteHandler.onClaimRoute(route, cards);
-            drawTicketsHandlerProperty.set(null);
-            drawCardHandlerProperty.set(null);
-        });
+//        if (observableGameState.canDrawTickets()) {
+//            drawTicketsHandlerProperty.set(() -> {
+//                drawTicketsHandler.onDrawTickets();
+//                drawCardHandlerProperty.set(null);
+//                claimRouteHandlerProperty.set(null);
+//            });
+//        } else
+//            drawTicketsHandlerProperty.set(null);
+//
+//        if (observableGameState.canDrawCards()) {
+//            drawCardHandlerProperty.set(drawSlot -> {
+//                drawCardHandler.onDrawCard(drawSlot);
+//                drawTicketsHandlerProperty.set(null);
+//                claimRouteHandlerProperty.set(null);
+//            });
+//        } else
+//            drawTicketsHandlerProperty.set(null);
+//
+//        claimRouteHandlerProperty.set((route, cards) -> {
+//            claimRouteHandler.onClaimRoute(route, cards);
+//            drawTicketsHandlerProperty.set(null);
+//            drawCardHandlerProperty.set(null);
+//        });
 
     }
 

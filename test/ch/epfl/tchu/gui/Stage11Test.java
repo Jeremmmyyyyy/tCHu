@@ -19,11 +19,12 @@ public final class Stage11Test extends Application {
 
     //TODO SAUT DE LIGNE APRES "C'est a Kevin de jouer" ??
 
-    //TODO quand decide de ne pas choisir de cartes additionnelles peut encore jouer et produit une erreur
+    //TODO quand decide de ne pas choisir de cartes additionnelles peut encore jouer et produit une erreur et bloque l'interface
 
-    //TODO points avec les billets pas pris en compte au cours du jeu quand on remplit l'objectif d'un billet....
+    //TODO points affiches au cours de la partie : seulement les claim points des routes et non des billes deja remplis ?
 
     //TODO points casse quand on prend une route de taille 4 fait + 5 au lieu de + 4
+
 
 
     @Override
