@@ -20,10 +20,15 @@ public final class Stage11Test extends Application {
     //TODO SAUT DE LIGNE APRES "C'est a Kevin de jouer" ??
 
     //TODO quand decide de ne pas choisir de cartes additionnelles peut encore jouer et produit une erreur et bloque l'interface
+    //TODO c'est bon ne crash plus mais bloque le jeu
 
     //TODO points affiches au cours de la partie : seulement les claim points des routes et non des billes deja remplis ?
 
     //TODO points casse quand on prend une route de taille 4 fait + 5 au lieu de + 4
+
+    //TODO 2.2.4 etape Interface graphique : le jeu doit proposer une selection par defaut ??
+
+    //TODO on peut selectionner deux choix d'additional Cards pour initialClaimCards aussi : normal ??
 
 
 
