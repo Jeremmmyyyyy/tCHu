@@ -21,7 +21,8 @@ public final class Stage11Test extends Application {
 
     //TODO quand decide de ne pas choisir de cartes additionnelles peut encore jouer et produit une erreur et bloque l'interface
     //TODO c'est bon ne crash plus mais bloque le jeu
-    //reglé fallait rajouter un true dans le builder des chooseAdditionalCards du GraphicalPlayer mais ducoup always true ??
+    //reglé fallait rajouter un true dans le builder des chooseAdditionalCards du GraphicalPlayer mais ducoup true ???
+    //Non faut laisser le bouton choisir actif, le joueur peut choisir de ne pas jouer de cartes supplementaires meme s'il en a la possibilite
 
 
     //TODO normal que quand toutes les cartes soient prises, on ne puisse plus prendre de faceUpCards ???
