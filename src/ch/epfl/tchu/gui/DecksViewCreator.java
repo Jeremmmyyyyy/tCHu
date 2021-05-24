@@ -63,7 +63,7 @@ abstract class DecksViewCreator {
         Map<Card, StackPane> cardStack = new HashMap<>();
         for (Card card : Card.ALL) {
             StackPane s = stackPaneCreator(observableGameState.cardCountOnColor(card), true);
-            s.visibleProperty().bind(Bindings.greaterThan(observableGameState.cardCountOnColor(card), 0));
+            s.visibleProperty().bind(Bindings.greaterThan(observableGameState.cardCountOnColor(card), 0)); //TODO verif avec empty meilleur ?
             cardStack.put(card, s);
 
             observableGameState.cardCountOnColor(card).addListener((o, oV, nV)->{
@@ -94,7 +94,6 @@ abstract class DecksViewCreator {
         VBox vBox = new VBox();
         vBox.getStylesheets().addAll("decks.css", "colors.css");
         vBox.setId("card-pane");
-//        vBox.disableProperty().bind(drawCardHandler.isNull()); //TODO appliquer à chaque card / bouton
 
 
         Map<Integer, StackPane> cardStack = new HashMap<>();

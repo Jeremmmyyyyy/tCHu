@@ -37,6 +37,8 @@ public final class Stage11Test extends Application {
 
     //TODO on peut selectionner deux choix d'additional Cards pour initialClaimCards aussi : normal ??
 
+    //TODO egalité bonus aux deux ??
+
 
 
     @Override
