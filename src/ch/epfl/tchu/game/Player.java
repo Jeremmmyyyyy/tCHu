@@ -64,9 +64,9 @@ public interface Player {
     TurnKind nextTurn();
 
     /**
-     * Called if the player wants to draw additional billets
-     * @param options
-     * @return
+     * Called if the player wants to draw additional tickets
+     * @param options possible tickets to draw
+     * @return at less one of the possible tickets
      */
     SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options);
 

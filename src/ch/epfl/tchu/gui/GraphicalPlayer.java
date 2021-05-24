@@ -24,15 +24,20 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import static ch.epfl.tchu.game.Constants.*;
 import static ch.epfl.tchu.gui.StringsFr.*;
 import static javafx.application.Platform.isFxApplicationThread;
 
+/**
+ * GraphicalPlayer that creates the whole GUI for the players
+ * All the different possible actions are called on the javaFX thread
+ *
+ * @author Yann Ennassih (329978)
+ * @author Jérémy Barghorn (328403)
+ */
 public final class GraphicalPlayer {
 
     private static final int NUMBER_OF_DISPLAYED_MESSAGES = 5;
@@ -46,6 +51,11 @@ public final class GraphicalPlayer {
 
     private final Stage mainStage;
 
+    /**
+     * Creates the graphical part of the game composed by the 4 parts of the GUI and instantiate all the properties
+     * @param playerId of the player who owns the current GraphicalPlayer (so the window can be called according to the playerName)
+     * @param playerNames Map containing the PlayerId and their names
+     */
     public GraphicalPlayer(PlayerId playerId, Map<PlayerId, String> playerNames){
         assert isFxApplicationThread();
 
@@ -73,11 +83,20 @@ public final class GraphicalPlayer {
 
     }
 
+    /**
+     * Calls the method of the same name in ObservableGameState
+     * @param publicGameState that updates the old one
+     * @param playerState that updates the old one
+     */
     public void setState(PublicGameState publicGameState, PlayerState playerState){
         assert isFxApplicationThread();
         observableGameState.setState(publicGameState, playerState);
     }
 
+    /**
+     * Add the given message to the InfoView displays only the 5 last messages
+     * @param message new message to add
+     */
     public void receiveInfo(String message){
         assert isFxApplicationThread();
         if (gameMessages.size() == NUMBER_OF_DISPLAYED_MESSAGES){ //TODO bonne maniere de faire
@@ -86,6 +105,13 @@ public final class GraphicalPlayer {
         gameMessages.add(new Text(message));
     }
 
+    /**
+     * Is called at the beginning of a turn of a player so he can choose the TurnKind
+     * Different ActionHandlers are given in argument so that for each TurnKind the right Handler is called and complete the authorised actions
+     * @param drawTicketsHandler to handle what happens when the TurnKind DRAW_TICKETS is called
+     * @param drawCardHandler to handle what happens when the TurnKind DRAW_CARDS is called
+     * @param claimRouteHandler to handle what happens when the TurnKind CLAIM_ROUTE is called
+     */
     public void startTurn(DrawTicketsHandler drawTicketsHandler, DrawCardHandler drawCardHandler,
                           ClaimRouteHandler claimRouteHandler){
         assert isFxApplicationThread();
@@ -113,6 +139,11 @@ public final class GraphicalPlayer {
         claimRouteHandlerProperty.set(null);
     }
 
+    /**
+     * Takes a List of tickets and pop-ups a window so the player can choose the wished Tickets
+     * @param tickets SortedBag of tickets (5 at the beginning of the game and 3 otherwise)
+     * @param chooseTicketsHandler ActionHandler that handles which tickets are chosen
+     */
     public void chooseTickets(SortedBag<Ticket> tickets, ChooseTicketsHandler chooseTicketsHandler){
         assert isFxApplicationThread();
 
@@ -141,7 +172,11 @@ public final class GraphicalPlayer {
 
     }
 
-    public void drawCard(DrawCardHandler drawCardHandler){ //doit juste mettre à jour
+    /**
+     * Authorise the player to draw a card from the deck (button "cartes") or from the FaceUpCards
+     * @param drawCardHandler ActionHandler that handles which cards from which slot are chosen
+     */
+    public void drawCard(DrawCardHandler drawCardHandler){
         assert isFxApplicationThread();
 
         this.drawCardHandlerProperty.set(drawSlot-> {
@@ -151,6 +186,11 @@ public final class GraphicalPlayer {
 
     }
 
+    /**
+     * Pop-ups a window with the different card possibilities to take a route
+     * @param initialClaimCards list of the different possible cards that can take the route
+     * @param chooseCardsHandler ActionHandler that handles which Card possibility is used to take the route
+     */
     public void chooseClaimCards(List<SortedBag<Card>> initialClaimCards, ChooseCardsHandler chooseCardsHandler){
         assert isFxApplicationThread();
 
@@ -158,6 +198,11 @@ public final class GraphicalPlayer {
 
     }
 
+    /**
+     * Pop-ups a window with the different possibilities of additional cards to take a tunnel
+     * @param possibleAdditionalCards SortedBag of the different possibilities the player has to take the tunnel
+     * @param chooseCardsHandler ActionHandler that handles which AdditionalCards are used to take the tunnel
+     */
     public void chooseAdditionalCards(List<SortedBag<Card>> possibleAdditionalCards,
                                       ChooseCardsHandler chooseCardsHandler){
         assert isFxApplicationThread();
@@ -187,7 +232,7 @@ public final class GraphicalPlayer {
         return choiceStage;
     }
 
-    private void createCardsStage(boolean buttonCanBeDisabled, Text text, List<SortedBag<Card>> cards,
+    private void createCardsStage(boolean buttonCanBeDisabled, Text text, List<SortedBag<Card>> cards, //TODO normal ou pas ouf
                                   ChooseCardsHandler chooseCardsHandler) {
 
         ListView<SortedBag<Card>> cardsView = new ListView<>(FXCollections.observableList(cards));
@@ -210,8 +255,16 @@ public final class GraphicalPlayer {
 
     }
 
+    /**
+     * Nested Class that displays a convenient StringFormat for a SortedBag
+     */
     static final class CardBagStringConverter extends StringConverter<SortedBag<Card>> {
 
+        /**
+         * toString method for a sortedBag
+         * @param object SortedBag of Cards to display in String format
+         * @return String for the given SortedBag
+         */
         @Override
         public String toString(SortedBag<Card> object) {
             List<String> toStrings = new ArrayList<>();
@@ -225,6 +278,12 @@ public final class GraphicalPlayer {
             return String.join(AND_SEPARATOR, toStrings);
         }
 
+        /**
+         * fromString method that throw UnsupportedOperationException when called. The inverse operation of toString is not used in our case so we don't want to implement it
+         * @param string to convert into a SortedBag
+         * @return UnsupportedOperationException
+         * @throws UnsupportedOperationException
+         */
         @Override
         public SortedBag<Card> fromString(String string) {
             throw new UnsupportedOperationException();

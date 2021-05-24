@@ -17,11 +17,25 @@ import java.util.Map;
 
 import static ch.epfl.tchu.game.PlayerId.PLAYER_1;
 
+/**
+ * Abstract class that creates the left panel of the GUI containing all the information of the Game
+ *
+ * @author Yann Ennassih (329978)
+ * @author Jérémy Barghorn (328403)
+ */
 abstract class InfoViewCreator {
 
     private static final int CIRCLE_RADIUS = 5;
 
-    public static Node createInfoView(PlayerId playerId, Map<PlayerId, String> playerNames,
+    /**
+     * Create a Node that corresponds to the left panel of the game
+     * @param playerId of the current player
+     * @param playerNames that maps the PlayerId to the names
+     * @param observableGameState current observableGameState so the points and other informations can be updated
+     * @param gameMessages ObservableList containing the last 5 actions of the game
+     * @return a VBox corresponding to the left panel of the game
+     */
+    public static Node createInfoView(PlayerId playerId, Map<PlayerId, String> playerNames, //TODO euh wtf ??
                                       ObservableGameState observableGameState, ObservableList<Text> gameMessages) {
 
         VBox vBox = new VBox();
