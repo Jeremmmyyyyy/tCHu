@@ -21,10 +21,17 @@ public final class Stage11Test extends Application {
 
     //TODO quand decide de ne pas choisir de cartes additionnelles peut encore jouer et produit une erreur et bloque l'interface
     //TODO c'est bon ne crash plus mais bloque le jeu
+    //reglé fallait rajouter un true dans le builder des chooseAdditionalCards du GraphicalPlayer mais ducoup always true ??
+
+
+    //TODO normal que quand toutes les cartes soient prises, on ne puisse plus prendre de faceUpCards ???
+    //je pense que c'est normal mais quand meme petit doute
 
     //TODO points affiches au cours de la partie : seulement les claim points des routes et non des billes deja remplis ?
+    //c'est normal il compte que à la fin en meme temps que les bonus
 
     //TODO points casse quand on prend une route de taille 4 fait + 5 au lieu de + 4
+    //bizzare est censé faire plus 7 List.of(Integer.MIN_VALUE, 1, 2, 4, 7, 10, 15); moi j'ai juste tt le temps
 
     //TODO 2.2.4 etape Interface graphique : le jeu doit proposer une selection par defaut ??
 

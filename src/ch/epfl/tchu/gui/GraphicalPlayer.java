@@ -162,7 +162,7 @@ public final class GraphicalPlayer {
                                       ChooseCardsHandler chooseCardsHandler){
         assert isFxApplicationThread();
 
-        createCardsStage(false, new Text(CHOOSE_ADDITIONAL_CARDS), possibleAdditionalCards, chooseCardsHandler);
+        createCardsStage(true, new Text(CHOOSE_ADDITIONAL_CARDS), possibleAdditionalCards, chooseCardsHandler);
     }
 
 
