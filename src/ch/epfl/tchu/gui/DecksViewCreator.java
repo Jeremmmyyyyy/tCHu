@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -55,6 +56,34 @@ abstract class DecksViewCreator {
         ObservableList<Ticket> observableList = observableGameState.ownTickets();
         ListView<Ticket> listView = new ListView<>(observableList);
         listView.setId("tickets");
+
+//        listView.setCellFactory(param -> new ListCell<>(){
+//            @Override
+//            protected void updateItem(Ticket item, boolean empty) {
+//                super.updateItem(item, empty);
+//                        if (item == null || empty) {
+//                            setText(null);
+//
+////                            setStyle("-fx-control-inner-background: green"  + ";");
+//                        } else {
+//                            setText(item.toString());
+//
+//
+////                            for (int i = 0; i < listView.getItems().size(); i++) {
+////                                System.out.println(i);
+////                                if (i%3 ==0) {
+////                                    setStyle("-fx-control-inner-background: blue" +";");
+////                                    System.out.println("ok");
+////                                } else {
+////                                    setStyle("-fx-control-inner-background: red" +";");
+////                                }
+////                            }
+//                        }
+//
+//            }
+//        });
+
+
 
 
         hBoxMain.getChildren().addAll(listView, hBoxTickets);
