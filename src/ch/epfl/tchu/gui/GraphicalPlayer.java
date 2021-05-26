@@ -67,7 +67,7 @@ public final class GraphicalPlayer {
         claimRouteHandlerProperty = new SimpleObjectProperty<>();
 
         Node mapView = MapViewCreator
-                .createMapView(observableGameState, claimRouteHandlerProperty, this::chooseClaimCards); //TODO demander comment ca marche
+                .createMapView(observableGameState, claimRouteHandlerProperty, this::chooseClaimCards);
         Node cardsView = DecksViewCreator
                 .createCardsView(observableGameState, drawTicketsHandlerProperty, drawCardHandlerProperty);
         Node handView = DecksViewCreator
@@ -99,7 +99,7 @@ public final class GraphicalPlayer {
      */
     public void receiveInfo(String message){
         assert isFxApplicationThread();
-        if (gameMessages.size() == NUMBER_OF_DISPLAYED_MESSAGES){ //TODO bonne maniere de faire
+        if (gameMessages.size() == NUMBER_OF_DISPLAYED_MESSAGES){
             gameMessages.remove(0);
         }
         gameMessages.add(new Text(message));
@@ -232,7 +232,7 @@ public final class GraphicalPlayer {
         return choiceStage;
     }
 
-    private void createCardsStage(boolean buttonCanBeDisabled, Text text, List<SortedBag<Card>> cards, //TODO normal ou pas ouf
+    private void createCardsStage(boolean buttonCanBeDisabled, Text text, List<SortedBag<Card>> cards,
                                   ChooseCardsHandler chooseCardsHandler) {
 
         ListView<SortedBag<Card>> cardsView = new ListView<>(FXCollections.observableList(cards));

@@ -63,7 +63,7 @@ abstract class DecksViewCreator {
         Map<Card, StackPane> cardStack = new HashMap<>();
         for (Card card : Card.ALL) {
             StackPane s = stackPaneCreator(observableGameState.cardCountOnColor(card), true);
-            s.visibleProperty().bind(Bindings.greaterThan(observableGameState.cardCountOnColor(card), 0)); //TODO verif avec empty meilleur ?
+            s.visibleProperty().bind(Bindings.greaterThan(observableGameState.cardCountOnColor(card), 0)); //TODO verif avec empty meilleur ? (changer dans lautre si pas mieux avec empty)
             cardStack.put(card, s);
 
             observableGameState.cardCountOnColor(card).addListener((o, oV, nV)->{
