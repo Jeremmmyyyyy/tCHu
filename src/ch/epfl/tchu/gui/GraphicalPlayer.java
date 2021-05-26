@@ -249,8 +249,10 @@ public final class GraphicalPlayer {
         }
         button.setOnAction(e -> {
             choiceStage.hide();
+            SortedBag<Card> selectedCards = cardsView.getSelectionModel().getSelectedItem();
             if (cardsView.getSelectionModel().getSelectedItem() != null)
                 chooseCardsHandler.onChooseCards(SortedBag.of(cardsView.getSelectionModel().getSelectedItem()));
+            chooseCardsHandler.onChooseCards(selectedCards == null ? SortedBag.of() : SortedBag.of(selectedCards)); //TODO GERER ICI LE CHOISIR SANS CARTE NE PAS REMPLIR LA QUEUE OU LA REMPLIR AVEC NULL ?
         });
 
     }
@@ -258,7 +260,7 @@ public final class GraphicalPlayer {
     /**
      * Nested Class that displays a convenient StringFormat for a SortedBag
      */
-    static final class CardBagStringConverter extends StringConverter<SortedBag<Card>> {
+    private static final class CardBagStringConverter extends StringConverter<SortedBag<Card>> {
 
         /**
          * toString method for a sortedBag
