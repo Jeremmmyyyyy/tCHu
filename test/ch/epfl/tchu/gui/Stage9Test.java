@@ -44,7 +44,7 @@ public final class Stage9Test extends Application {
                 .createCardsView(gameState, drawTickets, drawCard);
         Node handView = DecksViewCreator
                 .createHandView(gameState);
-        Node infoView = InfoViewCreator.createInfoView(PLAYER_1,
+        Node infoView = InfoViewCreator.createInfoView(
                 Map.of(PLAYER_1, "Ada", PLAYER_2, "Charles"), gameState, FXCollections.observableArrayList(
                         new Text("Première information.\n"),
                         new Text("\nDeuxième information.\n")
