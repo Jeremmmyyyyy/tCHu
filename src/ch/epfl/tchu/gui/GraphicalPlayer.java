@@ -250,8 +250,8 @@ public final class GraphicalPlayer {
         button.setOnAction(e -> {
             choiceStage.hide();
             SortedBag<Card> selectedCards = cardsView.getSelectionModel().getSelectedItem();
-            if (cardsView.getSelectionModel().getSelectedItem() != null)
-                chooseCardsHandler.onChooseCards(SortedBag.of(cardsView.getSelectionModel().getSelectedItem()));
+//            if (cardsView.getSelectionModel().getSelectedItem() != null)
+//                chooseCardsHandler.onChooseCards(SortedBag.of(cardsView.getSelectionModel().getSelectedItem()));
             chooseCardsHandler.onChooseCards(selectedCards == null ? SortedBag.of() : SortedBag.of(selectedCards)); //TODO GERER ICI LE CHOISIR SANS CARTE NE PAS REMPLIR LA QUEUE OU LA REMPLIR AVEC NULL ?
         });
 
