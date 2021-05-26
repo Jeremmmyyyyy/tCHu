@@ -24,15 +24,11 @@ public final class Stage11Test extends Application {
     //reglé fallait rajouter un true dans le builder des chooseAdditionalCards du GraphicalPlayer mais ducoup true ???
     //Non faut laisser le bouton choisir actif, le joueur peut choisir de ne pas jouer de cartes supplementaires meme s'il en a la possibilite
 
-
     //TODO normal que quand toutes les cartes soient prises, on ne puisse plus prendre de faceUpCards ???
     //je pense que c'est normal mais quand meme petit doute
 
     //TODO points affiches au cours de la partie : seulement les claim points des routes et non des billes deja remplis ?
     //c'est normal il compte que à la fin en meme temps que les bonus
-
-    //TODO points casse quand on prend une route de taille 4 fait + 5 au lieu de + 4
-    //bizzare est censé faire plus 7 List.of(Integer.MIN_VALUE, 1, 2, 4, 7, 10, 15); moi j'ai juste tt le temps
 
     //TODO 2.2.4 etape Interface graphique : le jeu doit proposer une selection par defaut ??
 
