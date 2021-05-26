@@ -57,32 +57,6 @@ abstract class DecksViewCreator {
         ListView<Ticket> listView = new ListView<>(observableList);
         listView.setId("tickets");
 
-//        listView.setCellFactory(param -> new ListCell<>(){
-//            @Override
-//            protected void updateItem(Ticket item, boolean empty) {
-//                super.updateItem(item, empty);
-//                        if (item == null || empty) {
-//                            setText(null);
-//
-////                            setStyle("-fx-control-inner-background: green"  + ";");
-//                        } else {
-//                            setText(item.toString());
-//
-//
-////                            for (int i = 0; i < listView.getItems().size(); i++) {
-////                                System.out.println(i);
-////                                if (i%3 ==0) {
-////                                    setStyle("-fx-control-inner-background: blue" +";");
-////                                    System.out.println("ok");
-////                                } else {
-////                                    setStyle("-fx-control-inner-background: red" +";");
-////                                }
-////                            }
-//                        }
-//
-//            }
-//        });
-
 
 
 
