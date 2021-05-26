@@ -122,12 +122,17 @@ public final class Game {
                             List<SortedBag<Card>> possibleAdditionalCards = currentPlayerState.
                                     possibleAdditionalCards(additionalCards, initialClaimCards);
 
-                            if (!possibleAdditionalCards.isEmpty() && !currentPlayer.chooseAdditionalCards(currentPlayerState.
-                                    possibleAdditionalCards(additionalCards, initialClaimCards)).isEmpty()) { //TODO demander a lassistant
+                            SortedBag<Card> additionalChosenCards = possibleAdditionalCards.isEmpty() ? null :
+                                    currentPlayer.chooseAdditionalCards(currentPlayerState.
+                                    possibleAdditionalCards(additionalCards, initialClaimCards));
 
-                                SortedBag<Card> claimCards =
-                                        initialClaimCards.union(currentPlayer.chooseAdditionalCards(currentPlayerState.
-                                                possibleAdditionalCards(additionalCards, initialClaimCards)));
+//                            if (!possibleAdditionalCards.isEmpty()) { //TODO demander a lassistant
+                            if (additionalChosenCards != null && !additionalChosenCards.isEmpty()) {
+
+//                                SortedBag<Card> claimCards =
+//                                        initialClaimCards.union(currentPlayer.chooseAdditionalCards(currentPlayerState.
+//                                                possibleAdditionalCards(additionalCards, initialClaimCards)));
+                                SortedBag<Card> claimCards = initialClaimCards.union(additionalChosenCards);
                                 currentGameState = currentGameState.withClaimedRoute(
                                         claimedRoute, claimCards);
                                 sendInfoToBoth(currentInfo.claimedRoute(claimedRoute, claimCards), players);

@@ -233,9 +233,9 @@ public class PlayerStateTest {
         assertThrows(IllegalArgumentException.class, ()-> {
             playerState.possibleAdditionalCards(4,SortedBag.of(2, Card.BLUE, 1,Card.LOCOMOTIVE));
         });
-        assertThrows(IllegalArgumentException.class, ()-> {
-            playerState.possibleAdditionalCards(2,SortedBag.of(2, Card.BLUE, 1,Card.LOCOMOTIVE));
-        });
+//        assertThrows(IllegalArgumentException.class, ()-> {
+//            playerState.possibleAdditionalCards(2,SortedBag.of(2, Card.BLUE, 1,Card.LOCOMOTIVE));
+//        });
         assertThrows(IllegalArgumentException.class, ()-> {
             playerState.possibleAdditionalCards(2,SortedBag.of());
         });
