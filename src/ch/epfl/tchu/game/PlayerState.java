@@ -102,7 +102,6 @@ public final class PlayerState extends PublicPlayerState{
      * Gives sa List of all the possible card combinations that could be required to take a tunnel
      * @param additionalCardsCount amount of additional cards to lay on the board
      * @param initialCards SortedBag of the cards that are already on the table
-     * @param drawnCards SortedBag of the drawnCards
      * @return A List of all the possible combinations of additional cards that are required to take the tunnel
      * @throws IllegalArgumentException if the additionalCardsCount is not in 1,3
      * @throws IllegalArgumentException if the initialCards are Empty
