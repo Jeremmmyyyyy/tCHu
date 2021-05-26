@@ -35,7 +35,7 @@ abstract class InfoViewCreator {
      * @param gameMessages ObservableList containing the last 5 actions of the game
      * @return a VBox corresponding to the left panel of the game
      */
-    public static Node createInfoView(PlayerId playerId, Map<PlayerId, String> playerNames, //TODO euh wtf ??
+    public static Node createInfoView(Map<PlayerId, String> playerNames,
                                       ObservableGameState observableGameState, ObservableList<Text> gameMessages) {
 
         VBox vBox = new VBox();
@@ -46,8 +46,7 @@ abstract class InfoViewCreator {
 
         TextFlow messages = new TextFlow();
         messages.setId("game-info");
-        List<Text> messagesContent = new ArrayList<>(gameMessages); //TODO construire ainsi ?
-        messages.getChildren().addAll(messagesContent);
+        messages.getChildren().addAll(gameMessages);
         Bindings.bindContent(messages.getChildren(), gameMessages);
 
         for (PlayerId id : PlayerId.ALL) {

@@ -124,7 +124,7 @@ public final class ObservableGameState {
                     playerState.canClaimRoute(route)));
     }
 
-    private boolean claimableRoute(Route route, PublicGameState publicGameState) { //TODO inserer la ligne directement au dessus ou garder la methode ???
+    private boolean claimableRoute(Route route, PublicGameState publicGameState) {
         for (Route claimedRoute : publicGameState.claimedRoutes()) {
             if(claimedRoute.stations().contains(route.station1()) && claimedRoute.stations().contains(route.station2()))
                 return false;

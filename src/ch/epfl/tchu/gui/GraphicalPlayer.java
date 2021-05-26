@@ -72,7 +72,7 @@ public final class GraphicalPlayer {
                 .createCardsView(observableGameState, drawTicketsHandlerProperty, drawCardHandlerProperty);
         Node handView = DecksViewCreator
                 .createHandView(observableGameState);
-        Node infoView = InfoViewCreator.createInfoView(playerId, playerNames, observableGameState, gameMessages);
+        Node infoView = InfoViewCreator.createInfoView(playerNames, observableGameState, gameMessages);
 
         mainStage = new Stage();
         mainStage.setScene(new Scene(new BorderPane(mapView, null, cardsView, handView, infoView)));
@@ -250,9 +250,7 @@ public final class GraphicalPlayer {
         button.setOnAction(e -> {
             choiceStage.hide();
             SortedBag<Card> selectedCards = cardsView.getSelectionModel().getSelectedItem();
-//            if (cardsView.getSelectionModel().getSelectedItem() != null)
-//                chooseCardsHandler.onChooseCards(SortedBag.of(cardsView.getSelectionModel().getSelectedItem()));
-            chooseCardsHandler.onChooseCards(selectedCards == null ? SortedBag.of() : SortedBag.of(selectedCards)); //TODO GERER ICI LE CHOISIR SANS CARTE NE PAS REMPLIR LA QUEUE OU LA REMPLIR AVEC NULL ?
+            chooseCardsHandler.onChooseCards(selectedCards == null ? SortedBag.of() : SortedBag.of(selectedCards));
         });
 
     }
