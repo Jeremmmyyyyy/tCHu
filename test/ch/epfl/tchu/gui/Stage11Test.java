@@ -17,7 +17,7 @@ public final class Stage11Test extends Application {
     //TODO carte sans couleur dans un des deck des joueurs : du coup carte sans couleur permet de chopper n'importe quelle route PEUT ETRE REGLER MANQUAIT UN NEUTRAL DANS DECKVIEW
     //TODO COULEUR NOIRE : SE COMPORTE COMME UNE LOCOMOTIVE VOIR SCREEN BUGCOULEURNOIRE
 
-    //TODO SAUT DE LIGNE APRES "C'est a Kevin de jouer" ??
+
 
     //TODO quand decide de ne pas choisir de cartes additionnelles peut encore jouer et produit une erreur et bloque l'interface
     //TODO c'est bon ne crash plus mais bloque le jeu
