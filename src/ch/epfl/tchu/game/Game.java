@@ -126,12 +126,8 @@ public final class Game {
                                     currentPlayer.chooseAdditionalCards(currentPlayerState.
                                     possibleAdditionalCards(additionalCards, initialClaimCards));
 
-//                            if (!possibleAdditionalCards.isEmpty()) { //TODO demander a lassistant
                             if (additionalChosenCards != null && !additionalChosenCards.isEmpty()) {
 
-//                                SortedBag<Card> claimCards =
-//                                        initialClaimCards.union(currentPlayer.chooseAdditionalCards(currentPlayerState.
-//                                                possibleAdditionalCards(additionalCards, initialClaimCards)));
                                 SortedBag<Card> claimCards = initialClaimCards.union(additionalChosenCards);
                                 currentGameState = currentGameState.withClaimedRoute(
                                         claimedRoute, claimCards);
