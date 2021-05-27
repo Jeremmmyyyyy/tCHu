@@ -7,7 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static ch.epfl.tchu.game.Constants.*;
 
@@ -28,7 +27,7 @@ public final class ObservableGameState {
     private final List<ObjectProperty<Card>> faceUpCards;
     private final Map<Route, ObjectProperty<PlayerId>> routesOwner;
 
-    //Properties for both players
+    //Public properties for both players
     private final Map<PlayerId, IntegerProperty> ticketCounts;
     private final Map<PlayerId, IntegerProperty> cardCounts;
     private final Map<PlayerId, IntegerProperty> carCounts;
@@ -40,7 +39,7 @@ public final class ObservableGameState {
     private final Map<Route, BooleanProperty> claimableRoutes;
 
     /**
-     * Constructor : initializes all the properties of the class
+     * Constructor : initializes all the properties of the class and the player attached to this
      * @param playerId of the player attached to this
      */
     public ObservableGameState(PlayerId playerId) {
@@ -72,16 +71,19 @@ public final class ObservableGameState {
         this.publicGameState = publicGameState;
         this.playerState = playerState;
 
+        //Initializes the first set of properties
         ticketPercentage.set(publicGameState.ticketsCount() * 100 / ChMap.tickets().size());
         cardPercentage.set(publicGameState.cardState().deckSize() * 100 / TOTAL_CARDS_COUNT);
-        setFaceUpCards(publicGameState);
+        FACE_UP_CARD_SLOTS.forEach(slot -> faceUpCards.get(slot).set(publicGameState.cardState().faceUpCard(slot)));
         setRoutes(publicGameState);
 
+        //Initializes the second set of properties
         ticketCounts.forEach((id, ticketCount) -> ticketCount.set(publicGameState.playerState(id).ticketCount()));
         cardCounts.forEach((id, cardCount) -> cardCount.set(publicGameState.playerState(id).cardCount()));
         carCounts.forEach((id, carCount) -> carCount.set(publicGameState.playerState(id).carCount()));
         claimPoints.forEach((id, points) -> points.set(publicGameState.playerState(id).claimPoints()));
 
+        //Initializes the third set or properties
         ownTickets.setAll(playerState.tickets().toList());
         setClaimableRoutes(publicGameState, playerState);
         cardCountOnColor.forEach((card, count) -> count.set(playerState.cards().countOf(card)));
@@ -89,43 +91,40 @@ public final class ObservableGameState {
     }
 
     /**
-     * Updates the faceUpCards list's content
-     * @param publicGameState considered
-     */
-    private void setFaceUpCards(PublicGameState publicGameState) {
-        for (int slot : FACE_UP_CARD_SLOTS) {
-            Card newCard = publicGameState.cardState().faceUpCard(slot);
-            faceUpCards.get(slot).set(newCard);
-        }
-    }
-
-    /**
      * Updates the route map's content
      * @param publicGameState considered
      */
     private void setRoutes(PublicGameState publicGameState) {
-        PlayerId.ALL.forEach(id -> {
-            for (Route r : publicGameState.playerState(id).routes()) {
-                routesOwner.get(r).set(id);
-            }
-        });
+        PlayerId.ALL.forEach(id -> publicGameState.playerState(id).routes().forEach(
+                        route -> routesOwner.get(route).set(id)));
     }
 
     /**
      * Updates the claimableRoutes map's content
      * @param publicGameState considered
      * @param playerState considered
+     * Sets true for a given route iff :
+     * - the player is the current player
+     * - the route or its neighbour hasn't been claimed yet
+     * - the player can claim the route
      */
     private void setClaimableRoutes(PublicGameState publicGameState, PlayerState playerState) {
-        claimableRoutes.forEach((route, claimable) ->
-            claimable.set(
+        claimableRoutes.forEach((route, claimable) -> claimable.set(
                     playerId == publicGameState.currentPlayerId() &&
                     claimableRoute(route, publicGameState) &&
                     playerState.canClaimRoute(route)));
     }
 
+    /**
+     * Returns if a route is claimable for the player or not
+     * @param route to check
+     * @param publicGameState considered, provides the current claimed routes
+     * @return true if the route is available, false else
+     * (available iff the route or its neighbour hasn't been claimed yet)
+     */
     private boolean claimableRoute(Route route, PublicGameState publicGameState) {
         for (Route claimedRoute : publicGameState.claimedRoutes()) {
+            //Checks if the route or its neighbour has already been claimed
             if(claimedRoute.stations().contains(route.station1()) && claimedRoute.stations().contains(route.station2()))
                 return false;
         }
@@ -177,6 +176,7 @@ public final class ObservableGameState {
     private static Map<Card, IntegerProperty> createsCardCountOnColor() {
         Map<Card, IntegerProperty> cardCountOnColor = new EnumMap<>(Card.class);
         Card.ALL.forEach(c -> cardCountOnColor.put(c, new SimpleIntegerProperty()));
+
         return cardCountOnColor;
     }
 
@@ -289,7 +289,7 @@ public final class ObservableGameState {
     }
 
     /**
-     * Calls the canDrawTickets() of PublicGameState class
+     * Calls the canDrawTickets() method of PublicGameState class
      * @return true if a ticket can be drawn from the ticket-deck
      * (the size of the discard + deck must be greater than 5)
      */
@@ -298,7 +298,7 @@ public final class ObservableGameState {
     }
 
     /**
-     * Calls canDrawTickets() method of PublicGameState class
+     * Calls the canDrawCards() method of PublicGameState class
      * @return true if a card can be drawn from the card-deck
      */
     public boolean canDrawCards() {
