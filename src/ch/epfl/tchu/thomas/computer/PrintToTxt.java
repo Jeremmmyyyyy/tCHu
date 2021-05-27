@@ -1,4 +1,4 @@
-package ch.epfl.tchu;
+package ch.epfl.tchu.thomas.computer;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,7 +34,6 @@ public class PrintToTxt {
             pw.append(textToWrite);
             pw.close();
 
-//            System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
