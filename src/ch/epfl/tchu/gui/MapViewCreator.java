@@ -17,7 +17,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.List;
 
 /**
- * Abstract class that creates the view of the graphical map
+ * Abstract class that creates the view of the graphical map (package private)
  *
  * @author Yann Ennassih (329978)
  */
@@ -40,7 +40,6 @@ abstract class MapViewCreator {
     public static Node createMapView(ObservableGameState observableGameState,
                                      ObjectProperty<ClaimRouteHandler> claimRouteHandler,
                                      CardChooser cardChooser) {
-
         Pane mapView = createMapViewPane();
 
         for (Route r : ChMap.routes()) {
@@ -56,13 +55,13 @@ abstract class MapViewCreator {
             //Handles a mouse click event
             route.setOnMouseClicked(e -> {
                 List<SortedBag<Card>> possibleClaimCards = observableGameState.possibleClaimCards(r);
+
                 if (possibleClaimCards.size() == 1) {
                     claimRouteHandler.get().onClaimRoute(r, possibleClaimCards.get(0));
                 } else {
                     cardChooser.chooseCards(observableGameState.possibleClaimCards(r),
                             chosenCards -> claimRouteHandler.get().onClaimRoute(r, chosenCards));
-                }
-            });
+                }});
 
             //When a player claims or attempts to claim a route
             observableGameState.routes(r).addListener((o, oV, nV) -> route.getStyleClass().add(nV.name()));
@@ -83,9 +82,8 @@ abstract class MapViewCreator {
     private static Group createRouteGroup(Route r) {
         Group route = new Group();
         route.setId(r.id());
-        route.getStyleClass().addAll("route",
-                r.level().toString(),
-                r.color() != null ? r.color().toString() : NEUTRAL);
+        route.getStyleClass().addAll(
+                "route", r.level().toString(), r.color() != null ? r.color().toString() : NEUTRAL);
 
         return route;
     }

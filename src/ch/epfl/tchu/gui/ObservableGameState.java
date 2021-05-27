@@ -71,7 +71,7 @@ public final class ObservableGameState {
         this.publicGameState = publicGameState;
         this.playerState = playerState;
 
-        //Initializes the first set of properties
+        //Initializes the first set of properties //TODO DES CONSTANTES POUR 100 ??
         ticketPercentage.set(publicGameState.ticketsCount() * 100 / ChMap.tickets().size());
         cardPercentage.set(publicGameState.cardState().deckSize() * 100 / TOTAL_CARDS_COUNT);
         FACE_UP_CARD_SLOTS.forEach(slot -> faceUpCards.get(slot).set(publicGameState.cardState().faceUpCard(slot)));
