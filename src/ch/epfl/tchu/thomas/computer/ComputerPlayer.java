@@ -3,7 +3,6 @@ package ch.epfl.tchu.thomas.computer;
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +42,8 @@ public final class ComputerPlayer implements Player {
 
     public ArrayList<String> getAllInfosFromGameState(){
         ArrayList<String> infos = new ArrayList<>();
-        infos.addAll(player());
-        infos.addAll(ticketAmount());
+//        infos.addAll(player());
+//        infos.addAll(ticketAmount());
         infos.addAll(tickets());
         return infos;
     }
@@ -53,9 +52,9 @@ public final class ComputerPlayer implements Player {
         Preconditions.checkArgument(publicGameState != null);
         ArrayList<String> player = new ArrayList<>();
         if (publicGameState.currentPlayerId() == ownId) {
-            player.add("1.0,0.0");
+            player.add("1.0|0.0");
         } else {
-            player.add("0.0,1.0");
+            player.add("0.0|1.0");
         }
 
         return player;
@@ -74,13 +73,25 @@ public final class ComputerPlayer implements Player {
     public ArrayList<String> tickets(){
         ArrayList<String> tickets = new ArrayList<>();
         List<Ticket> allTickets = ChMap.tickets();
-        ownState.tickets().forEach(e -> {
-            for (int i = 0; i < allTickets.size(); i++) {
-                if (e.compareTo(allTickets.get(i)) == 0){
-                    tickets.add(Double.toString(i));
+        int count = 0;
+        System.out.println(ownState.tickets());
+        if (ownState.tickets().size() != 0){
+            for (Ticket ticket : allTickets) {
+                if (ticket.compareTo(ownState.tickets().get(count)) == 0){
+                    ++count;
+                    System.out.println("count : " + count + ownState.tickets().get(count));
+//                    tickets.add("1.0");
+                }else{
+//                    tickets.add("0.0");
                 }
             }
-        });
+        }
+
+//        for (int i = 0; i < allTickets.size(); i++) {
+//            System.out.printf("|%3d", i);
+//        }
+//        System.out.println();
+
         return tickets;
     }
 
@@ -109,7 +120,7 @@ public final class ComputerPlayer implements Player {
 
         ArrayList<String> oldInfos = getAllInfosFromGameState();
         if (oldInfos != getAllInfosFromGameState()){
-            System.out.println((String.join(",", getAllInfosFromGameState())));
+            System.out.println("|" + (String.join("|", getAllInfosFromGameState())));
             System.out.println();
         }
 
@@ -146,11 +157,11 @@ public final class ComputerPlayer implements Player {
         if (claimableRoutes.isEmpty()) {
 //                System.out.println("DRAW_CARDS ");
             if (!publicGameState.canDrawTickets()) {
-                PrintToTxt.writeToFile("DRAW_CARDS "+ "\n");
+//                PrintToTxt.writeToFile("DRAW_CARDS "+ "\n");
                 return TurnKind.DRAW_CARDS;
             }
             else {
-                PrintToTxt.writeToFile("DRAW_TICKETS "+ "\n");
+//                PrintToTxt.writeToFile("DRAW_TICKETS "+ "\n");
                 return TurnKind.DRAW_TICKETS;
             }
         } else {
@@ -161,15 +172,15 @@ public final class ComputerPlayer implements Player {
             routeToClaim = route;
             initialClaimCards = cards.get(0);
 
-            PrintToTxt.writeToFile("CLAIM_ROUTE = Route : " + route.id() + " | Level : "
-                    + route.level() + " | InitialClaimCards : " + initialClaimCards+ "\n");
-            PrintToTxt.writeToFile("Deck: " + publicGameState.cardState().deckSize()+
-                    "| Discard: " + publicGameState.cardState().discardsSize() +
-                    "| Cards: " + ownState.cards()+
-                    "| AvailableCars: " + publicGameState.playerState(ownId).carCount() +
-                    " | faceUpCards " + publicGameState.cardState().faceUpCards()+ "\n");
-            publicGameState.claimedRoutes().forEach((s)-> PrintToTxt.writeToFile(s.id() + "|"));
-            PrintToTxt.writeToFile("\n");
+//            PrintToTxt.writeToFile("CLAIM_ROUTE = Route : " + route.id() + " | Level : "
+//                    + route.level() + " | InitialClaimCards : " + initialClaimCards+ "\n");
+//            PrintToTxt.writeToFile("Deck: " + publicGameState.cardState().deckSize()+
+//                    "| Discard: " + publicGameState.cardState().discardsSize() +
+//                    "| Cards: " + ownState.cards()+
+//                    "| AvailableCars: " + publicGameState.playerState(ownId).carCount() +
+//                    " | faceUpCards " + publicGameState.cardState().faceUpCards()+ "\n");
+//            publicGameState.claimedRoutes().forEach((s)-> PrintToTxt.writeToFile(s.id() + "|"));
+//            PrintToTxt.writeToFile("\n");
 
 
             return TurnKind.CLAIM_ROUTE;
@@ -205,7 +216,7 @@ public final class ComputerPlayer implements Player {
     public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) {
         SortedBag<Card> chosenAdditionalCards = options.get(getRandomNumber(0, options.size() - 1));
 //            System.out.println("ChosenAdditionalCards : " + chosenAdditionalCards);
-        PrintToTxt.writeToFile("ChosenAdditionalCards : " + chosenAdditionalCards+ "\n");
+//        PrintToTxt.writeToFile("ChosenAdditionalCards : " + chosenAdditionalCards+ "\n");
         return chosenAdditionalCards;
     }
 
