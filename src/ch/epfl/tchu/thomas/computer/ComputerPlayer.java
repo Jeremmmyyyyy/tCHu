@@ -77,7 +77,7 @@ public final class ComputerPlayer implements Player {
         ownState.tickets().forEach(test::add);
 
         int count = 0;
-        System.out.println(ownState.tickets());
+//        System.out.println(ownState.tickets());
 
         if (ownState.tickets().size() != 0){
             for (Ticket ticket : allTickets) {
