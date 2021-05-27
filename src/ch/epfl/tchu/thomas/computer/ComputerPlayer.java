@@ -77,12 +77,14 @@ public final class ComputerPlayer implements Player {
         System.out.println(ownState.tickets());
         if (ownState.tickets().size() != 0){
             for (Ticket ticket : allTickets) {
-                if (ticket.compareTo(ownState.tickets().get(count)) == 0){
-                    ++count;
-                    System.out.println("count : " + count + ownState.tickets().get(count));
-//                    tickets.add("1.0");
+
+                if (ticket.compareTo(ownState.tickets().get(count)) == 0 && count < ownState.tickets().size()){
+                    System.out.println("count : " + count + " " + ownState.tickets().get(count));
+                    tickets.add("1.0");
+                    count += 1;
+
                 }else{
-//                    tickets.add("0.0");
+                    tickets.add("0.0");
                 }
             }
         }
