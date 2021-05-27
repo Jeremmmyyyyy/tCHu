@@ -73,6 +73,10 @@ public final class StringsFr {
     // Séparateurs textuels
     public static final String AND_SEPARATOR = " et ";
     public static final String EN_DASH_SEPARATOR = " – ";
+    public static final String SPACE_SEPARATOR = " ";
+    public final static String COMMA_SEPARATOR = ",";
+    public final static String SEMICOLON_SEPARATOR = ";";
+    public final static String COLON_SEPARATOR = ":";
 
     /**
      * Retourne une chaîne marquant le pluriel, ou la chaîne vide.

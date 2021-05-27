@@ -78,7 +78,7 @@ public interface Player {
 
     /**
      * Called if the player tries to take control of a route
-     * @return the route that the player try to control
+     * @return the route that the player tries to control
      */
     Route claimedRoute();
 
@@ -90,7 +90,8 @@ public interface Player {
 
     /**
      * Called if a player tries to take control of a tunnel and additional cards are required
-     * @param options list of the possible additional cards combinations (empty if the player can't control or don't want to control the route
+     * @param options list of the possible additional cards combinations
+     * (empty if the player can't control or doesn't want to control the route)
      * @return a SortedBag
      */
     SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options);

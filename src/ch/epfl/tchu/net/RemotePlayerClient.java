@@ -9,13 +9,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import static ch.epfl.tchu.gui.StringsFr.SPACE_SEPARATOR;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
-public class RemotePlayerClient {
+/**
+ * Represents a remote client for a given player
+ *
+ * @author Jérémy Barghorn (328403)
+ * @author Yann Ennassih (329978)
+ */
+public final class RemotePlayerClient {
 
-    private Player player;
-    private String name;
-    private int port;
+    private final Player player;
+    private final String name;
+    private final int port;
 
     public RemotePlayerClient(Player player, String name, int port) {
         this.player = player;
@@ -33,7 +40,7 @@ public class RemotePlayerClient {
 
             while ((readLine = r.readLine()) != null) {
 
-                String[] m = readLine.split(Pattern.quote(" "), -1);
+                String[] m = readLine.split(Pattern.quote(SPACE_SEPARATOR), -1);
                 MessageId messageId = MessageId.valueOf(m[0]);
                 String o = "";
 
@@ -86,8 +93,7 @@ public class RemotePlayerClient {
                         break;
                 }
                 if(o != null){
-                    w.write(o);
-                    w.write("\n");
+                    w.write(String.format("%s\n", o));
                     w.flush();
                 }
             }

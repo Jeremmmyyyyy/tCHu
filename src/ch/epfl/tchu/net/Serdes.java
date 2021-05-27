@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import static ch.epfl.tchu.gui.StringsFr.COMMA_SEPARATOR;
+import static ch.epfl.tchu.gui.StringsFr.SEMICOLON_SEPARATOR;
+import static ch.epfl.tchu.gui.StringsFr.COLON_SEPARATOR;
+
 /**
  * Non instantiable final class that contains all the possible Serdes for the Game
  *
@@ -17,9 +21,7 @@ import java.util.regex.Pattern;
  */
 public final class Serdes {
 
-    private final static String COMMA_SEPARATOR = ",";
-    private final static String SEMICOLON_SEPARATOR = ";";
-    private final static String COLON_SEPARATOR = ":";
+
     private final static int SPLIT_LIMIT = -1;
 
     //In order to make the class non instantiable
