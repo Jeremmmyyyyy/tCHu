@@ -14,7 +14,6 @@ import java.util.stream.Stream;
  * @author Jérémy Barghorn (328403)
  * @author Yann Ennassih (329978)
  */
-
 public interface Serde <T> {
 
     /**
