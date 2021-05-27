@@ -73,21 +73,44 @@ public final class ComputerPlayer implements Player {
     public ArrayList<String> tickets(){
         ArrayList<String> tickets = new ArrayList<>();
         List<Ticket> allTickets = ChMap.tickets();
+        ArrayList<Ticket> test = new ArrayList<>();
+        ownState.tickets().forEach(test::add);
+
         int count = 0;
         System.out.println(ownState.tickets());
+
         if (ownState.tickets().size() != 0){
             for (Ticket ticket : allTickets) {
-
-                if (ticket.compareTo(ownState.tickets().get(count)) == 0 && count < ownState.tickets().size()){
-                    System.out.println("count : " + count + " " + ownState.tickets().get(count));
+                if (ticket.compareTo(test.get(count)) == 0){
+                    System.out.println(test.get(count));
                     tickets.add("1.0");
-                    count += 1;
-
+                    ++count;
                 }else{
                     tickets.add("0.0");
                 }
             }
         }
+
+
+
+//        if (ownState.tickets().size() != 0){
+//            for (Ticket ownTicket : ownState.tickets()) {
+//                for (Ticket ticket : allTickets) {
+//                    if (ownTicket.compareTo(ticket) == 0){
+//                        tickets.add("1.0");
+//
+//                    }else{
+//                        tickets.add("0.0");
+//                    }
+//
+////                if (ticket.compareTo(ownState.tickets().get(count)) == 0){
+////                    count = count + 1;
+////
+////                }else{
+//////                    tickets.add("0.0");
+//                }
+//            }
+//        }
 
 //        for (int i = 0; i < allTickets.size(); i++) {
 //            System.out.printf("|%3d", i);
