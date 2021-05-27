@@ -1,6 +1,7 @@
 package ch.epfl.tchu.net;
 
 import ch.epfl.tchu.SortedBag;
+
 import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -8,28 +9,30 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Generic Interface used to create functions that Serialize/Deserialize objects into a String
+ * Generic Interface used to create functions that serialize/deserialize objects into a String
  *
  * @author Jérémy Barghorn (328403)
  * @author Yann Ennassih (329978)
  */
+
 public interface Serde <T> {
+
     /**
-     * Serialize an object in the form of a String
+     * Serializes an object in the form of a String
      * @param object to be serialized
      * @return the serialized String
      */
     String serialize(T object);
 
     /**
-     * Deserialize an object
+     * Deserializes a string
      * @param arg string to be deserialized
      * @return the deserialized object
      */
     T deserialize(String arg);
 
     /**
-     * Create a serializer/deserializer function
+     * Creates an instance of Serde with given serializing/deserializing functions
      * @param serializer the function used to serialize an object
      * @param deserializer the function used to deserialize the String
      * @param <T> type of the object to serialize
@@ -50,17 +53,17 @@ public interface Serde <T> {
     }
 
     /**
-     * Create a Serde of a list of given elements
-     * @param allValues List of the elements
+     * Creates a Serde of a list of given elements
+     * @param allValues List of all the elements
      * @param <T> type of the elements in the List
-     * @return a Serde for this List
+     * @return a Serde for this list
      */
     static <T> Serde<T> oneOf(List<T> allValues){
         return of(t -> String.valueOf(allValues.indexOf(t)), s -> allValues.get(Integer.parseInt(s)));
     }
 
     /**
-     * Create a Serde that is able to (de)serialize lists of values that are (de)serialized by the given serde
+     * Creates a Serde that is able to (de)serialize lists of values that are (de)serialized by the given serde
      * @param serde that serialize the list
      * @param separator that is put in between each element of the list
      * @param <T> type of the elements in the list
@@ -85,8 +88,9 @@ public interface Serde <T> {
         };
 
     }
+
     /**
-     * Create a Serde that is able to (de)serialize SortedBags of values that are (de)serialized by the given serde
+     * Creates a Serde that is able to (de)serialize SortedBags of values that are (de)serialized by the given serde
      * @param serde that serialize the SortedBag
      * @param separator that is put in between each element of the list
      * @param <T> type of the elements in the SortedBag
