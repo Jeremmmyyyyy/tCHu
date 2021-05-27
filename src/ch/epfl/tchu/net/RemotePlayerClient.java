@@ -24,80 +24,111 @@ public final class RemotePlayerClient {
     private final String name;
     private final int port;
 
+    /**
+     * Class constructor, initializes the Player instance attached to this
+     * @param player attached to the client
+     * @param name of the host
+     * @param port of the host
+     */
     public RemotePlayerClient(Player player, String name, int port) {
         this.player = player;
         this.name = name;
         this.port = port;
     }
 
+    /**
+     * Runs the connection between the remote client and the server
+     * For each player possible action, calls the corresponding method of the attribute player
+     * with the deserialized received arguments.
+     * And if the method has a return type, communicates its serialized return object.
+     */
     public void run() {
+
         try (
             Socket s = new Socket(name, port);
-            BufferedReader r = new BufferedReader(new InputStreamReader(s.getInputStream(), US_ASCII));
-            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(s.getOutputStream(),US_ASCII))) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream(), US_ASCII));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(s.getOutputStream(),US_ASCII))) {
 
             String readLine;
 
-            while ((readLine = r.readLine()) != null) {
+            while ((readLine = reader.readLine()) != null) {
 
-                String[] m = readLine.split(Pattern.quote(SPACE_SEPARATOR), -1);
-                MessageId messageId = MessageId.valueOf(m[0]);
-                String o = "";
+                //Splits the received serialized message into its different arguments
+                String[] splitMessage = readLine.split(Pattern.quote(SPACE_SEPARATOR), -1);
+                MessageId messageId = MessageId.valueOf(splitMessage[0]);
+                StringBuilder answer = new StringBuilder();
 
                 switch (messageId) {
 
                     case INIT_PLAYERS :
-                        List<String> l = Serdes.LIST_STRING_SERDE.deserialize(m[2]);
+                        //splitMessage[1] = ownId | splitMessage[2] = playerNames
+                        List<String> playerNames = Serdes.LIST_STRING_SERDE.deserialize(splitMessage[2]);
                         player.initPlayers(
-                                Serdes.PLAYER_ID_SERDE.deserialize(m[1]), Map.of(
-                                        PlayerId.PLAYER_1, l.get(0),
-                                        PlayerId.PLAYER_2, l.get(1)));
-                        o = null;
+                                Serdes.PLAYER_ID_SERDE.deserialize(splitMessage[1]),
+                                Map.of(
+                                        PlayerId.PLAYER_1, playerNames.get(0),
+                                        PlayerId.PLAYER_2, playerNames.get(1)));
                         break;
+
                     case RECEIVE_INFO :
-                        player.receiveInfo(Serdes.STRING_SERDE.deserialize(m[1]));
-                        o = null;
+                        //splitMessage[1] = info
+                        player.receiveInfo(Serdes.STRING_SERDE.deserialize(splitMessage[1]));
                         break;
+
                     case UPDATE_STATE :
+                        //splitMessage[1] = newState | splitMessage[2] = ownState
                         player.updateState(
-                                Serdes.PUBLIC_GAME_STATE_SERDE.deserialize(m[1]),
-                                Serdes.PLAYER_STATE_SERDE.deserialize(m[2]));
-                        o = null;
+                                Serdes.PUBLIC_GAME_STATE_SERDE.deserialize(splitMessage[1]),
+                                Serdes.PLAYER_STATE_SERDE.deserialize(splitMessage[2]));
                         break;
+
                     case SET_INITIAL_TICKETS :
-                        player.setInitialTicketChoice(Serdes.SORTED_BAG_TICKET_SERDE.deserialize(m[1]));
-                        o = null;
+                        //splitMessage[1] = tickets
+                        player.setInitialTicketChoice(Serdes.SORTED_BAG_TICKET_SERDE.deserialize(splitMessage[1]));
                         break;
+
                     case CHOOSE_INITIAL_TICKETS :
-                        o = Serdes.SORTED_BAG_TICKET_SERDE.serialize(player.chooseInitialTickets());
+                        answer.append(Serdes.SORTED_BAG_TICKET_SERDE.serialize(player.chooseInitialTickets()));
                         break;
+
                     case NEXT_TURN :
-                        o = Serdes.TURN_KIND_SERDE.serialize(player.nextTurn());
+                        answer.append(Serdes.TURN_KIND_SERDE.serialize(player.nextTurn()));
                         break;
+
                     case CHOOSE_TICKETS :
-                        o = Serdes.SORTED_BAG_TICKET_SERDE.serialize(
-                                player.chooseTickets(Serdes.SORTED_BAG_TICKET_SERDE.deserialize(m[1])));
+                        //splitMessage[1] = options
+                        answer.append(Serdes.SORTED_BAG_TICKET_SERDE.serialize(
+                                player.chooseTickets(Serdes.SORTED_BAG_TICKET_SERDE.deserialize(splitMessage[1]))));
                         break;
+
                     case DRAW_SLOT :
-                        o = Serdes.INTEGER_SERDE.serialize(player.drawSlot());
+                        answer.append(Serdes.INTEGER_SERDE.serialize(player.drawSlot()));
                         break;
+
                     case ROUTE :
-                        o = Serdes.ROUTE_SERDE.serialize(player.claimedRoute());
+                        answer.append(Serdes.ROUTE_SERDE.serialize(player.claimedRoute()));
                         break;
+
                     case CARDS:
-                        o = Serdes.SORTED_BAG_CARD_SERDE.serialize(player.initialClaimCards());
+                        answer.append(Serdes.SORTED_BAG_CARD_SERDE.serialize(player.initialClaimCards()));
                         break;
+
                     case CHOOSE_ADDITIONAL_CARDS:
-                        o = Serdes.SORTED_BAG_CARD_SERDE.serialize(
-                                player.chooseAdditionalCards(Serdes.LIST_SORTEDBAG_CARD_SERDE.deserialize(m[1])));
+                        //splitMessage[1] = options
+                        answer.append(Serdes.SORTED_BAG_CARD_SERDE.serialize(
+                                player.chooseAdditionalCards(Serdes.LIST_SORTEDBAG_CARD_SERDE.deserialize(splitMessage[1]))));
                         break;
+
+                    default:
+                        throw new IOException(); //TODO QUELLE EXCEPTION ????
                 }
-                if(o != null){
-                    w.write(String.format("%s\n", o));
-                    w.flush();
+
+                //If the player has to communicate, enters this loop
+                if(answer.length() != 0) {
+                    writer.write(String.format("%s\n", answer));
+                    writer.flush();
                 }
             }
-
 
         } catch (IOException e) {
             throw new UncheckedIOException(e);
