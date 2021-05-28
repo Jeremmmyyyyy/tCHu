@@ -28,7 +28,7 @@ import static ch.epfl.tchu.game.PlayerId.PLAYER_2;
 public final class ServerMain extends Application  {
 
     //By default, the program execution arguments are set to : Ada Charles
-    private final Map<PlayerId, String> playerNames = Map.of(PLAYER_1, "Ada", PLAYER_2, "Charles");
+    private static Map<PlayerId, String> playerNames = Map.of(PLAYER_1, "Ada", PLAYER_2, "Charles");
 
     /**
      * Main class that launches a game server, especially the start(...) method
@@ -46,9 +46,9 @@ public final class ServerMain extends Application  {
         //Gets the program execution arguments
         List<String> parameters = getParameters().getRaw();
         if (!parameters.isEmpty()){
-            playerNames.put(PLAYER_1, parameters.get(0));
-            playerNames.put(PLAYER_2, parameters.get(1));
+            playerNames = Map.of(PLAYER_1, parameters.get(0), PLAYER_2, parameters.get(1));
         }
+        System.out.println("Server Started");
 
         try {
             ServerSocket serverSocket = new ServerSocket(5108); //TODO une constante pour le port vu utilise aussi dans ClientMain ?

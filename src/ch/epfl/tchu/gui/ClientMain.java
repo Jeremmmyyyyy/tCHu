@@ -38,6 +38,7 @@ public final class ClientMain extends Application {
             hostName = parameters.get(0);
             port = Integer.parseInt(parameters.get(1));
         }
+        System.out.println("Client Started");
 
         //Creates the remote client
         GraphicalPlayerAdapter graphicalPlayer = new GraphicalPlayerAdapter();
