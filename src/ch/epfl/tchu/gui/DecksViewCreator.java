@@ -39,13 +39,12 @@ final class DecksViewCreator {
     private final static int BACK_RECTANGLE_WIDTH = 50;
     private final static int BACK_RECTANGLE_HEIGHT = 5;
     private final static int GAUGE_WIDTH = 50;
-    public final static int PERCENT = 100; //TODO public constant defined here used else where
 
     private final static int DISPLAY_LOWER_BOUND = 1;
 
     //In order to make the class non instantiable
     private DecksViewCreator() {
-        throw new UnsupportedOperationException();};
+        throw new UnsupportedOperationException();}
 
     /**
      * Creates a HandView (bottom part of the GUI) given an observableGameState
@@ -74,7 +73,7 @@ final class DecksViewCreator {
             observableGameState.cardCountOnColor(card).addListener((o, oV, nV)->{
                 if(nV.intValue() > oV.intValue()){
                     cardPane.getStyleClass().add(getColorClass(card));
-                }else{ //TODO jcomprends pas le add et le remove
+                }else{
                     cardPane.getStyleClass().remove(getColorClass(card));
                 }
             });
@@ -157,9 +156,9 @@ final class DecksViewCreator {
         Rectangle backgroundRectangle = new Rectangle(BACK_RECTANGLE_WIDTH, BACK_RECTANGLE_HEIGHT);
         backgroundRectangle.getStyleClass().add("background");
 
-        Rectangle foregroundRectangle = new Rectangle(property.multiply(GAUGE_WIDTH).divide(PERCENT).get(), BACK_RECTANGLE_HEIGHT);
+        Rectangle foregroundRectangle = new Rectangle(property.multiply(GAUGE_WIDTH).divide(100).get(), BACK_RECTANGLE_HEIGHT);
         foregroundRectangle.getStyleClass().add("foreground");
-        foregroundRectangle.widthProperty().bind(property.multiply(GAUGE_WIDTH).divide(PERCENT));
+        foregroundRectangle.widthProperty().bind(property.multiply(GAUGE_WIDTH).divide(100));
 
         Button button = new Button(buttonName);
         button.getStyleClass().add("gauged");
