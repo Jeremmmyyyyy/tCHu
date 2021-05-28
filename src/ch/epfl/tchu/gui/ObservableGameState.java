@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import java.util.*;
 
 import static ch.epfl.tchu.game.Constants.*;
+import static ch.epfl.tchu.gui.DecksViewCreator.PERCENT;
 
 /**
  * Observes an entire GameState
@@ -71,9 +72,9 @@ public final class ObservableGameState {
         this.publicGameState = publicGameState;
         this.playerState = playerState;
 
-        //Initializes the first set of properties //TODO DES CONSTANTES POUR 100 ??
-        ticketPercentage.set(publicGameState.ticketsCount() * 100 / ChMap.tickets().size());
-        cardPercentage.set(publicGameState.cardState().deckSize() * 100 / TOTAL_CARDS_COUNT);
+        //Initializes the first set of properties
+        ticketPercentage.set(publicGameState.ticketsCount() * PERCENT / ChMap.tickets().size());
+        cardPercentage.set(publicGameState.cardState().deckSize() * PERCENT / TOTAL_CARDS_COUNT);
         FACE_UP_CARD_SLOTS.forEach(slot -> faceUpCards.get(slot).set(publicGameState.cardState().faceUpCard(slot)));
         setRoutes(publicGameState);
 

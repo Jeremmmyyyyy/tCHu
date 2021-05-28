@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
+import static ch.epfl.tchu.gui.ServerMain.PORT;
+
 /**
  * Game client supposed to be launched by one of the players
  * Can take program execution arguments
@@ -17,7 +19,7 @@ public final class ClientMain extends Application {
 
     //By default, program execution arguments are set to : localhost 5108
     private String hostName = "localhost";
-    private int port = 5108;
+    private int port = PORT;
 
     /**
      * Main class that launches a game client, especially the start(...) method

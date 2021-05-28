@@ -21,11 +21,11 @@ import static ch.epfl.tchu.gui.StringsFr.COLON_SEPARATOR;
  */
 public final class Serdes {
 
-
-    private final static int SPLIT_LIMIT = -1;
+    public final static int SPLIT_LIMIT = -1;
 
     //In order to make the class non instantiable
-    private Serdes(){}
+    private Serdes(){
+        throw new UnsupportedOperationException();}
 
     /**
      * Serde for the Integers
@@ -96,6 +96,7 @@ public final class Serdes {
 
             //Deserializing function
             string -> {
+                    //split[0] = faceUpCards, split[1] = deckSize, split[1] = discardSize
                     String[] split = string.split(Pattern.quote(SEMICOLON_SEPARATOR), SPLIT_LIMIT);
                     return new PublicCardState(
                             LIST_CARD_SERDE.deserialize(split[0]),
@@ -116,6 +117,7 @@ public final class Serdes {
 
             //Deserializing function
             string -> {
+                    //split[0] = ticketCount, split[1] = cardCount, split[2] = routes
                     String[] split = string.split(Pattern.quote(SEMICOLON_SEPARATOR), SPLIT_LIMIT);
                     return new PublicPlayerState(
                             INTEGER_SERDE.deserialize(split[0]),
@@ -136,6 +138,7 @@ public final class Serdes {
 
             //Deserializing function
             string -> {
+                    //split[0] = tickets, split[1] = cards, split[2] = routes
                     String[] split = string.split(Pattern.quote(SEMICOLON_SEPARATOR), SPLIT_LIMIT);
                     return new PlayerState(
                             SORTED_BAG_TICKET_SERDE.deserialize(split[0]),
@@ -159,6 +162,8 @@ public final class Serdes {
 
             //Deserializing function
             string -> {
+                    //split[0] = ticketsCount, split[1] = cardState, split[2] = currentPlayerId
+                    //split[3] = first publicPlayerState, split[4] = second publicPlayerState, split[5] = lastPlayer
                     String[] split = string.split(Pattern.quote(COLON_SEPARATOR), SPLIT_LIMIT);
                     return new PublicGameState(
                             INTEGER_SERDE.deserialize(split[0]),

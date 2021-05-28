@@ -17,7 +17,7 @@ import java.util.Map;
  * @author Jérémy Barghorn (328403)
  * @author Yann Ennassih (329978)
  */
-public class RemotePlayerProxy implements Player {
+public final class RemotePlayerProxy implements Player {
 
     private final BufferedReader READER;
     private final BufferedWriter WRITER;
@@ -27,7 +27,7 @@ public class RemotePlayerProxy implements Player {
      * @param socket used to communicate with the client through the network
      * @throws IOException when the socket isn't correctly connected
      */
-    public RemotePlayerProxy(Socket socket) throws IOException { //TODO throws ou try catch pour renvoyer une UncheckedException ???
+    public RemotePlayerProxy(Socket socket) throws IOException {
         this.READER = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.US_ASCII));
         this.WRITER = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.US_ASCII));
     }

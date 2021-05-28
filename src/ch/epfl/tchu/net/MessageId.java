@@ -1,10 +1,12 @@
 package ch.epfl.tchu.net;
+
 /**
  * Enum of all the types of messages
  *
  * @author Jérémy Barghorn (328403)
  */
 public enum MessageId {
+
     INIT_PLAYERS,
     RECEIVE_INFO,
     UPDATE_STATE,
@@ -16,4 +18,5 @@ public enum MessageId {
     ROUTE,
     CARDS,
     CHOOSE_ADDITIONAL_CARDS
+
 }

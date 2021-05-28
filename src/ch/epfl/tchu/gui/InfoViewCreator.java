@@ -22,9 +22,14 @@ import static ch.epfl.tchu.game.PlayerId.PLAYER_2;
  * @author Yann Ennassih (329978)
  * @author Jérémy Barghorn (328403)
  */
-abstract class InfoViewCreator { //TODO abstract suffit pour non instanciable ou mettre des constructeurs prives vide ?
+final class InfoViewCreator {
 
     private static final int CIRCLE_RADIUS = 5;
+
+    //In order to make the class non instantiable
+    private InfoViewCreator() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Creates a Node that corresponds to the left panel of the game

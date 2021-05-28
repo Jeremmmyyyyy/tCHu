@@ -30,7 +30,7 @@ import static ch.epfl.tchu.gui.StringsFr.TICKETS;
  *
  * @author Jérémy Barghorn (328403)
  */
-abstract class DecksViewCreator { //TODO non instanciable on est d'accord que le abstract suffit ???
+final class DecksViewCreator {
 
     private final static int RECTANGLE_WIDTH_OUT = 60;
     private final static int RECTANGLE_WIDTH_IN = 40;
@@ -38,8 +38,14 @@ abstract class DecksViewCreator { //TODO non instanciable on est d'accord que le
     private final static int RECTANGLE_HEIGHT_IN = 70;
     private final static int BACK_RECTANGLE_WIDTH = 50;
     private final static int BACK_RECTANGLE_HEIGHT = 5;
+    private final static int GAUGE_WIDTH = 50;
+    public final static int PERCENT = 100; //TODO public constant defined here used else where
 
     private final static int DISPLAY_LOWER_BOUND = 1;
+
+    //In order to make the class non instantiable
+    private DecksViewCreator() {
+        throw new UnsupportedOperationException();};
 
     /**
      * Creates a HandView (bottom part of the GUI) given an observableGameState
@@ -60,7 +66,7 @@ abstract class DecksViewCreator { //TODO non instanciable on est d'accord que le
 
         //Creates the graphical player hand cards
         Map<Card, StackPane> cardStack = new HashMap<>();
-        for (Card card : Card.ALL) { //TODO bonne facon avec une map ???
+        for (Card card : Card.ALL) {
             StackPane cardPane = stackPaneCreator(observableGameState.cardCountOnColor(card));
             cardPane.visibleProperty().bind(Bindings.greaterThan(observableGameState.cardCountOnColor(card), 0));
             cardStack.put(card, cardPane);
@@ -92,9 +98,8 @@ abstract class DecksViewCreator { //TODO non instanciable on est d'accord que le
         vBox.getStylesheets().addAll("decks.css", "colors.css");
         vBox.setId("card-pane");
 
-        Map<Integer, StackPane> cardStack = new HashMap<>(); //TODO Bonne facon avec une map ?
-
         //Creates the graphical faceUpCards
+        Map<Integer, StackPane> cardStack = new HashMap<>();
         for (int i = 0; i < Constants.FACE_UP_CARDS_COUNT; i++) {
 
             //Argument passed is always equal to 1 in case of a faceUpCard because its counter is not displayed
@@ -109,7 +114,7 @@ abstract class DecksViewCreator { //TODO non instanciable on est d'accord que le
                 faceUpCardPane.getStyleClass().add(getColorClass(nV));
             });
 
-            int slot = i; //TODO COMME CA AVEC UNE VARIABLE EFFECTIVELY FINAL POUR LA LAMBDA OU PREFERER LIGNE 125 ??
+            int slot = i; //gets an effectively final index for the lambda below
             faceUpCardPane.setOnMouseClicked(e -> drawCardHandler.get().onDrawCard(slot));
             faceUpCardPane.disableProperty().bind(drawCardHandler.isNull());
         }
@@ -123,10 +128,6 @@ abstract class DecksViewCreator { //TODO non instanciable on est d'accord que le
         Button ticketsButton = createButton(TICKETS, observableGameState.ticketPercentage());
         ticketsButton.setOnAction(e -> drawTicketHandler.get().onDrawTickets());
         ticketsButton.disableProperty().bind(drawTicketHandler.isNull());
-
-//        for (Integer key : cardStack.keySet()) {
-//            cardStack.get(key).setOnMouseClicked(e -> drawCardHandler.get().onDrawCard(key));
-//        }
 
         //Respects the expected order
         vBox.getChildren().add(ticketsButton);
@@ -154,11 +155,11 @@ abstract class DecksViewCreator { //TODO non instanciable on est d'accord que le
     private static Button createButton(String buttonName, ReadOnlyIntegerProperty property){
 
         Rectangle backgroundRectangle = new Rectangle(BACK_RECTANGLE_WIDTH, BACK_RECTANGLE_HEIGHT);
-        backgroundRectangle.getStyleClass().add("background"); //TODO need constant pour 50 et 100 ??
+        backgroundRectangle.getStyleClass().add("background");
 
-        Rectangle foregroundRectangle = new Rectangle(property.multiply(50).divide(100).get(), BACK_RECTANGLE_HEIGHT);
+        Rectangle foregroundRectangle = new Rectangle(property.multiply(GAUGE_WIDTH).divide(PERCENT).get(), BACK_RECTANGLE_HEIGHT);
         foregroundRectangle.getStyleClass().add("foreground");
-        foregroundRectangle.widthProperty().bind(property.multiply(50).divide(100));
+        foregroundRectangle.widthProperty().bind(property.multiply(GAUGE_WIDTH).divide(PERCENT));
 
         Button button = new Button(buttonName);
         button.getStyleClass().add("gauged");

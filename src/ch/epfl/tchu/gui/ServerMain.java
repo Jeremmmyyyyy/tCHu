@@ -30,6 +30,8 @@ public final class ServerMain extends Application  {
     //By default, the program execution arguments are set to : Ada Charles
     private static Map<PlayerId, String> playerNames = Map.of(PLAYER_1, "Ada", PLAYER_2, "Charles");
 
+    public static final int PORT = 5108;
+
     /**
      * Main class that launches a game server, especially the start(...) method
      * @param args PlayerId of the first and second player
@@ -51,7 +53,7 @@ public final class ServerMain extends Application  {
         System.out.println("Server Started");
 
         try {
-            ServerSocket serverSocket = new ServerSocket(5108); //TODO une constante pour le port vu utilise aussi dans ClientMain ?
+            ServerSocket serverSocket = new ServerSocket(PORT);
             //Waits for an incoming connection
             Socket socket = serverSocket.accept();
 

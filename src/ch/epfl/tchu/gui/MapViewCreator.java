@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author Yann Ennassih (329978)
  */
-abstract class MapViewCreator {
+final class MapViewCreator {
 
     private static final int RECTANGLE_WIDTH = 36;
     private static final int RECTANGLE_HEIGHT = 12;
@@ -29,6 +29,10 @@ abstract class MapViewCreator {
     private static final int CIRCLE_OFFSET = 6;
 
     public static final String NEUTRAL = "NEUTRAL";
+
+    //In order to make the class non instantiable
+    private MapViewCreator(){
+        throw new UnsupportedOperationException();}
 
     /**
      * Creates the view of the map

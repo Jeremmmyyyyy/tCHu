@@ -28,15 +28,17 @@ public final class GraphicalPlayerAdapter implements Player {
     private final BlockingQueue<Route> routeQueue;
     private final BlockingQueue<SortedBag<Card>> cardsQueue;
 
+    private final static int BLOCKING_CAPACITY = 1;
+
     /**
      * Instantiates a GraphicalPlayerAdapter with different ArrayBlockingQueues of size 1
      */
     public GraphicalPlayerAdapter (){
-        ticketsQueue = new ArrayBlockingQueue<>(1); //TODO constante pour les 1 ???
-        turnQueue = new ArrayBlockingQueue<>(1);
-        slotQueue = new ArrayBlockingQueue<>(1);
-        routeQueue = new ArrayBlockingQueue<>(1);
-        cardsQueue = new ArrayBlockingQueue<>(1);
+        ticketsQueue = new ArrayBlockingQueue<>(BLOCKING_CAPACITY);
+        turnQueue = new ArrayBlockingQueue<>(BLOCKING_CAPACITY);
+        slotQueue = new ArrayBlockingQueue<>(BLOCKING_CAPACITY);
+        routeQueue = new ArrayBlockingQueue<>(BLOCKING_CAPACITY);
+        cardsQueue = new ArrayBlockingQueue<>(BLOCKING_CAPACITY);
     }
 
     /**

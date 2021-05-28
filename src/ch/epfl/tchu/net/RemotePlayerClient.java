@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import static ch.epfl.tchu.gui.StringsFr.SPACE_SEPARATOR;
+import static ch.epfl.tchu.net.Serdes.SPLIT_LIMIT;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 /**
@@ -54,7 +55,7 @@ public final class RemotePlayerClient {
             while ((readLine = reader.readLine()) != null) {
 
                 //Splits the received serialized message into its different arguments
-                String[] splitMessage = readLine.split(Pattern.quote(SPACE_SEPARATOR), -1);
+                String[] splitMessage = readLine.split(Pattern.quote(SPACE_SEPARATOR), SPLIT_LIMIT);
                 MessageId messageId = MessageId.valueOf(splitMessage[0]);
                 StringBuilder answer = new StringBuilder();
 
@@ -120,7 +121,7 @@ public final class RemotePlayerClient {
                         break;
 
                     default:
-                        throw new IOException(); //TODO QUELLE EXCEPTION ????
+                        throw new Error();
                 }
 
                 //If the player has to communicate, enters this loop
