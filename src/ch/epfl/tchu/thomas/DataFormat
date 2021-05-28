@@ -1,2 +1,9 @@
-Computer BilletsNumber Billets CartesNumber Cartes Wagons Points FaceUpCards
-Player BilletsNumber Billets CartesNumber Cartes Wagons Points FaceUpCards
+0-1         :   0.0|1.0                         : le 1.0 correspondant au joueur actuel (Computer|Player)
+2-3         :   3.0|4.0                         : nombre de tickets (Computer|player)
+4-49        :   0.0|1.0|...|0.0|1.0             : index des tickets 1.0 si possédé par le Computer
+50-51       :   15.0|3.0                        : nombre de cartes possédées par les joueurs (Computer|Player)
+52-60       :   0.0|1.0|3.0|...                 : index des cartes de Computer et leur multiplicité
+61-148      :   0.0|2.0|1.0|...                 : index des routes 1.0 si pris par Computer 2.0 si pris par le player
+148-150     :   40.0|39.0                       : nombre de wagons (Computer|Player)
+151-153     :   10.0|3.0|-37.0                  : nombre de points de chaque joueur + final points provisoires du Computer
+154-163     :   0.0|2.0|...|97.0                : index des cartes et multiplicité | decksize

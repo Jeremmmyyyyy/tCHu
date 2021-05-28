@@ -8,21 +8,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public final class ComputerPlayer implements Player {
+public class ComputerPlayer implements Player {
 
     public int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
-    private String tab[];
     private static final int TURN_LIMIT = 1000;
 
     private final Random rng;
     // Toutes les routes de la carte
-    private final List<Route> allRoutes;
+    private final List<Route> allRoutes = ChMap.routes();
 
     private int turnCounter;
     private PlayerState ownState;
     private PublicGameState publicGameState;
+    private long randomSeed;
 
     // Lorsque nextTurn retourne CLAIM_ROUTE
     private Route routeToClaim;
@@ -30,94 +30,123 @@ public final class ComputerPlayer implements Player {
     private Map<PlayerId, String> playerNames;
     private PlayerId ownId;
     private SortedBag<Ticket> tickets;
-    private int numberOfInfoReceived = 0;
-    private boolean hasDrawnTickets = false;
 
-    public ComputerPlayer(long randomSeed, List<Route> allRoutes) {
+    //infoList
+    private final ArrayList<String> infos = new ArrayList<>();
+
+    public ComputerPlayer(Long randomSeed) {
+        this.randomSeed = randomSeed;
         System.out.println("Computer Started");
         this.rng = new Random(randomSeed);
-        this.allRoutes = List.copyOf(allRoutes);
         this.turnCounter = 0;
     }
 
-    public ArrayList<String> getAllInfosFromGameState(){
-        ArrayList<String> infos = new ArrayList<>();
-//        infos.addAll(player());
-//        infos.addAll(ticketAmount());
-        infos.addAll(tickets());
-        return infos;
+    public void getAllInfosFromGameState(){
+        infos.clear();
+        player();
+        ticketAmount();
+        tickets();
+        cardAmount();
+        cards();
+        routes();
+        carAmount();
+        points();
+        faceUpCardsDeckSize();
     }
 
-    public ArrayList<String> player(){
+    public void player(){
         Preconditions.checkArgument(publicGameState != null);
-        ArrayList<String> player = new ArrayList<>();
         if (publicGameState.currentPlayerId() == ownId) {
-            player.add("1.0|0.0");
+            infos.add("1.0|0.0");
         } else {
-            player.add("0.0|1.0");
+            infos.add("0.0|1.0");
         }
-
-        return player;
     }
 
-    public ArrayList<String> ticketAmount(){
+    public void ticketAmount(){
         Preconditions.checkArgument(publicGameState != null);
-        ArrayList<String> tickets = new ArrayList<>();
-
-        tickets.add(Double.toString(publicGameState.playerState(ownId).ticketCount()));
-        tickets.add(Double.toString(publicGameState.playerState(ownId.next()).ticketCount()));
-
-        return tickets;
+        infos.add(Double.toString(publicGameState.playerState(ownId).ticketCount()));
+        infos.add(Double.toString(publicGameState.playerState(ownId.next()).ticketCount()));
     }
 
-    public ArrayList<String> tickets(){
-        ArrayList<String> tickets = new ArrayList<>();
+    public void tickets(){
         List<Ticket> allTickets = ChMap.tickets();
-        ArrayList<Ticket> test = new ArrayList<>();
-        ownState.tickets().forEach(test::add);
-
-        int count = 0;
-//        System.out.println(ownState.tickets());
-
+        List<Ticket> test = ownState.tickets().toList();
         if (ownState.tickets().size() != 0){
+//            for (Ticket ticket : allTickets) {
+//                infos.add(ownState.tickets().contains(ticket)  ? "1.0" : "0.0");
+//            }
             for (Ticket ticket : allTickets) {
-                if (ticket.compareTo(test.get(count)) == 0){
-                    System.out.println(test.get(count));
-                    tickets.add("1.0");
-                    ++count;
-                }else{
-                    tickets.add("0.0");
+                if (test.contains(ticket)){
+                    infos.add("1.0");
+                    test.remove(ticket);
+                }
+                else {
+                    infos.add("0.0");
                 }
             }
-        }
-
-
-
-//        if (ownState.tickets().size() != 0){
-//            for (Ticket ownTicket : ownState.tickets()) {
-//                for (Ticket ticket : allTickets) {
-//                    if (ownTicket.compareTo(ticket) == 0){
-//                        tickets.add("1.0");
-//
-//                    }else{
-//                        tickets.add("0.0");
-//                    }
-//
-////                if (ticket.compareTo(ownState.tickets().get(count)) == 0){
-////                    count = count + 1;
-////
-////                }else{
-//////                    tickets.add("0.0");
+//            for (int i = 0; i<allTickets.size() - 8; ++i) {
+//                infos.add(ownState.tickets().contains(allTickets.get(i))  ? "1.0" : "0.0");
+//            }
+//            System.out.println(ownState.tickets());
+//            int count = 0;
+//            for (Ticket ticket : allTickets) {
+//                if (count != ownState.tickets().size()-1){
+//                    infos.add((ownState.tickets().get(count).compareTo(ticket) == 0) ?  "1.0" : "0.0");
+//                    ++count;
 //                }
 //            }
-//        }
+        }
+    }
 
-//        for (int i = 0; i < allTickets.size(); i++) {
-//            System.out.printf("|%3d", i);
-//        }
-//        System.out.println();
+    public void cardAmount(){
+        infos.add(Double.toString(publicGameState.playerState(ownId).cardCount()));
+        infos.add(Double.toString(publicGameState.playerState(ownId.next()).cardCount()));
+    }
 
-        return tickets;
+    public void cards(){
+        for (Card card : Card.ALL) {
+            if (ownState.cards().contains(card)){
+                infos.add(Double.toString(ownState.cards().countOf(card)));
+            }else{
+                infos.add("0.0");
+            }
+        }
+    }
+
+    public void routes(){
+        for (Route route : allRoutes) {
+            if (publicGameState.playerState(ownId).routes().contains(route)){
+                infos.add("1.0");
+            }else if(publicGameState.playerState(ownId.next()).routes().contains(route)){
+                infos.add("2.0");
+            }else{
+                infos.add("0.0");
+            }
+        }
+    }
+
+    public void carAmount(){
+        infos.add(Double.toString(publicGameState.playerState(ownId).carCount()));
+        infos.add(Double.toString(publicGameState.playerState(ownId.next()).carCount()));
+    }
+
+    public void points(){
+        infos.add(Double.toString(publicGameState.playerState(ownId).claimPoints()));
+        infos.add(Double.toString(publicGameState.playerState(ownId.next()).claimPoints()));
+        infos.add(Double.toString(ownState.finalPoints()));
+    }
+
+    public void faceUpCardsDeckSize(){
+        SortedBag<Card>  test = SortedBag.of(publicGameState.cardState().faceUpCards());
+        for (Card card : Card.ALL) {
+            if (test.contains(card)){
+                infos.add(Double.toString(test.countOf(card)));
+            }else{
+                infos.add("0.0");
+            }
+        }
+        infos.add(Double.toString(publicGameState.cardState().deckSize()));
     }
 
 
@@ -143,11 +172,13 @@ public final class ComputerPlayer implements Player {
         this.publicGameState = newState;
         this.ownState = ownState;
 
-        ArrayList<String> oldInfos = getAllInfosFromGameState();
-        if (oldInfos != getAllInfosFromGameState()){
-            System.out.println("|" + (String.join("|", getAllInfosFromGameState())));
-            System.out.println();
+        getAllInfosFromGameState();
+        if (infos.size() == 163){
+            System.out.println(String.join( "|", infos));
         }
+//        for (int i = 0; i < infos.size(); i++) {
+//            System.out.printf("%3d|", i);
+//        }
 
     }
 
@@ -248,9 +279,5 @@ public final class ComputerPlayer implements Player {
     @Override
     public String toString() {
         return playerNames.get(ownId);
-    }
-
-    public String[] tab() {
-        return tab;
     }
 }

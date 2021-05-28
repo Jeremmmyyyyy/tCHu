@@ -20,12 +20,11 @@ public final class PlayerVsComputer extends Application {
     public void start(Stage primaryStage) {
         SortedBag<Ticket> tickets = SortedBag.of(ChMap.tickets());
 
-        List<Route> allRoutes = ChMap.routes();
         Random rng = new Random();
         Map<PlayerId, String> names = Map.of(PLAYER_1, "Computer", PLAYER_2, "Player");
 
         Map<PlayerId, Player> players =
-                Map.of(PLAYER_1, new ComputerPlayer(rng.nextLong(), allRoutes), PLAYER_2, new GraphicalPlayerAdapter());
+                Map.of(PLAYER_1, new ComputerPlayer(rng.nextLong()), PLAYER_2, new GraphicalPlayerAdapter());
 
         new Thread(() -> Game.play(players, names, tickets, rng)).start();
     }
