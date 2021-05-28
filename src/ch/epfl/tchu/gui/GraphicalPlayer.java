@@ -280,7 +280,7 @@ public final class GraphicalPlayer {
     private static final class CardBagStringConverter extends StringConverter<SortedBag<Card>> {
 
         /**
-         * Overridden toString method for a sortedBag of Card
+         * Overriding toString method for a sortedBag of Card
          * @param object SortedBag of Cards to display in String format
          * @return String for the given SortedBag
          */
@@ -298,7 +298,7 @@ public final class GraphicalPlayer {
         }
 
         /**
-         * Overridden fromString method that throws UnsupportedOperationException when called.
+         * Overriding fromString method that throws UnsupportedOperationException when called.
          * The inverse operation of toString is not used in this project so it has no specific implementation
          * @param string to convert into a SortedBag
          * @return throws an UnsupportedOperationException
