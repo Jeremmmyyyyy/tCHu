@@ -24,7 +24,7 @@ public final class PlayerVsComputer extends Application {
         Map<PlayerId, String> names = Map.of(PLAYER_1, "Computer", PLAYER_2, "Player");
 
         Map<PlayerId, Player> players =
-                Map.of(PLAYER_1, new ComputerPlayer(rng.nextLong()), PLAYER_2, new GraphicalPlayerAdapter());
+                Map.of(PLAYER_1, new ComputerPlayer(rng.nextLong(), false, false), PLAYER_2, new GraphicalPlayerAdapter());
 
         new Thread(() -> Game.play(players, names, tickets, rng)).start();
     }

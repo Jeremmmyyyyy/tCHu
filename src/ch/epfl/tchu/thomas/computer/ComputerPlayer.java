@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class ComputerPlayer implements Player {
+public final class ComputerPlayer implements Player {
 
     public int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
@@ -23,6 +23,8 @@ public class ComputerPlayer implements Player {
     private PlayerState ownState;
     private PublicGameState publicGameState;
     private long randomSeed;
+    private final boolean print;
+    private final boolean save;
 
     // Lorsque nextTurn retourne CLAIM_ROUTE
     private Route routeToClaim;
@@ -30,15 +32,21 @@ public class ComputerPlayer implements Player {
     private Map<PlayerId, String> playerNames;
     private PlayerId ownId;
     private SortedBag<Ticket> tickets;
+    private ArrayList<ArrayList<String>> oneGameInfos = new ArrayList<>();
 
     //infoList
     private final ArrayList<String> infos = new ArrayList<>();
 
-    public ComputerPlayer(Long randomSeed) {
+    private final String endGame = " remporte la victoire avec ";
+    private int endGameSize;
+
+    public ComputerPlayer(Long randomSeed, boolean print, boolean save) {
         this.randomSeed = randomSeed;
-        System.out.println("Computer Started");
+        this.print = print;
+        this.save = save;
         this.rng = new Random(randomSeed);
         this.turnCounter = 0;
+
     }
 
     public void getAllInfosFromGameState(){
@@ -54,7 +62,7 @@ public class ComputerPlayer implements Player {
         faceUpCardsDeckSize();
     }
 
-    public void player(){
+    private void player(){
         Preconditions.checkArgument(publicGameState != null);
         if (publicGameState.currentPlayerId() == ownId) {
             infos.add("1.0|0.0");
@@ -63,13 +71,13 @@ public class ComputerPlayer implements Player {
         }
     }
 
-    public void ticketAmount(){
+    private void ticketAmount(){
         Preconditions.checkArgument(publicGameState != null);
         infos.add(Double.toString(publicGameState.playerState(ownId).ticketCount()));
         infos.add(Double.toString(publicGameState.playerState(ownId.next()).ticketCount()));
     }
 
-    public void tickets(){
+    private void tickets(){
         List<Ticket> allTickets = ChMap.tickets();
         List<Ticket> test = ownState.tickets().toList();
         if (ownState.tickets().size() != 0){
@@ -99,12 +107,12 @@ public class ComputerPlayer implements Player {
         }
     }
 
-    public void cardAmount(){
+    private void cardAmount(){
         infos.add(Double.toString(publicGameState.playerState(ownId).cardCount()));
         infos.add(Double.toString(publicGameState.playerState(ownId.next()).cardCount()));
     }
 
-    public void cards(){
+    private void cards(){
         for (Card card : Card.ALL) {
             if (ownState.cards().contains(card)){
                 infos.add(Double.toString(ownState.cards().countOf(card)));
@@ -114,7 +122,7 @@ public class ComputerPlayer implements Player {
         }
     }
 
-    public void routes(){
+    private void routes(){
         for (Route route : allRoutes) {
             if (publicGameState.playerState(ownId).routes().contains(route)){
                 infos.add("1.0");
@@ -126,12 +134,12 @@ public class ComputerPlayer implements Player {
         }
     }
 
-    public void carAmount(){
+    private void carAmount(){
         infos.add(Double.toString(publicGameState.playerState(ownId).carCount()));
         infos.add(Double.toString(publicGameState.playerState(ownId.next()).carCount()));
     }
 
-    public void points(){
+    private void points(){
         infos.add(Double.toString(publicGameState.playerState(ownId).claimPoints()));
         infos.add(Double.toString(publicGameState.playerState(ownId.next()).claimPoints()));
         infos.add(Double.toString(ownState.finalPoints()));
@@ -158,28 +166,34 @@ public class ComputerPlayer implements Player {
 
     @Override
     public void receiveInfo(String info) {
-//        ++numberOfInfoReceived;
-//        PrintToTxt.writeToFile(info);
-//            System.out.println(numberOfInfoReceived + " | " + info);
-//        if(info.contains("remporte la victoire avec")){
-//            tab = info.split(" ");
-//        }
-//        getAllInfosFromGameState();
+
+        if(info.contains(endGame)){
+            String tab[] = info.split(" ");
+            double winnerPoints = Double.parseDouble(tab[5]);
+            if (winnerPoints > 10 && save){
+                System.out.println(info);
+                PrintToTxt.writeToFile("test", "New Game \n" );
+                oneGameInfos.forEach(e -> PrintToTxt.writeToFile("test", String.join("|", e) + "\n"));
+            }
+            oneGameInfos.clear();
+        }
     }
 
     @Override
     public void updateState(PublicGameState newState, PlayerState ownState) {
         this.publicGameState = newState;
         this.ownState = ownState;
-
-        getAllInfosFromGameState();
-        if (infos.size() == 163){
-            System.out.println(String.join( "|", infos));
+        if (print){
+            getAllInfosFromGameState();
+            if (infos.size() == 163){
+                System.out.println(String.join( "|", infos));
+            }
+        }else if(save){
+            getAllInfosFromGameState();
+            if (infos.size() == 163) {
+                oneGameInfos.add(infos);
+            }
         }
-//        for (int i = 0; i < infos.size(); i++) {
-//            System.out.printf("%3d|", i);
-//        }
-
     }
 
     @Override

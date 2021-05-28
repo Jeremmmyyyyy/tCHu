@@ -8,14 +8,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class PrintToTxt {
-    private static DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static LocalDateTime now = LocalDateTime.now();
-    private static String fileId;
+//    private static DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//    private static LocalDateTime now = LocalDateTime.now();
+//    private static String fileId;
 
     public static void createFile(String fileName){
         try {
-            File myObj = new File(formatDate.format(now)  + " " +fileName+ ".txt");
-            fileId = fileName;
+            File myObj = new File(fileName+ ".txt");
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
             } else {
@@ -27,9 +26,9 @@ public class PrintToTxt {
         }
     }
 
-    public static void writeToFile(String textToWrite){
+    public static void writeToFile(String fileId, String textToWrite){
         try {
-            File f = new File(formatDate.format(now)  + " " +fileId+ " Log.txt");
+            File f = new File( fileId+ ".txt");
             PrintWriter pw = new PrintWriter(new FileOutputStream(f,true));
             pw.append(textToWrite);
             pw.close();
@@ -37,6 +36,15 @@ public class PrintToTxt {
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
+        }
+    }
+
+    public static void deleteFile(String fileId){
+        File f = new File(fileId+ ".txt");
+        if(f.delete()){
+            System.out.println("File deleted " + f.getName());
+        }else{
+            System.out.println("Failed to delete the File");
         }
     }
 }

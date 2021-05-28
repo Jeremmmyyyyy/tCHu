@@ -13,13 +13,15 @@ public class ComputerVSComputer {
 
         SortedBag<Ticket> tickets = SortedBag.of(ChMap.tickets());
 
-        Map<PlayerId, String> names = Map.of(PLAYER_1, "Computer", PLAYER_2, "Computer");
+        Map<PlayerId, String> names = Map.of(PLAYER_1, "ComputerSave", PLAYER_2, "Computer2");
 
-
-        for (int i = 0; i < 100; i++) {
+        System.out.println("Game Started");
+        PrintToTxt.deleteFile("test");
+        PrintToTxt.createFile("test");
+        for (int i = 0; i < 1000; i++) {
             Random rng = new Random();
             Map<PlayerId, Player> players =
-                    Map.of(PLAYER_1, new ComputerPlayer(rng.nextLong()), PLAYER_2, new ComputerPlayer(rng.nextLong()));
+                    Map.of(PLAYER_1, new ComputerPlayer(rng.nextLong(), false, true), PLAYER_2, new ComputerPlayer(rng.nextLong(), false, false));
             Game.play(players, names, tickets, rng);
         }
     }
