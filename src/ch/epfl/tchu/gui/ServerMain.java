@@ -50,13 +50,11 @@ public final class ServerMain extends Application  {
         if (!parameters.isEmpty()){
             playerNames = Map.of(PLAYER_1, parameters.get(0), PLAYER_2, parameters.get(1));
         }
-        System.out.println("Server Started");
 
         try {
             ServerSocket serverSocket = new ServerSocket(PORT);
             //Waits for an incoming connection
             Socket socket = serverSocket.accept();
-            System.out.println("Connection Established");
 
             //Creates the two players
             GraphicalPlayerAdapter graphicalPlayer = new GraphicalPlayerAdapter();

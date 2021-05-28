@@ -40,12 +40,11 @@ public final class ClientMain extends Application {
             hostName = parameters.get(0);
             port = Integer.parseInt(parameters.get(1));
         }
-        System.out.println("Client Started");
 
         //Creates the remote client
         GraphicalPlayerAdapter graphicalPlayer = new GraphicalPlayerAdapter();
         RemotePlayerClient distantClient = new RemotePlayerClient(graphicalPlayer, hostName, port);
-        System.out.println("Connection Established");
+
         //Starts the network associated thread
         new Thread(distantClient::run).start();
     }
