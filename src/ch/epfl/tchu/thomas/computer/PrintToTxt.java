@@ -8,9 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class PrintToTxt {
-//    private static DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//    private static LocalDateTime now = LocalDateTime.now();
-//    private static String fileId;
+
 
     public static void createFile(String fileName){
         try {
