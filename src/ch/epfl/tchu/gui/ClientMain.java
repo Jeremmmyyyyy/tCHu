@@ -45,7 +45,7 @@ public final class ClientMain extends Application {
         //Creates the remote client
         GraphicalPlayerAdapter graphicalPlayer = new GraphicalPlayerAdapter();
         RemotePlayerClient distantClient = new RemotePlayerClient(graphicalPlayer, hostName, port);
-
+        System.out.println("Connection Established");
         //Starts the network associated thread
         new Thread(distantClient::run).start();
     }

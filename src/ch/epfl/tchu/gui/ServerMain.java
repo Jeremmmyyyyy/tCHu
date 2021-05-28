@@ -56,6 +56,7 @@ public final class ServerMain extends Application  {
             ServerSocket serverSocket = new ServerSocket(PORT);
             //Waits for an incoming connection
             Socket socket = serverSocket.accept();
+            System.out.println("Connection Established");
 
             //Creates the two players
             GraphicalPlayerAdapter graphicalPlayer = new GraphicalPlayerAdapter();
