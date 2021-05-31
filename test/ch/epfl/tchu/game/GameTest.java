@@ -1,6 +1,5 @@
 package ch.epfl.tchu.game;
 
-import ch.epfl.tchu.PrintToTxt;
 import ch.epfl.tchu.SortedBag;
 
 import ch.epfl.test.ChMapPublic;
@@ -31,7 +30,7 @@ public class GameTest {
 //    @Test
 //    void BeacoupDeTests(){
 //        int[][] scores = new int[10][2];
-//        PrintToTxt.createFile(scores.length);
+//        ch.epfl.tchu.gui.PrintToTxt.createFile(scores.length);
 //        for (int i = 0; i < scores.length; i++) {
 //            int randomSeed = getRandomNumber(0,1000000000);
 //
@@ -116,7 +115,7 @@ public class GameTest {
         @Override
         public void receiveInfo(String info) {
             ++numberOfInfoReceived;
-            PrintToTxt.writeToFile(info);
+//            PrintToTxt.writeToFile(info);
 
 //            System.out.println(numberOfInfoReceived + " | " + info);
             if(info.contains("remporte la victoire avec")){
@@ -161,11 +160,11 @@ public class GameTest {
             if (claimableRoutes.isEmpty()) {
 //                System.out.println("DRAW_CARDS ");
                 if (!gameState.canDrawTickets()) {
-                    PrintToTxt.writeToFile("DRAW_CARDS "+ "\n");
+//                    PrintToTxt.writeToFile("DRAW_CARDS "+ "\n");
                     return TurnKind.DRAW_CARDS;
                 }
                 else {
-                    PrintToTxt.writeToFile("DRAW_TICKETS "+ "\n");
+//                    PrintToTxt.writeToFile("DRAW_TICKETS "+ "\n");
                     return TurnKind.DRAW_TICKETS;
                 }
             } else {
@@ -176,15 +175,15 @@ public class GameTest {
                 routeToClaim = route;
                 initialClaimCards = cards.get(0);
 
-                PrintToTxt.writeToFile("CLAIM_ROUTE = Route : " + route.id() + " | Level : "
-                        + route.level() + " | InitialClaimCards : " + initialClaimCards+ "\n");
-                PrintToTxt.writeToFile("Deck: " +gameState.cardState().deckSize()+
-                        "| Discard: " +gameState.cardState().discardsSize() +
-                        "| Cards: " + ownState.cards()+
-                        "| AvailableCars: " + gameState.playerState(ownId).carCount() +
-                        " | faceUpCards " + gameState.cardState().faceUpCards()+ "\n");
-                gameState.claimedRoutes().forEach((s)-> PrintToTxt.writeToFile(s.id() + "|"));
-                PrintToTxt.writeToFile("\n");
+//                PrintToTxt.writeToFile("CLAIM_ROUTE = Route : " + route.id() + " | Level : "
+//                        + route.level() + " | InitialClaimCards : " + initialClaimCards+ "\n");
+//                PrintToTxt.writeToFile("Deck: " +gameState.cardState().deckSize()+
+//                        "| Discard: " +gameState.cardState().discardsSize() +
+//                        "| Cards: " + ownState.cards()+
+//                        "| AvailableCars: " + gameState.playerState(ownId).carCount() +
+//                        " | faceUpCards " + gameState.cardState().faceUpCards()+ "\n");
+//                gameState.claimedRoutes().forEach((s)-> PrintToTxt.writeToFile(s.id() + "|"));
+//                PrintToTxt.writeToFile("\n");
 
 
 //                System.out.println("CLAIM_ROUTE = Route : " + route.id() + " | Level : "
@@ -231,7 +230,7 @@ public class GameTest {
         public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) {
             SortedBag<Card> chosenAdditionalCards = options.get(getRandomNumber(0, options.size() - 1));
 //            System.out.println("ChosenAdditionalCards : " + chosenAdditionalCards);
-            PrintToTxt.writeToFile("ChosenAdditionalCards : " + chosenAdditionalCards+ "\n");
+//            PrintToTxt.writeToFile("ChosenAdditionalCards : " + chosenAdditionalCards+ "\n");
             return chosenAdditionalCards;
         }
 

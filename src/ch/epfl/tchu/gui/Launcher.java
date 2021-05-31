@@ -4,7 +4,6 @@ import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -29,6 +28,9 @@ public final class Launcher {
     private final int STAGE_HEIGHT = 500;
     private static String namePlayer1 = "Joueur 1";
     private static String namePlayer2 = "Joueur 2";
+    private static Color color1;
+    private static Color color2;
+
 
 
     public Launcher(PlayerId playerId, Map<PlayerId, String> playerNames){
@@ -105,7 +107,15 @@ public final class Launcher {
         playerText.setFont(Font.font("Arial", FontWeight.BOLD, 10));
 
         ColorPicker colorPicker1 = new ColorPicker(Color.LIGHTBLUE);
+        colorPicker1.setOnAction(event -> {
+            color1 = colorPicker1.getValue();
+            System.out.println(color1 + " " + color2);
+        });
         ColorPicker colorPicker2 = new ColorPicker(Color.LIGHTPINK);
+        colorPicker2.setOnAction(event -> {
+            color2 = colorPicker2.getValue();
+            System.out.println(color1 + " " + color2);
+        });
 
         button.setOnAction(event -> {
             namePlayer1 = textField1.getText();
@@ -164,6 +174,8 @@ public final class Launcher {
             Platform.setImplicitExit(false);
             SortedBag<Ticket> tickets = SortedBag.of(ChMap.tickets());
             Map<PlayerId, String> names = Map.of(PLAYER_1, namePlayer1, PLAYER_2, namePlayer2);
+            Map<PlayerId, String> colors = Map.of(PLAYER_1, namePlayer1, PLAYER_2, namePlayer2);
+
             Map<PlayerId, Player> players =
                     Map.of(PLAYER_1, new GraphicalPlayerAdapter(), PLAYER_2, new GraphicalPlayerAdapter());
             Random rng = new Random();
