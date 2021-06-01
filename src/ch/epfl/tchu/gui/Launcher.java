@@ -13,6 +13,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -20,7 +21,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -33,11 +33,13 @@ import static javafx.application.Platform.isFxApplicationThread;
 public final class Launcher {
 
     private static final int PORT = 5108;
-    private final Stage launcher;
+    private static Stage launcher;
     private final int STAGE_WIDTH = 700;
     private final int STAGE_HEIGHT = 500;
     private static String namePlayer1 = "Joueur 1";
     private static String namePlayer2 = "Joueur 2";
+    private static ColorPicker colorPicker1 = new ColorPicker(Color.LIGHTBLUE);
+    private static ColorPicker colorPicker2 = new ColorPicker(Color.LIGHTPINK);
     private static Color color1;
     private static Color color2;
     private static String hostComputer = "localhost";
@@ -45,12 +47,13 @@ public final class Launcher {
     private static GameType gameType = GameType.TUTORIAL;
     private static final StringProperty stringProperty = new SimpleStringProperty();
     private static BooleanProperty radioButtonSelectionProperty = new SimpleBooleanProperty();
+    private static final Color COLOR = Color.LIGHTBLUE;
 
     public enum GameType{
         TUTORIAL("Tutoriel"),
         LOCAL_GAME("Jeu en local"),
         ONLINE_GAME("Jouer en ligne"),
-        TEST_GAME("Partie de test");
+        TEST_GAME("Entraînement");
 
         private final String gameType;
 
@@ -65,7 +68,6 @@ public final class Launcher {
     }
 
 
-
     public Launcher(PlayerId playerId, Map<PlayerId, String> playerNames) {
         assert isFxApplicationThread();
 
@@ -73,7 +75,7 @@ public final class Launcher {
 
         Node launcherCreator = Launcher.center();
         Node top = Launcher.top();
-        Node bottom = Launcher.bottom(launcher);
+        Node bottom = Launcher.bottom();
         Node right = Launcher.right();
         Node left = Launcher.left();
 
@@ -82,6 +84,7 @@ public final class Launcher {
         launcher.setWidth(STAGE_WIDTH);
         launcher.setHeight(STAGE_HEIGHT);
         launcher.setResizable(false);
+        launcher.getIcons().add(new Image("launcher.png"));
         launcher.show();
 
     }
@@ -89,22 +92,35 @@ public final class Launcher {
     public static Node center(){
 
         HBox startWindow = new HBox();
+        startWindow.setBackground(new Background(new BackgroundFill(COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+
         VBox vBox1 = new VBox();
-        vBox1.setBackground(new Background(new BackgroundFill(Color.SALMON, CornerRadii.EMPTY, Insets.EMPTY)));
+        vBox1.setBackground(new Background(new BackgroundFill(COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
         vBox1.setSpacing(0);
         vBox1.setPadding(new Insets(0, 0, 0, 0));
 
         VBox vBox2 = new VBox();
-        vBox2.setBackground(new Background(new BackgroundFill(Color.SEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        vBox2.setBackground(new Background(new BackgroundFill(COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
         vBox2.setSpacing(20);
         vBox2.setPadding(new Insets(20, 10, 0, 10));
 
-        Text text = new Text("Choississez le mode de jeu");
+        VBox vBox3 = new VBox();
+        vBox3.setBackground(new Background(new BackgroundFill(COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+        vBox3.setSpacing(20);
+        vBox3.setPadding(new Insets(20, 10, 0, 10));
+
+        Text text = new Text("Choississez le mode de jeu : ");
+        text.setFill(Color.WHITE);
+        text.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+
+        Text infoText = new Text(Strings.tutorial());
+        infoText.setFill(Color.WHITE);
+        infoText.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+        infoText.wrappingWidthProperty().setValue(150);
 
         ImageView imageView = new ImageView("launcher.png");
         imageView.setFitHeight(250);
         imageView.setFitWidth(250);
-        startWindow.setBackground(new Background(new BackgroundFill(Color.DARKGREY, CornerRadii.EMPTY, Insets.EMPTY)));
 
         ChoiceBox<GameType> choiceBox = new ChoiceBox<>();
         choiceBox.getItems().addAll(
@@ -118,25 +134,29 @@ public final class Launcher {
         choiceBox.setOnAction(event -> {
             gameType = choiceBox.getValue();
             stringProperty.set(gameType.toString());
+            radioButtonSelectionProperty.set(true);
+            updateInfoText(infoText);
         });
 
         TextField host = new TextField(hostComputer);
         TextField port = new TextField(String.valueOf(portComputer));
 
-
         vBox2.getChildren().addAll(text, choiceBox);
-        creatRadioButtonGroupAndLinkClientServer(vBox2, host, port);
+        creatRadioButtonGroupAndLinkClientServer(vBox2, host, port, colorPicker1, colorPicker2);
         vBox2.getChildren().addAll(host, port);
-
+        vBox3.getChildren().add(infoText);
         vBox1.getChildren().addAll(imageView);
 
-        startWindow.getChildren().addAll(vBox1, vBox2);
-
+        startWindow.getChildren().addAll(vBox1, vBox2, vBox3);
 
         return startWindow;
     }
 
-    private static void creatRadioButtonGroupAndLinkClientServer(VBox vBox, TextField host, TextField port){
+    private static void creatRadioButtonGroupAndLinkClientServer(VBox vBox,
+                                                                 TextField host,
+                                                                 TextField port,
+                                                                 ColorPicker colorPicker1,
+                                                                 ColorPicker colorPicker2){
         host.setDisable(true);
         port.setDisable(true);
         ToggleGroup radioButtonGroup = new ToggleGroup();
@@ -154,24 +174,52 @@ public final class Launcher {
                 radioButton2.setDisable(false);
                 host.setDisable(radioButtonSelectionProperty.getValue());
                 port.setDisable(radioButtonSelectionProperty.getValue());
+                colorPicker1.setDisable(!radioButtonSelectionProperty.getValue());
+                colorPicker2.setDisable(!radioButtonSelectionProperty.getValue());
             }else {
+                radioButton1.setSelected(true);
                 radioButton1.setDisable(true);
                 radioButton2.setDisable(true);
                 host.setDisable(true);
                 port.setDisable(true);
+                colorPicker1.setDisable(false);
+                colorPicker2.setDisable(false);
             }
         });
         radioButton1.setOnAction(event -> {
             radioButtonSelectionProperty.set(true);
             host.setDisable(true);
             port.setDisable(true);
+            colorPicker1.setDisable(false);
+            colorPicker2.setDisable(false);
         });
         radioButton2.setOnAction(event -> {
             radioButtonSelectionProperty.set(false);
             host.setDisable(false);
             port.setDisable(false);
+            colorPicker1.setDisable(true);
+            colorPicker2.setDisable(true);
         });
         vBox.getChildren().addAll(radioButton1, radioButton2);
+    }
+
+    private static void updateInfoText(Text text){
+        switch (gameType){
+            case TUTORIAL:
+                text.setText(Strings.tutorial());
+                break;
+            case LOCAL_GAME:
+                text.setText(Strings.local());
+                break;
+            case ONLINE_GAME:
+                text.setText(Strings.online());
+                break;
+            case TEST_GAME:
+                text.setText(Strings.training());
+                break;
+            default:
+                throw new Error("no such a game Type");
+        }
     }
 
     public static Node top(){
@@ -179,21 +227,23 @@ public final class Launcher {
         VBox vBox = new VBox();
         vBox.setPrefSize(700, 100);
         HBox hBox1 = new HBox();
-        hBox1.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        hBox1.setBackground(new Background(new BackgroundFill(COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
         hBox1.setSpacing(40);
         hBox1.setPadding(new Insets(20, 10, 20, 30));
 
         HBox hBox2 = new HBox();
-        hBox2.setSpacing(40);
-        hBox2.setPadding(new Insets(0, 10 , 0 ,30));
+        hBox2.setSpacing(30);
+        hBox2.setBackground(new Background(new BackgroundFill(COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+        hBox2.setPadding(new Insets(0, 10 , 15 ,30));
 
         HBox hBox3 = new HBox();
-        hBox3.setSpacing(40);
-        hBox3.setPadding(new Insets(10, 10 , 10 ,30));
-
+        hBox3.setSpacing(20);
+        hBox3.setBackground(new Background(new BackgroundFill(COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+        hBox3.setPadding(new Insets(10, 0 , 10 ,0));
 
         HBox hBox4 = new HBox();
-        hBox4.setSpacing(40);
+        hBox4.setSpacing(10);
+        hBox4.setBackground(new Background(new BackgroundFill(COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
         hBox4.setPadding(new Insets(3, 10 , 0 ,0));
 
         Text text = new Text(" Versus ");
@@ -206,19 +256,20 @@ public final class Launcher {
         TextField textField1 = new TextField(namePlayer1);
         TextField textField2 = new TextField(namePlayer2);
 
-        Text playerText = new Text("Trouvez des noms un peu plus originaux !");
-        playerText.setFill(Color.BLACK);
-        playerText.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+        Text playerText = new Text(Strings.findBetterNames());
+        playerText.setFill(Color.WHITE);
+        playerText.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+        playerText.wrappingWidthProperty().setValue(300);
 
 
         radioButtonSelectionProperty.addListener((o, oV, nV)->{
-            if (gameType == GameType.ONLINE_GAME && !nV){
-                playerText.setText("ALLRIGHT");
+            if (gameType == GameType.ONLINE_GAME && !nV) {
+                playerText.setText(Strings.clientSelected());
                 textField1.setDisable(true);
                 textField2.setDisable(true);
                 button.setDisable(true);
             }else {
-                playerText.setText("Trouvez des noms un peu plus originaux !");
+                playerText.setText(Strings.findBetterNames());
                 textField1.setDisable(false);
                 textField2.setDisable(false);
                 textField1.setText(namePlayer1);
@@ -227,32 +278,27 @@ public final class Launcher {
             }
         });
 
-        ColorPicker colorPicker1 = new ColorPicker(Color.LIGHTBLUE);
-        ColorPicker colorPicker2 = new ColorPicker(Color.LIGHTPINK);
         colorPicker1.setOnAction(event -> {
             color1 = colorPicker1.getValue();
             color2 = colorPicker2.getValue();
             System.out.println(color1 + " " + color2);
-//          test(color1, color2);
         });
         colorPicker2.setOnAction(event -> {
             color1 = colorPicker1.getValue();
             color2 = colorPicker2.getValue();
             System.out.println(color1 + " " + color2);
-//          test(color1, color2);
         });
 
         button.setOnAction(event -> {
             namePlayer1 = textField1.getText();
             namePlayer2 = textField2.getText();
             if (namePlayer1.length() > 10 || namePlayer2.length() > 10){
-                playerText.setText("Les noms sont un peu trop longs !");
+                playerText.setText(Strings.tooLongNames());
             }
             else if (namePlayer1.contains("Joueur 1") || namePlayer2.contains("Joueur 2")){
-                playerText.setText("Encore un petit effort pour le nom de l'autre joueur !");
+                playerText.setText(Strings.anotherChance());
             }else{
-                playerText.setText("Les joueurs qui vont s'affronter sont " + namePlayer1 + " et " + namePlayer2 +
-                        ".");
+                playerText.setText(Strings.twoNames(namePlayer1, namePlayer2));
             }
 
         });
@@ -271,23 +317,23 @@ public final class Launcher {
     public static Node right(){
         VBox vBox = new VBox();
         vBox.setPrefSize(50, 500);
-        vBox.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        vBox.setBackground(new Background(new BackgroundFill(COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
         return vBox;
     }
 
     public static Node left(){
         VBox vBox = new VBox();
         vBox.setPrefSize(50, 500);
-        vBox.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+        vBox.setBackground(new Background(new BackgroundFill(COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
 
         return vBox;
     }
 
-    public static Node bottom(Stage launcher){
+    public static Node bottom(){
         HBox hBox = new HBox();
-        hBox.setPrefSize(700, 100);
+        hBox.setPrefSize(700, 75);
         hBox.setSpacing(20);
-        hBox.setPadding(new Insets(75, 10, 20, 550));
+        hBox.setPadding(new Insets(20, 10, 20, 550));
 
         Button play = new Button("Jouer");
         Button close = new Button("Fermer");
@@ -303,11 +349,10 @@ public final class Launcher {
 
             switch (gameType){
                 case TUTORIAL:
-                    System.out.println("tutorial");
+                    startTutorialGame(tickets, names, players, rng);
                     break;
 
                 case ONLINE_GAME:
-                    System.out.println("onlineGame " + radioButtonSelectionProperty.getValue());
                     startOnlineGame(tickets, names, rng, radioButtonSelectionProperty.getValue());
                     break;
 
@@ -316,7 +361,7 @@ public final class Launcher {
                     break;
 
                 case TEST_GAME:
-                    System.out.println("TestGame");
+                    startTrainingGame(tickets, names, players, rng);
                     break;
 
                 default:
@@ -330,7 +375,7 @@ public final class Launcher {
         });
 
         close.setOnAction(event -> launcher.hide());
-        hBox.setBackground(new Background(new BackgroundFill(Color.DIMGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        hBox.setBackground(new Background(new BackgroundFill(COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
         hBox.getChildren().addAll(play, close);
 
         return hBox;
@@ -343,6 +388,28 @@ public final class Launcher {
         new Thread(() -> Game.play(players, names, tickets, rng)).start();
     }
 
+    private static void startTrainingGame(SortedBag<Ticket> tickets,
+                                          Map<PlayerId, String> names,
+                                          Map<PlayerId, Player> players,
+                                          Random rng){
+
+
+
+        new Thread(() -> Game.play(
+                Map.of(PLAYER_1, players.get(PLAYER_1), PLAYER_2, new TrainingPlayer()),
+                Map.of(PLAYER_1, names.get(PLAYER_1), PLAYER_2, "Assistant d'entrainement"),
+                tickets,
+                rng))
+                .start();
+    }
+
+    private static void startTutorialGame(SortedBag<Ticket> tickets,
+                                          Map<PlayerId, String> names,
+                                          Map<PlayerId, Player> players,
+                                          Random rng){
+        System.out.println("TUTO");
+    }
+
     private static void startOnlineGame(SortedBag<Ticket> tickets,
                                         Map<PlayerId, String> names,
                                         Random rng, boolean radioButtonSelection){
@@ -351,14 +418,10 @@ public final class Launcher {
             try {
                 System.out.println("Server Started");
                 ServerSocket serverSocket = new ServerSocket(PORT);
-                //Waits for an incoming connection
                 Socket socket = serverSocket.accept();
-                //Creates the two players
                 GraphicalPlayerAdapter graphicalPlayer = new GraphicalPlayerAdapter();
                 Player remotePlayerProxy = new RemotePlayerProxy(socket);
                 Map<PlayerId, Player> players = Map.of(PLAYER_1, graphicalPlayer , PLAYER_2, remotePlayerProxy);
-
-                //Launches the game's main thread
                 new Thread(() -> Game.play(players, names, tickets, rng)).start();
 
             } catch (IOException e) {
@@ -369,11 +432,53 @@ public final class Launcher {
 
             GraphicalPlayerAdapter graphicalPlayer = new GraphicalPlayerAdapter();
             RemotePlayerClient distantClient = new RemotePlayerClient(graphicalPlayer, hostComputer, portComputer);
-
-            //Starts the network associated thread
             new Thread(distantClient::run).start();
 
         }
+    }
+
+    private static final class Strings {
+        private Strings(){
+            throw new Error("no such a class instance");
+        }
+
+        public static String tutorial(){
+            return "Ceci lance un tutoriel de jeu.\nVous y apprendrez les règles du jeu au travers d'une partie guidée.";
+        }
+
+        public static String online(){
+            return "Ceci lance une partie en ligne.\nVous devez spécifier si vous êtes le serveur ou le client du jeu. " +
+                    "\nATTENTION : si vous êtes le client veillez à ne lancer la partie qu'une fois le serveur lancé sur l'autre ordinateur.";
+        }
+
+        public static String local(){
+            return "Ceci lance une partie pour deux joueurs en local.\nVous jouerez à deux sur le même ordinateur.";
+        }
+
+        public static String training(){
+            return "Cecei lance le mode d'entraînement.\nVous jouerez contre un ordinateur effectuant des actions aléatoires.";
+        }
+
+        public static String findBetterNames(){
+            return "Trouvez des noms un peu plus originaux !";
+        }
+
+        public static String tooLongNames(){
+            return "Les noms sont un peu trop longs !";
+        }
+
+        public static String anotherChance(){
+            return "Encore un petit effort pour l'autre joueur !";
+        }
+
+        public static String twoNames(String namePlayer1, String namePlayer2){
+            return "Les joueurs qui vont s'affronter sont " + namePlayer1 + " et " + namePlayer2 + ".";
+        }
+
+        public static String clientSelected(){
+            return "Désactivée lorsque vous êtes client.";
+        }
+
     }
 
 
@@ -385,7 +490,6 @@ public final class Launcher {
 //            PrintToTxt.writeToFile("./resources/launcher.css",
 //                    ".PLAYER_1 .filled { -fx-fill: " + color1.toString() + " ; }\n.PLAYER_2 .filled { -fx-fill: " + color2.toString() + "; }");
 //        System.out.println(".PLAYER_1 .filled { -fx-fill: " + color1.toString() + " ; }\n.PLAYER_2 .filled { -fx-fill: " + color2.toString() + "; }");
-
 //        Properties properties = new Properties();
 //        String filename = "./resources/launcher.css";
 //
@@ -400,7 +504,6 @@ public final class Launcher {
 //        properties.store(outputStream, null);
 //        outputStream.close();
 //    }
-
 //    public void testTXT() {
 //        Path path = FileSystems.getDefault().getPath("./resources/launcher.css");
 //        try {
@@ -424,7 +527,6 @@ public final class Launcher {
 //        Files.
 //
 //    }
-
 //    public static Pane cssSheet(Pane node, Color color1, Color color2){
 //        try {
 //

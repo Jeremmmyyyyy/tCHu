@@ -69,15 +69,14 @@ final class MapViewCreator {
                 }});
 
             //When a player claims or attempts to claim a route
-            observableGameState.routes(r).addListener((o, oV, nV) -> {
-                //route.setStyle("-colorPlayer1 : " + Color.RED);
-                //route.setStyle("-colorPlayer2 : " + Color.BLUE);
+            //route.setStyle("-colorPlayer1 : " + Color.RED);
+            //route.setStyle("-colorPlayer2 : " + Color.BLUE);
 //                route.getStylesheets().add("launcher.css");
-                //route.setStyle("-my-background1:" + "red"); //TODO
-                //route.setStyle("-my-background2:" + "blue");
-                //route.getStyleClass().add(nV.name() + "red");
-                route.getStyleClass().add(nV.name());
-            });
+            //route.setStyle("-my-background1:" + "red"); //TODO
+            //route.setStyle("-my-background2:" + "blue");
+            //route.getStyleClass().add(nV.name() + "red");
+
+            observableGameState.routes(r).addListener((o, oV, nV) -> route.getStyleClass().add(nV.name()));
             route.disableProperty().bind(claimRouteHandler.isNull().or(observableGameState.claimableRoute(r).not()));
 
             mapView.getChildren().add(route);
