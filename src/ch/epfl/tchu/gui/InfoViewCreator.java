@@ -58,8 +58,7 @@ final class InfoViewCreator {
             playerVBox.setId("player-stats");
 
             Circle circle = new Circle(CIRCLE_RADIUS);
-//            circle.getStyleClass().add("filled");
-            circle.setFill(Color.RED);
+            circle.getStyleClass().add("filled"); //TODO changer couleur ici
 
             Text text = new Text();
             text.textProperty().bind(Bindings.format(StringsFr.PLAYER_STATS,

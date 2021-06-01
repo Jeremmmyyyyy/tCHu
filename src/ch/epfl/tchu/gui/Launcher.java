@@ -14,7 +14,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.file.*;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 
 import static ch.epfl.tchu.game.PlayerId.PLAYER_1;
@@ -33,7 +38,7 @@ public final class Launcher {
 
 
 
-    public Launcher(PlayerId playerId, Map<PlayerId, String> playerNames){
+    public Launcher(PlayerId playerId, Map<PlayerId, String> playerNames) throws URISyntaxException, IOException {
         assert isFxApplicationThread();
 
         launcher = new Stage();
@@ -51,17 +56,39 @@ public final class Launcher {
         launcher.setHeight(STAGE_HEIGHT);
         launcher.setResizable(false);
         launcher.show();
+//        testTXT();
+//        writeFile();
+        test();
+
     }
 
     public static Node center(){
 
-        Pane startWindow = new Pane();
+        HBox startWindow = new HBox();
 //        startWindow.getStylesheets().add("launcher.css"); //TODO css optionnel
+
+        VBox vBox1 = new VBox();
+        vBox1.setBackground(new Background(new BackgroundFill(Color.SALMON, CornerRadii.EMPTY, Insets.EMPTY)));
+        vBox1.setSpacing(0);
+        vBox1.setPadding(new Insets(0, 0, 0, 0));
+
+        VBox vBox2 = new VBox();
+        vBox2.setBackground(new Background(new BackgroundFill(Color.SEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        vBox2.setSpacing(0);
+        vBox2.setPadding(new Insets(0, 0, 0, 0));
+
+
         ImageView imageView = new ImageView("launcher.png");
-        imageView.setFitHeight(270);
-        imageView.setFitWidth(270);
+        imageView.setFitHeight(250);
+        imageView.setFitWidth(250);
         startWindow.setBackground(new Background(new BackgroundFill(Color.GREY, CornerRadii.EMPTY, Insets.EMPTY)));
-        startWindow.getChildren().add(imageView);
+
+        ChoiceBox choiceBox = new ChoiceBox();
+
+
+        vBox1.getChildren().addAll(imageView);
+        vBox2.getChildren().addAll(choiceBox);
+        startWindow.getChildren().addAll(vBox1, vBox2);
 
 
         return startWindow;
@@ -107,14 +134,18 @@ public final class Launcher {
         playerText.setFont(Font.font("Arial", FontWeight.BOLD, 10));
 
         ColorPicker colorPicker1 = new ColorPicker(Color.LIGHTBLUE);
+        ColorPicker colorPicker2 = new ColorPicker(Color.LIGHTPINK);
         colorPicker1.setOnAction(event -> {
             color1 = colorPicker1.getValue();
-            System.out.println(color1 + " " + color2);
-        });
-        ColorPicker colorPicker2 = new ColorPicker(Color.LIGHTPINK);
-        colorPicker2.setOnAction(event -> {
             color2 = colorPicker2.getValue();
             System.out.println(color1 + " " + color2);
+//            cssSheet(hBox1, color1, color2);
+        });
+        colorPicker2.setOnAction(event -> {
+            color1 = colorPicker1.getValue();
+            color2 = colorPicker2.getValue();
+            System.out.println(color1 + " " + color2);
+//            cssSheet(hBox1, color1, color2);
         });
 
         button.setOnAction(event -> {
@@ -172,9 +203,9 @@ public final class Launcher {
 
         play.setOnAction(event -> {
             Platform.setImplicitExit(false);
-            SortedBag<Ticket> tickets = SortedBag.of(ChMap.tickets());
+            SortedBag<Ticket> tickets = SortedBag.of(ChMap.tickets()); //TODO modulariser la creation des différents jeux
             Map<PlayerId, String> names = Map.of(PLAYER_1, namePlayer1, PLAYER_2, namePlayer2);
-            Map<PlayerId, String> colors = Map.of(PLAYER_1, namePlayer1, PLAYER_2, namePlayer2);
+            //Map<PlayerId, String> colors = Map.of(PLAYER_1, namePlayer1, PLAYER_2, namePlayer2); //TODO colors for players
 
             Map<PlayerId, Player> players =
                     Map.of(PLAYER_1, new GraphicalPlayerAdapter(), PLAYER_2, new GraphicalPlayerAdapter());
@@ -192,5 +223,69 @@ public final class Launcher {
 
         return hBox;
     }
+
+    public void test() throws IOException {
+            File test = new File("./resources/launcher.css");
+            boolean deleted = test.delete();
+            System.out.println(deleted);
+
+//        Properties properties = new Properties();
+//        String filename = "./resources/launcher.css";
+//
+//        FileInputStream configStream = new FileInputStream(filename);
+//        properties.load(configStream);
+//        configStream.close();
+//
+//        properties.(".PLAYER_1 .filled { -fx-fill: -my-background1; }", );
+//        properties.setProperty("newProperty", "newValue");
+//
+//        FileOutputStream outputStream = new FileOutputStream(filename);
+//        properties.store(outputStream, null);
+//        outputStream.close();
+    }
+
+//    public void testTXT() {
+//        Path path = FileSystems.getDefault().getPath("./resources/launcher.css");
+//        try {
+//            Files.delete(path);
+//        } catch (NoSuchFileException x) {
+//            System.err.format("%s: no such" + " file or directory%n", path);
+//        } catch (IOException x) {
+//            System.err.println(x);
+//        }
+//    }
+//
+//    public void writeFile() throws IOException {
+//        Path path = FileSystems.getDefault().getPath("./resources/launcher.css");
+//        Files.createFile(path);
+//        Files.writeString(path, ".PLAYER_1 .filled { -fx-fill: red; } \n.PLAYER_2 .filled { -fx-fill: blue; }");
+//        BufferedReader bufferedReader = Files.newBufferedReader(path);
+//        for (int i = 0; i < 5; i++) {
+//            System.out.println(bufferedReader.readLine());
+//        }
+//        bufferedReader.close();
+//        Files.
+//
+//    }
+
+//    public static Pane cssSheet(Pane node, Color color1, Color color2){
+//        try {
+//
+//            Path cssPath = Files.createTempFile("fx-theme-", ".css");
+//            Files.writeString(cssPath, ".PLAYER1{-fx-fill :" + color1 + ";}" +
+//                    ".PLAYER2{-fx-fill :" + color2 + ";}");
+//            cssPath.toFile().deleteOnExit();
+//            System.out.println("Wrote " + cssPath);
+//            System.out.println("URL " + cssPath.toUri().toURL().toExternalForm());
+//
+//            node.getStyleClass().setAll("PLAYER1");
+//            node.getStylesheets().setAll(cssPath.toUri().toURL().toExternalForm());
+//        }catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return node;
+//    }
+
+
 
 }

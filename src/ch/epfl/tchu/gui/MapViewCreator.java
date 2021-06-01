@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
@@ -68,12 +69,19 @@ final class MapViewCreator {
                 }});
 
             //When a player claims or attempts to claim a route
-            observableGameState.routes(r).addListener((o, oV, nV) -> route.getStyleClass().add(nV.name()));
+            observableGameState.routes(r).addListener((o, oV, nV) -> {
+                //route.setStyle("-colorPlayer1 : " + Color.RED);
+                //route.setStyle("-colorPlayer2 : " + Color.BLUE);
+                route.getStylesheets().add("launcher.css");
+                //route.setStyle("-my-background1:" + "red");
+                //route.setStyle("-my-background2:" + "blue");
+                //route.getStyleClass().add(nV.name() + "red");
+                route.getStyleClass().add(nV.name());
+            });
             route.disableProperty().bind(claimRouteHandler.isNull().or(observableGameState.claimableRoute(r).not()));
 
             mapView.getChildren().add(route);
         }
-
         return mapView;
 
     }
