@@ -5,6 +5,8 @@ import ch.epfl.tchu.game.*;
 import ch.epfl.tchu.net.RemotePlayerClient;
 import ch.epfl.tchu.net.RemotePlayerProxy;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
@@ -42,7 +44,8 @@ public final class Launcher {
     private static int portComputer = 5108;
     private static GameType gameType = GameType.TUTORIAL;
     private static final StringProperty stringProperty = new SimpleStringProperty();
-    private static boolean radioButtonSelection = true;
+//    private static boolean radioButtonSelection = true;
+    private static BooleanProperty radioButtonSelectionProperty = new SimpleBooleanProperty();
 
     public enum GameType{
         TUTORIAL("Tutoriel"),
@@ -145,12 +148,13 @@ public final class Launcher {
         radioButton2.setToggleGroup(radioButtonGroup);
         radioButton1.setDisable(true);
         radioButton2.setDisable(true);
+        radioButtonSelectionProperty.set(true);
         stringProperty.addListener((o, oV, nV) ->{
             if (nV.equals(GameType.ONLINE_GAME.toString())){
                 radioButton1.setDisable(false);
                 radioButton2.setDisable(false);
-                host.setDisable(radioButtonSelection);
-                port.setDisable(radioButtonSelection);
+                host.setDisable(radioButtonSelectionProperty.getValue());
+                port.setDisable(radioButtonSelectionProperty.getValue());
             }else {
                 radioButton1.setDisable(true);
                 radioButton2.setDisable(true);
@@ -159,12 +163,12 @@ public final class Launcher {
             }
         });
         radioButton1.setOnAction(event -> {
-            radioButtonSelection = true;
+            radioButtonSelectionProperty.set(true);
             host.setDisable(true);
             port.setDisable(true);
         });
         radioButton2.setOnAction(event -> {
-            radioButtonSelection = false;
+            radioButtonSelectionProperty.set(false);
             host.setDisable(false);
             port.setDisable(false);
         });
@@ -209,6 +213,23 @@ public final class Launcher {
         Text playerText = new Text("Trouvez des noms un peu plus originaux !");
         playerText.setFill(Color.BLACK);
         playerText.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+
+
+        radioButtonSelectionProperty.addListener((o, oV, nV)->{
+            if (gameType == GameType.ONLINE_GAME && !nV){
+                playerText.setText("ALLRIGHT");
+                textField1.setDisable(true);
+                textField2.setDisable(true);
+                button.setDisable(true);
+            }else if (gameType != GameType.ONLINE_GAME && !nV){
+                playerText.setText("Trouvez des noms un peu plus originaux !");
+                textField1.setDisable(false);
+                textField2.setDisable(false);
+                textField1.setText(namePlayer1);
+                textField2.setText(namePlayer2);
+                button.setDisable(false);
+            }
+        });
 
         ColorPicker colorPicker1 = new ColorPicker(Color.LIGHTBLUE);
         ColorPicker colorPicker2 = new ColorPicker(Color.LIGHTPINK);
@@ -290,8 +311,8 @@ public final class Launcher {
                     break;
 
                 case ONLINE_GAME:
-                    System.out.println("onlineGame " + radioButtonSelection);
-                    startOnlineGame(tickets, names, rng, radioButtonSelection);
+                    System.out.println("onlineGame " + radioButtonSelectionProperty.getValue());
+                    startOnlineGame(tickets, names, rng, radioButtonSelectionProperty.getValue());
                     break;
 
                 case LOCAL_GAME:
