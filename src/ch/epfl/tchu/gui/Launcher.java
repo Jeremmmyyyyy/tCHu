@@ -44,7 +44,6 @@ public final class Launcher {
     private static int portComputer = 5108;
     private static GameType gameType = GameType.TUTORIAL;
     private static final StringProperty stringProperty = new SimpleStringProperty();
-//    private static boolean radioButtonSelection = true;
     private static BooleanProperty radioButtonSelectionProperty = new SimpleBooleanProperty();
 
     public enum GameType{
@@ -179,9 +178,6 @@ public final class Launcher {
 
         VBox vBox = new VBox();
         vBox.setPrefSize(700, 100);
-
-//        hBox1.setMaxHeight(75);
-//        hBox1.setMaxSize(700, 50);
         HBox hBox1 = new HBox();
         hBox1.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         hBox1.setSpacing(40);
@@ -221,7 +217,7 @@ public final class Launcher {
                 textField1.setDisable(true);
                 textField2.setDisable(true);
                 button.setDisable(true);
-            }else if (gameType != GameType.ONLINE_GAME && !nV){
+            }else {
                 playerText.setText("Trouvez des noms un peu plus originaux !");
                 textField1.setDisable(false);
                 textField2.setDisable(false);
@@ -299,7 +295,7 @@ public final class Launcher {
 
         play.setOnAction(event -> {
 
-            SortedBag<Ticket> tickets = SortedBag.of(ChMap.tickets()); //TODO modulariser la creation des différents jeux
+            SortedBag<Ticket> tickets = SortedBag.of(ChMap.tickets());
             Map<PlayerId, String> names = Map.of(PLAYER_1, namePlayer1, PLAYER_2, namePlayer2);
             Map<PlayerId, Player> players =
                     Map.of(PLAYER_1, new GraphicalPlayerAdapter(), PLAYER_2, new GraphicalPlayerAdapter());
