@@ -72,8 +72,8 @@ final class MapViewCreator {
             observableGameState.routes(r).addListener((o, oV, nV) -> {
                 //route.setStyle("-colorPlayer1 : " + Color.RED);
                 //route.setStyle("-colorPlayer2 : " + Color.BLUE);
-                route.getStylesheets().add("launcher.css");
-                //route.setStyle("-my-background1:" + "red");
+//                route.getStylesheets().add("launcher.css");
+                //route.setStyle("-my-background1:" + "red"); //TODO
                 //route.setStyle("-my-background2:" + "blue");
                 //route.getStyleClass().add(nV.name() + "red");
                 route.getStyleClass().add(nV.name());

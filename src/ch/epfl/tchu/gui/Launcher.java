@@ -2,7 +2,11 @@ package ch.epfl.tchu.gui;
 
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
+import ch.epfl.tchu.net.RemotePlayerClient;
+import ch.epfl.tchu.net.RemotePlayerProxy;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -15,19 +19,18 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.*;
-import java.net.URISyntaxException;
-import java.nio.file.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Random;
-
 import static ch.epfl.tchu.game.PlayerId.PLAYER_1;
 import static ch.epfl.tchu.game.PlayerId.PLAYER_2;
 import static javafx.application.Platform.isFxApplicationThread;
 
 public final class Launcher {
 
+    private static final int PORT = 5108;
     private final Stage launcher;
     private final int STAGE_WIDTH = 700;
     private final int STAGE_HEIGHT = 500;
@@ -35,14 +38,36 @@ public final class Launcher {
     private static String namePlayer2 = "Joueur 2";
     private static Color color1;
     private static Color color2;
+    private static String hostComputer = "localhost";
+    private static int portComputer = 5108;
+    private static GameType gameType = GameType.TUTORIAL;
+    private static final StringProperty stringProperty = new SimpleStringProperty();
+    private static boolean radioButtonSelection = true;
+
+    public enum GameType{
+        TUTORIAL("Tutoriel"),
+        LOCAL_GAME("Jeu en local"),
+        ONLINE_GAME("Jouer en ligne"),
+        TEST_GAME("Partie de test");
+
+        private final String gameType;
+
+        GameType(String gameType){
+            this.gameType = gameType;
+        }
+
+        @Override
+        public String toString() {
+            return this.gameType;
+        }
+    }
 
 
 
-    public Launcher(PlayerId playerId, Map<PlayerId, String> playerNames) throws URISyntaxException, IOException {
+    public Launcher(PlayerId playerId, Map<PlayerId, String> playerNames) {
         assert isFxApplicationThread();
 
         launcher = new Stage();
-
 
         Node launcherCreator = Launcher.center();
         Node top = Launcher.top();
@@ -56,17 +81,12 @@ public final class Launcher {
         launcher.setHeight(STAGE_HEIGHT);
         launcher.setResizable(false);
         launcher.show();
-//        testTXT();
-//        writeFile();
-        test();
 
     }
 
     public static Node center(){
 
         HBox startWindow = new HBox();
-//        startWindow.getStylesheets().add("launcher.css"); //TODO css optionnel
-
         VBox vBox1 = new VBox();
         vBox1.setBackground(new Background(new BackgroundFill(Color.SALMON, CornerRadii.EMPTY, Insets.EMPTY)));
         vBox1.setSpacing(0);
@@ -74,24 +94,81 @@ public final class Launcher {
 
         VBox vBox2 = new VBox();
         vBox2.setBackground(new Background(new BackgroundFill(Color.SEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-        vBox2.setSpacing(0);
-        vBox2.setPadding(new Insets(0, 0, 0, 0));
+        vBox2.setSpacing(20);
+        vBox2.setPadding(new Insets(20, 10, 0, 10));
 
+        Text text = new Text("Choississez le mode de jeu");
 
         ImageView imageView = new ImageView("launcher.png");
         imageView.setFitHeight(250);
         imageView.setFitWidth(250);
-        startWindow.setBackground(new Background(new BackgroundFill(Color.GREY, CornerRadii.EMPTY, Insets.EMPTY)));
+        startWindow.setBackground(new Background(new BackgroundFill(Color.DARKGREY, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        ChoiceBox choiceBox = new ChoiceBox();
+        ChoiceBox<GameType> choiceBox = new ChoiceBox<>();
+        choiceBox.getItems().addAll(
+                GameType.TUTORIAL,
+                GameType.LOCAL_GAME,
+                GameType.ONLINE_GAME,
+                GameType.TEST_GAME);
 
+        choiceBox.getSelectionModel().selectFirst();
+
+        choiceBox.setOnAction(event -> {
+            gameType = choiceBox.getValue();
+            stringProperty.set(gameType.toString());
+        });
+
+        TextField host = new TextField(hostComputer);
+        TextField port = new TextField(String.valueOf(portComputer));
+
+
+        vBox2.getChildren().addAll(text, choiceBox);
+        creatRadioButtonGroupAndLinkClientServer(vBox2, host, port);
+        vBox2.getChildren().addAll(host, port);
 
         vBox1.getChildren().addAll(imageView);
-        vBox2.getChildren().addAll(choiceBox);
+
         startWindow.getChildren().addAll(vBox1, vBox2);
 
 
         return startWindow;
+    }
+
+    private static void creatRadioButtonGroupAndLinkClientServer(VBox vBox, TextField host, TextField port){
+        host.setDisable(true);
+        port.setDisable(true);
+        ToggleGroup radioButtonGroup = new ToggleGroup();
+        RadioButton radioButton1 = new RadioButton("Server");
+        RadioButton radioButton2 = new RadioButton("Cleint");
+        radioButton1.setToggleGroup(radioButtonGroup);
+        radioButton1.setSelected(true);
+        radioButton2.setToggleGroup(radioButtonGroup);
+        radioButton1.setDisable(true);
+        radioButton2.setDisable(true);
+        stringProperty.addListener((o, oV, nV) ->{
+            if (nV.equals(GameType.ONLINE_GAME.toString())){
+                radioButton1.setDisable(false);
+                radioButton2.setDisable(false);
+                host.setDisable(radioButtonSelection);
+                port.setDisable(radioButtonSelection);
+            }else {
+                radioButton1.setDisable(true);
+                radioButton2.setDisable(true);
+                host.setDisable(true);
+                port.setDisable(true);
+            }
+        });
+        radioButton1.setOnAction(event -> {
+            radioButtonSelection = true;
+            host.setDisable(true);
+            port.setDisable(true);
+        });
+        radioButton2.setOnAction(event -> {
+            radioButtonSelection = false;
+            host.setDisable(false);
+            port.setDisable(false);
+        });
+        vBox.getChildren().addAll(radioButton1, radioButton2);
     }
 
     public static Node top(){
@@ -139,13 +216,13 @@ public final class Launcher {
             color1 = colorPicker1.getValue();
             color2 = colorPicker2.getValue();
             System.out.println(color1 + " " + color2);
-//            cssSheet(hBox1, color1, color2);
+//          test(color1, color2);
         });
         colorPicker2.setOnAction(event -> {
             color1 = colorPicker1.getValue();
             color2 = colorPicker2.getValue();
             System.out.println(color1 + " " + color2);
-//            cssSheet(hBox1, color1, color2);
+//          test(color1, color2);
         });
 
         button.setOnAction(event -> {
@@ -198,36 +275,99 @@ public final class Launcher {
         Button play = new Button("Jouer");
         Button close = new Button("Fermer");
 
-//        play.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-//        close.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         play.setOnAction(event -> {
-            Platform.setImplicitExit(false);
+
             SortedBag<Ticket> tickets = SortedBag.of(ChMap.tickets()); //TODO modulariser la creation des différents jeux
             Map<PlayerId, String> names = Map.of(PLAYER_1, namePlayer1, PLAYER_2, namePlayer2);
-            //Map<PlayerId, String> colors = Map.of(PLAYER_1, namePlayer1, PLAYER_2, namePlayer2); //TODO colors for players
-
             Map<PlayerId, Player> players =
                     Map.of(PLAYER_1, new GraphicalPlayerAdapter(), PLAYER_2, new GraphicalPlayerAdapter());
             Random rng = new Random();
-            new Thread(() -> Game.play(players, names, tickets, rng)).start();
+
+            switch (gameType){
+                case TUTORIAL:
+                    System.out.println("tutorial");
+                    break;
+
+                case ONLINE_GAME:
+                    System.out.println("onlineGame " + radioButtonSelection);
+                    startOnlineGame(tickets, names, rng, radioButtonSelection);
+                    break;
+
+                case LOCAL_GAME:
+                    startLocalGame(tickets, names, players, rng);
+                    break;
+
+                case TEST_GAME:
+                    System.out.println("TestGame");
+                    break;
+
+                default:
+                    throw new Error("No such game found");
+            }
             launcher.hide();
+            Platform.setImplicitExit(false);
+
+//            //Map<PlayerId, String> colors = Map.of(PLAYER_1, namePlayer1, PLAYER_2, namePlayer2); //TODO colors for players
 
         });
 
         close.setOnAction(event -> launcher.hide());
-
-        hBox.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-
+        hBox.setBackground(new Background(new BackgroundFill(Color.DIMGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         hBox.getChildren().addAll(play, close);
 
         return hBox;
     }
 
-    public void test() throws IOException {
-            File test = new File("./resources/launcher.css");
-            boolean deleted = test.delete();
-            System.out.println(deleted);
+    private static void startLocalGame(SortedBag<Ticket> tickets,
+                                       Map<PlayerId, String> names,
+                                       Map<PlayerId, Player> players,
+                                       Random rng){
+        new Thread(() -> Game.play(players, names, tickets, rng)).start();
+    }
+
+    private static void startOnlineGame(SortedBag<Ticket> tickets,
+                                        Map<PlayerId, String> names,
+                                        Random rng, boolean radioButtonSelection){
+
+        if (radioButtonSelection){
+            try {
+                System.out.println("Server Started");
+                ServerSocket serverSocket = new ServerSocket(PORT);
+                //Waits for an incoming connection
+                Socket socket = serverSocket.accept();
+                //Creates the two players
+                GraphicalPlayerAdapter graphicalPlayer = new GraphicalPlayerAdapter();
+                Player remotePlayerProxy = new RemotePlayerProxy(socket);
+                Map<PlayerId, Player> players = Map.of(PLAYER_1, graphicalPlayer , PLAYER_2, remotePlayerProxy);
+
+                //Launches the game's main thread
+                new Thread(() -> Game.play(players, names, tickets, rng)).start();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else {
+            System.out.println("Server Started");
+
+            GraphicalPlayerAdapter graphicalPlayer = new GraphicalPlayerAdapter();
+            RemotePlayerClient distantClient = new RemotePlayerClient(graphicalPlayer, hostComputer, portComputer);
+
+            //Starts the network associated thread
+            new Thread(distantClient::run).start();
+
+        }
+    }
+
+
+
+
+//    public static void test(Color color1, Color color2) throws IOException {
+//            PrintToTxt.deleteFile("./resources/launcher.css");
+//            PrintToTxt.createFile("./resources/launcher.css");
+//            PrintToTxt.writeToFile("./resources/launcher.css",
+//                    ".PLAYER_1 .filled { -fx-fill: " + color1.toString() + " ; }\n.PLAYER_2 .filled { -fx-fill: " + color2.toString() + "; }");
+//        System.out.println(".PLAYER_1 .filled { -fx-fill: " + color1.toString() + " ; }\n.PLAYER_2 .filled { -fx-fill: " + color2.toString() + "; }");
 
 //        Properties properties = new Properties();
 //        String filename = "./resources/launcher.css";
@@ -242,7 +382,7 @@ public final class Launcher {
 //        FileOutputStream outputStream = new FileOutputStream(filename);
 //        properties.store(outputStream, null);
 //        outputStream.close();
-    }
+//    }
 
 //    public void testTXT() {
 //        Path path = FileSystems.getDefault().getPath("./resources/launcher.css");
