@@ -125,6 +125,8 @@ public final class Tutorial {
         player.waitsForNext(tutorialText.nextLine()); //18
         player.waitsForNext(tutorialText.nextLine()); //19
 
+        currentGameState = currentGameState.withClaimedRoute(ChMap.routes().get(43), SortedBag.of(currentGameState.playerState(id).cards()));
+
         PlayerState stateWithAddedVioletCards = currentGameState.playerState(id);
         for (int i = 0; i < 4; i++) {
             stateWithAddedVioletCards = stateWithAddedVioletCards.withAddedCard(Card.VIOLET);
@@ -186,8 +188,7 @@ public final class Tutorial {
         Route claimedRoute3 = player.claimedRoute();
         SortedBag<Card> initialClaimCards3 = player.initialClaimCards();
         PlayerState claimPlayerState3 = currentGameState.playerState(id);
-        while (!claimedRoute3.equals(ChMap.routes().get(16)) || !claimedRoute3.equals(ChMap.routes().get(17))) {
-            System.out.println("enters here");
+        while (!claimedRoute3.equals(ChMap.routes().get(16)) && !claimedRoute3.equals(ChMap.routes().get(17))) {
             for (int i = 0; i < 4; i++) {
                 claimPlayerState3 = claimPlayerState3.withAddedCard(Card.YELLOW);
             }
@@ -211,7 +212,7 @@ public final class Tutorial {
         Route claimedRoute4 = player.claimedRoute();
         SortedBag<Card> initialClaimCards4 = player.initialClaimCards();
         PlayerState claimPlayerState4 = currentGameState.playerState(id);
-        while (!claimedRoute4.equals(ChMap.routes().get(16)) || !claimedRoute4.equals(ChMap.routes().get(17))) {
+        while (!claimedRoute4.equals(ChMap.routes().get(56))) {
             for (int i = 0; i < 4; i++) {
                 claimPlayerState4 = claimPlayerState4.withAddedCard(Card.GREEN);
             }
@@ -225,6 +226,81 @@ public final class Tutorial {
         player.receiveInfo(info.claimedRoute(claimedRoute4, initialClaimCards4));
 
         player.next(tutorialText.nextLine()); //27
+        player.waitsForNext(tutorialText.nextLine()); //28
+        player.waitsForNext(tutorialText.nextLine()); //29
+
+        PlayerState stateWithAddedBlackAndLocoCards = currentGameState.playerState(id);
+        for (int i = 0; i < 3; i++) {
+            stateWithAddedBlackAndLocoCards = stateWithAddedBlackAndLocoCards.withAddedCard(Card.BLACK);
+        }
+        stateWithAddedBlackAndLocoCards = stateWithAddedBlackAndLocoCards.withAddedCard(Card.LOCOMOTIVE);
+        player.updateState(currentGameState, stateWithAddedBlackAndLocoCards);
+
+        Route claimedRoute5 = player.claimedRoute();
+        SortedBag<Card> initialClaimCards5 = player.initialClaimCards();
+        PlayerState claimPlayerState5 = currentGameState.playerState(id);
+        while (!claimedRoute5.equals(ChMap.routes().get(11)) && !claimedRoute5.equals(ChMap.routes().get(12))) {
+            for (int i = 0; i < 3; i++) {
+                claimPlayerState5 = claimPlayerState5.withAddedCard(Card.BLACK);
+            }
+            claimPlayerState5 = claimPlayerState5.withAddedCard(Card.LOCOMOTIVE);
+            player.next("Ce n'est pas la bonne route. Veuillez recommencer : emparez vous de la route Lausanne - Neuchâtel.");
+            claimedRoute5 = player.claimedRoute();
+            initialClaimCards5 = player.initialClaimCards();
+            player.updateState(currentGameState, claimPlayerState5);
+        }
+        currentGameState = currentGameState.withClaimedRoute(claimedRoute5, initialClaimCards5);
+        player.updateState(currentGameState, currentGameState.playerState(id));
+        player.receiveInfo(info.claimedRoute(claimedRoute5, initialClaimCards5));
+
+        player.next(tutorialText.nextLine()); //30
+
+
+        PlayerState stateWithAddedLocoCards = currentGameState.playerState(id);
+        for (int i = 0; i < 3; i++) {
+            stateWithAddedLocoCards = stateWithAddedLocoCards.withAddedCard(Card.BLACK);
+        }
+        stateWithAddedLocoCards = stateWithAddedLocoCards.withAddedCard(Card.LOCOMOTIVE);
+        player.updateState(currentGameState, stateWithAddedLocoCards);
+
+
+        Route claimedRoute6 = player.claimedRoute();
+        SortedBag<Card> initialClaimCards6 = player.initialClaimCards();
+        PlayerState claimPlayerState6 = currentGameState.playerState(id);
+        while (!claimedRoute6.equals(ChMap.routes().get(22))) {
+            for (int i = 0; i < 6; i++) {
+                claimPlayerState6 = claimPlayerState6.withAddedCard(Card.LOCOMOTIVE);
+            }
+            player.next("Ce n'est pas la bonne route. Veuillez recommencer : emparez vous de la route Lausanne - Neuchâtel.");
+            claimedRoute6 = player.claimedRoute();
+            initialClaimCards6 = player.initialClaimCards();
+            player.updateState(currentGameState, claimPlayerState6);
+        }
+        currentGameState = currentGameState.withClaimedRoute(claimedRoute6, initialClaimCards6);
+        player.updateState(currentGameState, currentGameState.playerState(id));
+        player.receiveInfo(info.claimedRoute(claimedRoute6, initialClaimCards6));
+
+        player.next(tutorialText.nextLine()); //31
+        player.waitsForNext(tutorialText.nextLine()); //32
+        player.waitsForNext(tutorialText.nextLine()); //33
+
+        PlayerState stateWithAddedTwoYellowCards = currentGameState.playerState(id);
+        for (int i = 0; i < 2; i++) {
+            stateWithAddedTwoYellowCards = stateWithAddedTwoYellowCards.withAddedCard(Card.YELLOW);
+        }
+        player.updateState(currentGameState, stateWithAddedTwoYellowCards);
+
+
+        //========================================================================================
+
+
+
+
+
+        //========================================================================================
+
+
+
 
 
 
@@ -233,21 +309,21 @@ public final class Tutorial {
     }
 
     private static void withRe(TutorialGraphicalPlayerAdapter player, GameState currentGameState, PlayerId id, Info info) {
-        Route claimedRoute4 = player.claimedRoute();
-        SortedBag<Card> initialClaimCards4 = player.initialClaimCards();
-        PlayerState claimPlayerState4 = currentGameState.playerState(id);
-        while (!claimedRoute4.equals(ChMap.routes().get(16)) || !claimedRoute4.equals(ChMap.routes().get(17))) {
-            for (int i = 0; i < 4; i++) {
-                claimPlayerState4 = claimPlayerState4.withAddedCard(Card.GREEN);
+        Route claimedRoute6 = player.claimedRoute();
+        SortedBag<Card> initialClaimCards6 = player.initialClaimCards();
+        PlayerState claimPlayerState6 = currentGameState.playerState(id);
+        while (!claimedRoute6.equals(ChMap.routes().get(22))) {
+            for (int i = 0; i < 6; i++) {
+                claimPlayerState6 = claimPlayerState6.withAddedCard(Card.LOCOMOTIVE);
             }
             player.next("Ce n'est pas la bonne route. Veuillez recommencer : emparez vous de la route Lausanne - Neuchâtel.");
-            claimedRoute4 = player.claimedRoute();
-            initialClaimCards4 = player.initialClaimCards();
-            player.updateState(currentGameState, claimPlayerState4);
+            claimedRoute6 = player.claimedRoute();
+            initialClaimCards6 = player.initialClaimCards();
+            player.updateState(currentGameState, claimPlayerState6);
         }
-        currentGameState = currentGameState.withClaimedRoute(claimedRoute4, initialClaimCards4);
+        currentGameState = currentGameState.withClaimedRoute(claimedRoute6, initialClaimCards6);
         player.updateState(currentGameState, currentGameState.playerState(id));
-        player.receiveInfo(info.claimedRoute(claimedRoute4, initialClaimCards4));
+        player.receiveInfo(info.claimedRoute(claimedRoute6, initialClaimCards6));
     }
 
     private static void drawTickets(Player player, GameState gameState, Info info) {
@@ -260,14 +336,46 @@ public final class Tutorial {
 
 
 
-    private static void needsToPlay(String text) {
-        String command = text.substring(DO_LENGTH);
+    private static void tunnel(TutorialGraphicalPlayerAdapter player, GameState currentGameState, PlayerId id, Info info) {
+        Route claimedRoute7 = player.claimedRoute();
+        SortedBag<Card> initialClaimCards7 = player.initialClaimCards();
+
+        player.receiveInfo(info.attemptsTunnelClaim(claimedRoute7, initialClaimCards7));
+
+        SortedBag<Card> drawnCards = SortedBag.of(new ArrayList<>(List.of(Card.YELLOW, Card.YELLOW, Card.BLACK)));
+        int additionalCards = claimedRoute7.additionalClaimCardsCount(initialClaimCards7, drawnCards);
+        player.receiveInfo(info.drewAdditionalCards(drawnCards, additionalCards));
+
+        List<SortedBag<Card>> possibleAdditionalCards = currentGameState.playerState(id).possibleAdditionalCards(additionalCards, initialClaimCards7);
+
+        SortedBag<Card> additionalChosenCards = possibleAdditionalCards.isEmpty() ? null :
+                player.chooseAdditionalCards(currentGameState.playerState(id).
+                        possibleAdditionalCards(additionalCards, initialClaimCards7));
+
+        if (additionalChosenCards != null && !additionalChosenCards.isEmpty()) {
+
+            SortedBag<Card> claimCards = initialClaimCards7.union(additionalChosenCards);
+            currentGameState = currentGameState.withClaimedRoute(
+                    claimedRoute7, claimCards);
+            player.receiveInfo(info.claimedRoute(claimedRoute7, claimCards));
+
+        } else {
+            player.receiveInfo(info.didNotClaimRoute(claimedRoute7));
+        }
+        } else {
+            currentGameState = currentGameState.withClaimedRoute(claimedRoute7, initialClaimCards7);
+            player.receiveInfo(info.claimedRoute(claimedRoute7, initialClaimCards7));
+        }
+
 
     }
 
-    private static void updateStates(Map<PlayerId, Player> players, GameState currentGameState){
-        for(PlayerId playerId : ALL){
-            players.get(playerId).updateState(currentGameState, currentGameState.playerState(playerId));
+    private static void updateStates(TutorialGraphicalPlayerAdapter player, GameState currentGameState, PlayerId id){
+        PlayerState stateWithAddedRedCards = currentGameState.playerState(id);
+        for (int i = 0; i < 3; i++) {
+            stateWithAddedRedCards = stateWithAddedRedCards.withAddedCard(Card.BLACK);
         }
+        stateWithAddedRedCards = stateWithAddedRedCards.withAddedCard(Card.LOCOMOTIVE);
+        player.updateState(currentGameState, stateWithAddedRedCards);
     }
 }

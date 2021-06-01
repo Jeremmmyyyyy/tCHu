@@ -26,18 +26,11 @@ Allez-y, emparez-vous de la route Berne - Lucerne avec 4 cartes jaunes.
 Bravo ! Emparez-vous maintenant de la route Lausanne - Neuchâtel avec 4 cartes vertes.
 Bravo ! Les routes en pointillé représentent des tunnels.
 Pour s'emparer d'un tunnel vous pouvez jouer en plus des cartes de couleur correspondante, des cartes locomotives.
-
-Voici une carte locomotive. Emparez-vous de la route Wassen - Bellizone avec 3 cartes vertes et 1 carte locomotive.
-
-En voici 6 autres. Emparez-vous maintenant de la route Brigue - Locarno avec ces 6 cartes locomotives.
-
-En réalité, lorsque vous souhaitez vous emparer d'un tunnel,
-le jeu tire les trois cartes du sommet de la pioche et détermine un coût additionnel de cartes à jouer.
-Pour vous emparez du tunnel, vous devez alors fournir un nombre de cartes (de la même couleur que celles jouées initialement)
-ou de locomotives supplémentaires à hauteur de coût additionnel.
-
+Voici une carte locomotive et 3 cartes noires. Emparez-vous de la route Wassen - Bellizone avec 3 cartes noires et 1 carte locomotive.
+Bravo et voici 6 autres cartes locomotives. Emparez-vous maintenant de la route Brigue - Locarno avec ces cartes.
+En réalité, lorsque vous souhaitez vous emparer d'un tunnel, le jeu tire les trois cartes du sommet de la pioche et détermine un coût additionnel de cartes à jouer.
+Pour vous emparez du tunnel, vous devez alors fournir un nombre de cartes (de la même couleur que celles jouées initialement) ou de locomotives supplémentaires à hauteur de ce coût additionnel.
 Emparez-vous de la route Schwiz - Wassen avec 2 cartes jaunes.
-INFO
 
 Le coût additionnel est de deux cartes. Malheureusement vous n'avez pas assez de cartes en main pour jouer ce coût.
 (fenetre de selection avec plein de choix)

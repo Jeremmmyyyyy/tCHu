@@ -154,16 +154,16 @@ public final class TutorialGraphicalPlayer {
         assert isFxApplicationThread();
 
         //TurnKind = DRAW_TICKETS
-        drawTicketsHandlerProperty.set(observableGameState.canDrawTickets() ? () -> {
-            drawTicketsHandler.onDrawTickets();
-            clearHandlerProperties();
-        } : null);
+//        drawTicketsHandlerProperty.set(observableGameState.canDrawTickets() ? () -> {
+//            drawTicketsHandler.onDrawTickets();
+//            clearHandlerProperties();
+//        } : null);
 
         //TurnKind = DRAW_CARDS
-        drawCardHandlerProperty.set(observableGameState.canDrawCards() ? drawSlot -> {
-            drawCardHandler.onDrawCard(drawSlot);
-            clearHandlerProperties();
-        } : null);
+//        drawCardHandlerProperty.set(observableGameState.canDrawCards() ? drawSlot -> {
+//            drawCardHandler.onDrawCard(drawSlot);
+//            clearHandlerProperties();
+//        } : null);
 
         //TurnKind = CLAIM_ROUTE (always filled)
         claimRouteHandlerProperty.set((route, cards) -> {

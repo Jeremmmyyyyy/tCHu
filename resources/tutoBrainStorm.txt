@@ -15,3 +15,4 @@ A FAIRE : GERER LE TEXT DU TUTORIEL DANS UN CADRE BLANC OU MIEUX ET QUE LA TAILL
 A FAIRE : Garder la taille du pane, pas que ca casse la map au fur et a mesure
 A FAIRE : update au drawCards et drawTickets casse
 A FARIRE : empecher de cumuler les cartes dans les demandes de claimRoute
+A FAIRE : remove les card sans prendre la route 43
