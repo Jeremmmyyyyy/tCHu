@@ -17,10 +17,7 @@ Allez-y, suivez les instructions de cette fenêtre de sélection de billet. (Mai
 Bravo ! Notez que les billets choisis sont représentés à gauche de votre main de cartes.
 Pour prendre une route, il suffit de cliquer dessus sur la carte.
 Allez-y, emparez-vous de la route Interlaken - Lucerne.
-DO:CLAIM_ROUTE
-================================================================================================
-Maintenant que vous maîtrisez les outils pour jouer, voici quelques spécificités à connaître.
-
+Bravo ! Maintenant que vous maîtrisez les outils pour jouer, voici quelques spécificités à connaître.
 Remarquez qu'il y a différentes types de routes sur la carte.
 Les routes en couleur ne peuvent être prises qu'avec des cartes de la même couleur.
 

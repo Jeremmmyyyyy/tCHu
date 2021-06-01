@@ -5,6 +5,7 @@ import ch.epfl.tchu.game.*;
 import ch.epfl.tchu.gui.Info;
 import ch.epfl.tchu.gui.TutorialGraphicalPlayerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -37,7 +38,6 @@ public final class Tutorial {
         GameState currentGameState = GameState.initial(SortedBag.of(ChMap.tickets()), new Random());
         PlayerId id = currentGameState.currentPlayerId();
 
-        PlayerState currentPlayerState = currentGameState.playerState(id);
 
 
 
@@ -48,7 +48,7 @@ public final class Tutorial {
         player.waitsForNext(tutorialText.nextLine());
         player.waitsForNext(tutorialText.nextLine());
         player.waitsForNext(tutorialText.nextLine());
-        player.receiveInfo("Comme ceci !\n\n");
+        player.receiveInfo("Comme ceci !\n");
         player.waitsForNext(tutorialText.nextLine());
         player.waitsForNext(tutorialText.nextLine());
         player.waitsForNext(tutorialText.nextLine());
@@ -78,7 +78,6 @@ public final class Tutorial {
         player.receiveInfo(info.canPlay());
 
         currentGameState = currentGameState.withCardsDeckRecreatedIfNeeded(new Random());
-//        player.updateState(currentGameState, currentGameState.playerState(PLAYER_1));
         int slot = player.drawSlot();
         if (0 <= slot && slot < Constants.FACE_UP_CARDS_COUNT) {
 
@@ -119,18 +118,70 @@ public final class Tutorial {
         SortedBag<Ticket> keptTickets = player.chooseTickets(drawnTickets);
         player.receiveInfo(info.keptTickets(keptTickets.size()));
         currentGameState = currentGameState.withChosenAdditionalTickets(drawnTickets, keptTickets);
+        player.updateState(currentGameState, currentGameState.playerState(id));
+
 
         player.next(tutorialText.nextLine()); //17
         player.waitsForNext(tutorialText.nextLine()); //18
         player.waitsForNext(tutorialText.nextLine()); //19
 
-        System.out.println(player);
+        PlayerState currentPlayerState = currentGameState.playerState(id);
         for (int i = 0; i < 4; i++) {
-            player.updateState(currentGameState, currentGameState.playerState(id).withAddedCard(Card.VIOLET));
+            currentPlayerState = currentPlayerState.withAddedCard(Card.VIOLET);
         }
-        player.updateState(currentGameState, currentGameState.playerState(id));
+        player.updateState(currentGameState, currentPlayerState);
 
-        player.waitsForNext(tutorialText.nextLine());
+        Route claimedRoute = player.claimedRoute();
+        SortedBag<Card> initialClaimCards = player.initialClaimCards();
+
+        currentGameState = currentGameState.withClaimedRoute(claimedRoute, initialClaimCards);
+        player.updateState(currentGameState, currentGameState.playerState(id));
+        player.receiveInfo(info.claimedRoute(claimedRoute, initialClaimCards));
+
+//
+//        if (claimedRoute.level() == Route.Level.UNDERGROUND) {
+//
+//            player.receiveInfo(info.attemptsTunnelClaim(claimedRoute, initialClaimCards));
+//            List<Card> drawnCardsList = new ArrayList<>();
+//            for (int i = 0; i < Constants.ADDITIONAL_TUNNEL_CARDS; i++) {
+//                currentGameState = currentGameState.withCardsDeckRecreatedIfNeeded(new Random());;
+//                drawnCardsList.add(currentGameState.topCard());
+//                currentGameState = currentGameState.withoutTopCard();
+//            }
+//            SortedBag<Card> drawnCards = SortedBag.of(drawnCardsList);
+//            currentGameState = currentGameState.withMoreDiscardedCards(drawnCards);
+//            int additionalCards = claimedRoute.additionalClaimCardsCount(initialClaimCards, drawnCards);
+//            player.receiveInfo(info.drewAdditionalCards(drawnCards, additionalCards));
+//
+//            if (additionalCards > 0) {
+//
+//                List<SortedBag<Card>> possibleAdditionalCards = currentGameState.playerState(id).
+//                        possibleAdditionalCards(additionalCards, initialClaimCards);
+//
+//                SortedBag<Card> additionalChosenCards = possibleAdditionalCards.isEmpty() ? null :
+//                        player.chooseAdditionalCards(currentGameState.playerState(id).
+//                                possibleAdditionalCards(additionalCards, initialClaimCards));
+//
+//                if (additionalChosenCards != null && !additionalChosenCards.isEmpty()) {
+//
+//                    SortedBag<Card> claimCards = initialClaimCards.union(additionalChosenCards);
+//                    currentGameState = currentGameState.withClaimedRoute(claimedRoute, claimCards);
+//                    player.receiveInfo(info.claimedRoute(claimedRoute, claimCards));
+//
+//                } else {
+//                    player.receiveInfo(info.didNotClaimRoute(claimedRoute));
+//                }
+//            } else {
+//                currentGameState = currentGameState.withClaimedRoute(claimedRoute, initialClaimCards);
+//                player.receiveInfo(info.claimedRoute(claimedRoute, initialClaimCards));
+//            }
+//        } else if (claimedRoute.level() == Route.Level.OVERGROUND) {
+//            currentGameState = currentGameState.withClaimedRoute(claimedRoute, initialClaimCards);
+//            player.receiveInfo(info.claimedRoute(claimedRoute, initialClaimCards));
+//        }
+
+        player.next(tutorialText.nextLine());//20
+        player.waitsForNext(tutorialText.nextLine());//21
 
 
 

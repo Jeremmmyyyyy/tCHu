@@ -31,6 +31,7 @@ public final class TutorialGraphicalPlayerAdapter implements Player {
     private final BlockingQueue<SortedBag<Card>> cardsQueue;
 
     private final static int BLOCKING_CAPACITY = 1;
+    private final static String BREAK = "\n";
 
     /**
      * Instantiates a GraphicalPlayerAdapter with different ArrayBlockingQueues of size 1
@@ -88,7 +89,7 @@ public final class TutorialGraphicalPlayerAdapter implements Player {
      */
     @Override
     public void receiveInfo(String info) {
-        runLater(() -> tutorialGraphicalPlayer.receiveInfo(info));
+        runLater(() -> tutorialGraphicalPlayer.receiveInfo(info + BREAK));
     }
 
     /**
@@ -193,7 +194,13 @@ public final class TutorialGraphicalPlayerAdapter implements Player {
      */
     @Override
     public Route claimedRoute() {
-        return routeQueue.remove();
+        runLater(() ->  tutorialGraphicalPlayer.startTurn(null, null,
+                (route, cards) -> {
+                    routeQueue.add(route);
+                    cardsQueue.add(cards);
+                    turnQueue.add(Player.TurnKind.CLAIM_ROUTE);
+                }));
+        return takeTry(routeQueue);
     }
 
     /**
