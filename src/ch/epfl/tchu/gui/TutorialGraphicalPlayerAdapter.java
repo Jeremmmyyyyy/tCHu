@@ -3,7 +3,6 @@ package ch.epfl.tchu.gui;
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
 
-import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -52,6 +51,11 @@ public final class TutorialGraphicalPlayerAdapter implements Player {
 
         runLater(() -> tutorialGraphicalPlayer.updateTutorialText(nextMessage));
 
+    }
+
+    public void removeCard(Card card) {
+        cardsQueue.add(SortedBag.of(card));
+        initialClaimCards();
     }
 
     public void waitsForNext(String nextMessage) {
@@ -198,8 +202,8 @@ public final class TutorialGraphicalPlayerAdapter implements Player {
                 (route, cards) -> {
                     routeQueue.add(route);
                     cardsQueue.add(cards);
-                    turnQueue.add(Player.TurnKind.CLAIM_ROUTE);
                 }));
+
         return takeTry(routeQueue);
     }
 

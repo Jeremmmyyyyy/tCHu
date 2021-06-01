@@ -20,17 +20,11 @@ Allez-y, emparez-vous de la route Interlaken - Lucerne.
 Bravo ! Maintenant que vous maîtrisez les outils pour jouer, voici quelques spécificités à connaître.
 Remarquez qu'il y a différentes types de routes sur la carte.
 Les routes en couleur ne peuvent être prises qu'avec des cartes de la même couleur.
-
-Par exemple, comme vous ne disposez pas de cartes de couleur bleue, vous ne pouvez pas vous emparez de la route Berne - Interlaken.
-
-Voici maintenant 3 cartes bleues. Emparez-vous maintenant de la route Berne - Interlaken.
-
-Les routes grises sont de couleur neutre, c'est-à-dire qu'elles peuvent êtres prises avec n'importe quelle couleur.
-
+Voici maintenant 3 cartes bleues. Emparez-vous de la route Berne - Interlaken.
+Bravo ! Les routes grises sont de couleur neutre, c'est-à-dire qu'elles peuvent êtres prises avec n'importe quelle couleur.
 Allez-y, emparez-vous de la route Berne - Lucerne avec 4 cartes jaunes.
-Emparez-vous maintenant de la route Lausanne - Neuchâtel avec 4 cartes roses.
-
-Les routes en pointillé représentent des tunnels.
+Bravo ! Emparez-vous maintenant de la route Lausanne - Neuchâtel avec 4 cartes vertes.
+Bravo ! Les routes en pointillé représentent des tunnels.
 Pour s'emparer d'un tunnel vous pouvez jouer en plus des cartes de couleur correspondante, des cartes locomotives.
 
 Voici une carte locomotive. Emparez-vous de la route Wassen - Bellizone avec 3 cartes vertes et 1 carte locomotive.
