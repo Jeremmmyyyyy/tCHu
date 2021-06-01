@@ -177,6 +177,12 @@ public final class Tutorial {
         player.next(tutorialText.nextLine()); //24
         player.waitsForNext(tutorialText.nextLine()); //25
 
+        PlayerState stateWithAddedYellowCards = currentGameState.playerState(id);
+        for (int i = 0; i < 4; i++) {
+            stateWithAddedYellowCards = stateWithAddedYellowCards.withAddedCard(Card.YELLOW);
+        }
+        player.updateState(currentGameState, stateWithAddedYellowCards);
+
         Route claimedRoute3 = player.claimedRoute();
         SortedBag<Card> initialClaimCards3 = player.initialClaimCards();
         PlayerState claimPlayerState3 = currentGameState.playerState(id);
@@ -195,6 +201,12 @@ public final class Tutorial {
         player.receiveInfo(info.claimedRoute(claimedRoute3, initialClaimCards3));
 
         player.next(tutorialText.nextLine()); //26
+
+        PlayerState stateWithAddedGreenCards = currentGameState.playerState(id);
+        for (int i = 0; i < 4; i++) {
+            stateWithAddedGreenCards = stateWithAddedGreenCards.withAddedCard(Card.GREEN);
+        }
+        player.updateState(currentGameState, stateWithAddedGreenCards);
 
         Route claimedRoute4 = player.claimedRoute();
         SortedBag<Card> initialClaimCards4 = player.initialClaimCards();
