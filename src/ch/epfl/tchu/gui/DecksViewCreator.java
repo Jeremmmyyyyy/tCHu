@@ -124,6 +124,7 @@ final class DecksViewCreator {
         cardsButton.disableProperty().bind(drawCardHandler.isNull());
 
         //Create the main ticket deck button
+
         Button ticketsButton = createButton(TICKETS, observableGameState.ticketPercentage());
         ticketsButton.setOnAction(e -> drawTicketHandler.get().onDrawTickets());
         ticketsButton.disableProperty().bind(drawTicketHandler.isNull());

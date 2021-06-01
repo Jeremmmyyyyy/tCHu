@@ -22,6 +22,7 @@ public interface ActionHandlers {
 
     /**
      * Interface for the cards draw as onDrawCard(...) function
+     *
      */
     @FunctionalInterface
     interface DrawCardHandler {
