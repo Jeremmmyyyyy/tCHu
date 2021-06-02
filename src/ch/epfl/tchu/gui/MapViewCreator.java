@@ -69,7 +69,15 @@ final class MapViewCreator {
                 }});
 
             observableGameState.routes(r).addListener((o, oV, nV) -> {
-                route.getStylesheets().add("launcher.css");
+//                route.setStyle("-fx-fill-color: #1fc41f;");
+//                ((Rectangle)((Group)((Group) route.getChildren().get(0)).getChildren().get(1)).getChildren().get(0)).setFill(Color.RED);
+//                Rectangle rectangle = new Rectangle();
+//                rectangle.setFill(Color.RED);
+//                route.getStyleClass().add("-fx-fill-color: #00ff00ff;");
+//                route.getStyleClass().get(0).
+//                System.out.println(nV.name());
+//                route.setStyle("-fx-fill: #00ff00ff");
+//                route.getStyleClass().add(nV.name().equals("PLAYER_1") ? Launcher.GameColor.COLOR_PLAYER1.getColor() : Launcher.GameColor.COLOR_PLAYER2.getColor());
                 route.getStyleClass().add(nV.name());
             });
             route.disableProperty().bind(claimRouteHandler.isNull().or(observableGameState.claimableRoute(r).not()));

@@ -35,19 +35,15 @@ public final class Launcher {
 
     private static final int PORT = 5108;
     private static Stage launcher;
-    private final int STAGE_WIDTH = 700;
-    private final int STAGE_HEIGHT = 500;
     private static String namePlayer1 = "Joueur 1";
     private static String namePlayer2 = "Joueur 2";
-    private static ColorPicker colorPicker1 = new ColorPicker(Color.LIGHTBLUE);
-    private static ColorPicker colorPicker2 = new ColorPicker(Color.LIGHTPINK);
-    private static Color color1;
-    private static Color color2;
-    private static String hostComputer = "localhost";
-    private static int portComputer = 5108;
+    private static final ColorPicker colorPicker1 = new ColorPicker(Color.LIGHTBLUE);
+    private static final ColorPicker colorPicker2 = new ColorPicker(Color.LIGHTPINK);
+    private static final String hostComputer = "localhost";
+    private static final int portComputer = 5108;
     private static GameType gameType = GameType.TUTORIAL;
     private static final StringProperty stringProperty = new SimpleStringProperty();
-    private static BooleanProperty radioButtonSelectionProperty = new SimpleBooleanProperty();
+    private static final BooleanProperty radioButtonSelectionProperty = new SimpleBooleanProperty();
     private static final Color COLOR = Color.LIGHTBLUE;
 
     public enum GameType{
@@ -66,6 +62,25 @@ public final class Launcher {
         public String toString() {
             return this.gameType;
         }
+
+    }
+    public enum GameColor{
+        COLOR_PLAYER1("-fx-fill: #00ff00ff"),
+        COLOR_PLAYER2("-fx-fill: #00ff00ff");
+
+        private String color;
+
+        GameColor(String color){
+            this.color = color;
+        }
+
+        public void setColor(String newColor){
+            this.color = newColor;
+        }
+        public String getColor(){
+            return  color;
+        }
+
     }
 
 
@@ -82,7 +97,9 @@ public final class Launcher {
 
         launcher.setScene(new Scene(new BorderPane(launcherCreator, top, right, bottom, left)));
         launcher.setTitle("Launcher tCHu " + playerNames.get(playerId));
+        int STAGE_WIDTH = 700;
         launcher.setWidth(STAGE_WIDTH);
+        int STAGE_HEIGHT = 500;
         launcher.setHeight(STAGE_HEIGHT);
         launcher.setResizable(false);
         launcher.getIcons().add(new Image("launcher.png"));
@@ -143,7 +160,7 @@ public final class Launcher {
         TextField port = new TextField(String.valueOf(portComputer));
 
         vBox2.getChildren().addAll(text, choiceBox);
-        creatRadioButtonGroupAndLinkClientServer(vBox2, host, port, colorPicker1, colorPicker2);
+        creatRadioButtonGroupAndLinkClientServer(vBox2, host, port);
         vBox2.getChildren().addAll(host, port);
         vBox3.getChildren().add(infoText);
         vBox1.getChildren().addAll(imageView);
@@ -155,9 +172,7 @@ public final class Launcher {
 
     private static void creatRadioButtonGroupAndLinkClientServer(VBox vBox,
                                                                  TextField host,
-                                                                 TextField port,
-                                                                 ColorPicker colorPicker1,
-                                                                 ColorPicker colorPicker2){
+                                                                 TextField port){
         host.setDisable(true);
         port.setDisable(true);
         ToggleGroup radioButtonGroup = new ToggleGroup();
@@ -175,31 +190,31 @@ public final class Launcher {
                 radioButton2.setDisable(false);
                 host.setDisable(radioButtonSelectionProperty.getValue());
                 port.setDisable(radioButtonSelectionProperty.getValue());
-                colorPicker1.setDisable(!radioButtonSelectionProperty.getValue());
-                colorPicker2.setDisable(!radioButtonSelectionProperty.getValue());
+                Launcher.colorPicker1.setDisable(!radioButtonSelectionProperty.getValue());
+                Launcher.colorPicker2.setDisable(!radioButtonSelectionProperty.getValue());
             }else {
                 radioButton1.setSelected(true);
                 radioButton1.setDisable(true);
                 radioButton2.setDisable(true);
                 host.setDisable(true);
                 port.setDisable(true);
-                colorPicker1.setDisable(false);
-                colorPicker2.setDisable(false);
+                Launcher.colorPicker1.setDisable(false);
+                Launcher.colorPicker2.setDisable(false);
             }
         });
         radioButton1.setOnAction(event -> {
             radioButtonSelectionProperty.set(true);
             host.setDisable(true);
             port.setDisable(true);
-            colorPicker1.setDisable(false);
-            colorPicker2.setDisable(false);
+            Launcher.colorPicker1.setDisable(false);
+            Launcher.colorPicker2.setDisable(false);
         });
         radioButton2.setOnAction(event -> {
             radioButtonSelectionProperty.set(false);
             host.setDisable(false);
             port.setDisable(false);
-            colorPicker1.setDisable(true);
-            colorPicker2.setDisable(true);
+            Launcher.colorPicker1.setDisable(true);
+            Launcher.colorPicker2.setDisable(true);
         });
         vBox.getChildren().addAll(radioButton1, radioButton2);
     }
@@ -298,7 +313,7 @@ public final class Launcher {
 
         hBox1.getChildren().addAll(textField1, text, textField2, button);
         hBox3.getChildren().addAll(playerText);
-        hBox4.getChildren().addAll(colorPicker1, colorPicker2);
+//        hBox4.getChildren().addAll(colorPicker1, colorPicker2); //TODO colorPicker
         hBox2.getChildren().addAll(hBox3, hBox4);
 
 
@@ -308,14 +323,11 @@ public final class Launcher {
     }
 
     public static void updateColors(){
-        color1 = colorPicker1.getValue();
-        color2 = colorPicker2.getValue();
-        System.out.println(color1 + " " + color2);
-        try {
-            test(color1, color2);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Color color1 = colorPicker1.getValue();
+        Color color2 = colorPicker2.getValue();
+        GameColor.COLOR_PLAYER1.setColor("-fx-fill: #" + color1.toString().substring(2));
+        GameColor.COLOR_PLAYER2.setColor("-fx-fill: #" + color2.toString().substring(2));
+        System.out.println(GameColor.COLOR_PLAYER1.getColor() +" "+ GameColor.COLOR_PLAYER2.getColor());
     }
 
     public static Node right(){
@@ -373,9 +385,6 @@ public final class Launcher {
             }
             launcher.hide();
             Platform.setImplicitExit(false);
-
-//            //Map<PlayerId, String> colors = Map.of(PLAYER_1, namePlayer1, PLAYER_2, namePlayer2); //TODO colors for players
-
         });
 
         close.setOnAction(event -> launcher.hide());
@@ -481,10 +490,7 @@ public final class Launcher {
         }
 
     }
-
-
-
-
+    //TODO
     public static void test(Color color1, Color color2) throws IOException {
         PrintToTxt.deleteFile("./resources/launcher.css");
         PrintToTxt.createFile("./resources/launcher.css");
@@ -492,62 +498,4 @@ public final class Launcher {
                 ".PLAYER_1 .filled { -fx-fill: #" + color1.toString().substring(2) + " ; }\n.PLAYER_2 .filled { -fx-fill: #" + color2.toString().substring(2) + "; }");
 
     }
-            //        System.out.println(".PLAYER_1 .filled { -fx-fill: " + color1.toString() + " ; }\n.PLAYER_2 .filled { -fx-fill: " + color2.toString() + "; }");
-//        Properties properties = new Properties();
-//        String filename = "./resources/launcher.css";
-//
-//        FileInputStream configStream = new FileInputStream(filename);
-//        properties.load(configStream);
-//        configStream.close();
-//
-//        properties.(".PLAYER_1 .filled { -fx-fill: -my-background1; }", );
-//        properties.setProperty("newProperty", "newValue");
-//
-//        FileOutputStream outputStream = new FileOutputStream(filename);
-//        properties.store(outputStream, null);
-//        outputStream.close();
-//    }
-//    public void testTXT() {
-//        Path path = FileSystems.getDefault().getPath("./resources/launcher.css");
-//        try {
-//            Files.delete(path);
-//        } catch (NoSuchFileException x) {
-//            System.err.format("%s: no such" + " file or directory%n", path);
-//        } catch (IOException x) {
-//            System.err.println(x);
-//        }
-//    }
-//
-//    public void writeFile() throws IOException {
-//        Path path = FileSystems.getDefault().getPath("./resources/launcher.css");
-//        Files.createFile(path);
-//        Files.writeString(path, ".PLAYER_1 .filled { -fx-fill: red; } \n.PLAYER_2 .filled { -fx-fill: blue; }");
-//        BufferedReader bufferedReader = Files.newBufferedReader(path);
-//        for (int i = 0; i < 5; i++) {
-//            System.out.println(bufferedReader.readLine());
-//        }
-//        bufferedReader.close();
-//        Files.
-//
-//    }
-//    public static Pane cssSheet(Pane node, Color color1, Color color2){
-//        try {
-//
-//            Path cssPath = Files.createTempFile("fx-theme-", ".css");
-//            Files.writeString(cssPath, ".PLAYER1{-fx-fill :" + color1 + ";}" +
-//                    ".PLAYER2{-fx-fill :" + color2 + ";}");
-//            cssPath.toFile().deleteOnExit();
-//            System.out.println("Wrote " + cssPath);
-//            System.out.println("URL " + cssPath.toUri().toURL().toExternalForm());
-//
-//            node.getStyleClass().setAll("PLAYER1");
-//            node.getStylesheets().setAll(cssPath.toUri().toURL().toExternalForm());
-//        }catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return node;
-//    }
-
-
-
 }
