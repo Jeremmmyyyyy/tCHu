@@ -1,2 +1,2 @@
-.PLAYER_1 .filled { -fx-fill: cyan; }
-.PLAYER_2 .filled { -fx-fill: salmon; }
+.PLAYER_1 .filled { -fx-fill: #ff0000ff ; }
+.PLAYER_2 .filled { -fx-fill: #ff00ffff; }

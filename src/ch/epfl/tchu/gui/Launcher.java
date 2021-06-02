@@ -282,11 +282,21 @@ public final class Launcher {
             color1 = colorPicker1.getValue();
             color2 = colorPicker2.getValue();
             System.out.println(color1 + " " + color2);
+            try {
+                test(color1, color2);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         colorPicker2.setOnAction(event -> {
             color1 = colorPicker1.getValue();
             color2 = colorPicker2.getValue();
             System.out.println(color1 + " " + color2);
+            try {
+                test(color1, color2);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
         button.setOnAction(event -> {
@@ -484,12 +494,14 @@ public final class Launcher {
 
 
 
-//    public static void test(Color color1, Color color2) throws IOException {
-//            PrintToTxt.deleteFile("./resources/launcher.css");
-//            PrintToTxt.createFile("./resources/launcher.css");
-//            PrintToTxt.writeToFile("./resources/launcher.css",
-//                    ".PLAYER_1 .filled { -fx-fill: " + color1.toString() + " ; }\n.PLAYER_2 .filled { -fx-fill: " + color2.toString() + "; }");
-//        System.out.println(".PLAYER_1 .filled { -fx-fill: " + color1.toString() + " ; }\n.PLAYER_2 .filled { -fx-fill: " + color2.toString() + "; }");
+    public static void test(Color color1, Color color2) throws IOException {
+        PrintToTxt.deleteFile("./resources/launcher.css");
+        PrintToTxt.createFile("./resources/launcher.css");
+        PrintToTxt.writeToFile("./resources/launcher.css",
+                ".PLAYER_1 .filled { -fx-fill: #" + color1.toString().substring(2) + " ; }\n.PLAYER_2 .filled { -fx-fill: #" + color2.toString().substring(2) + "; }");
+
+    }
+            //        System.out.println(".PLAYER_1 .filled { -fx-fill: " + color1.toString() + " ; }\n.PLAYER_2 .filled { -fx-fill: " + color2.toString() + "; }");
 //        Properties properties = new Properties();
 //        String filename = "./resources/launcher.css";
 //
