@@ -7,8 +7,8 @@ ne pas desactiver le boutton Quitter le tutoriel
 remove les card sans prendre la route 43
 
 
-A FAIRE : GERER LE TEXT DU TUTORIEL DANS UN CADRE BLANC OU MIEUX ET QUE LA TAILLE NE CHANGE PAS, AJOUTEZ UNE IMAGE D'UN CONDUCTEUR DE TRAIN ANIME
+A FAIRE : GERER LE TEXT DU TUTORIEL DANS UN CADRE BLANC OU MIEUX ET QUE LA TAILLE NE CHANGE PAS
 A FAIRE : Garder la taille du pane, pas que ca casse la map au fur et a mesure
-A FAIRE : empecher de cumuler les cartes dans les demandes de claimRoute
+A FAIRE : empechesr de cumuler les cartes dans les demandes de claimRoute\
 
-A FAIRE : activer bouton quitter a la fin
+A FAIRE : MODULARISER AVEC DES ATTRIBUTS

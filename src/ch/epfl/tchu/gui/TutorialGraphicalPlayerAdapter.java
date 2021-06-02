@@ -223,7 +223,7 @@ public final class TutorialGraphicalPlayerAdapter implements Player {
      */
     @Override
     public SortedBag<Card> initialClaimCards() {
-        return cardsQueue.remove();
+        return takeTry(cardsQueue);
     }
 
     /**
