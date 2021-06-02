@@ -278,26 +278,8 @@ public final class Launcher {
             }
         });
 
-        colorPicker1.setOnAction(event -> {
-            color1 = colorPicker1.getValue();
-            color2 = colorPicker2.getValue();
-            System.out.println(color1 + " " + color2);
-            try {
-                test(color1, color2);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        colorPicker2.setOnAction(event -> {
-            color1 = colorPicker1.getValue();
-            color2 = colorPicker2.getValue();
-            System.out.println(color1 + " " + color2);
-            try {
-                test(color1, color2);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        colorPicker1.setOnAction(event -> updateColors());
+        colorPicker2.setOnAction(event -> updateColors());
 
         button.setOnAction(event -> {
             namePlayer1 = textField1.getText();
@@ -322,6 +304,17 @@ public final class Launcher {
         vBox.getChildren().addAll(hBox1, hBox2);
 
         return vBox;
+    }
+
+    public static void updateColors(){
+        color1 = colorPicker1.getValue();
+        color2 = colorPicker2.getValue();
+        System.out.println(color1 + " " + color2);
+        try {
+            test(color1, color2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Node right(){
