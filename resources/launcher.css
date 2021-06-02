@@ -1,2 +1,2 @@
-.PLAYER_1 .filled { -fx-fill: #ff00ffff ; }
-.PLAYER_2 .filled { -fx-fill: #00ffffff; }
+.PLAYER_1 .filled { -fx-fill: #0000ffff ; }
+.PLAYER_2 .filled { -fx-fill: #ffff00ff; }
