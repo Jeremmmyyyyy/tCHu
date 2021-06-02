@@ -4,6 +4,7 @@ import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
 import ch.epfl.tchu.net.RemotePlayerClient;
 import ch.epfl.tchu.net.RemotePlayerProxy;
+import ch.epfl.tchu.tutorial.Tutorial;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -352,7 +353,7 @@ public final class Launcher {
 
             switch (gameType){
                 case TUTORIAL:
-                    startTutorialGame(tickets, names, players, rng);
+                    startTutorialGame(names);
                     break;
 
                 case ONLINE_GAME:
@@ -406,11 +407,8 @@ public final class Launcher {
                 .start();
     }
 
-    private static void startTutorialGame(SortedBag<Ticket> tickets,
-                                          Map<PlayerId, String> names,
-                                          Map<PlayerId, Player> players,
-                                          Random rng){
-        System.out.println("TUTO");
+    private static void startTutorialGame(Map<PlayerId, String> names){
+        new Thread(() -> Tutorial.play(names.get(PLAYER_1))).start();
     }
 
     private static void startOnlineGame(SortedBag<Ticket> tickets,
