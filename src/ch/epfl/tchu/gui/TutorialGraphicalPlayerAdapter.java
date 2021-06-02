@@ -47,10 +47,18 @@ public final class TutorialGraphicalPlayerAdapter implements Player {
 
     public void next(String nextMessage) {
 
-        runLater(() -> tutorialGraphicalPlayer.fillTutorialHandler(tutorialQueue::add));
+        runLater(() -> {
+            tutorialGraphicalPlayer.fillTutorialHandler(tutorialQueue::add);
+            tutorialGraphicalPlayer.updateTutorialText(nextMessage);
+        });
 
-        runLater(() -> tutorialGraphicalPlayer.updateTutorialText(nextMessage));
+    }
 
+    public void waitsForLeave() {
+        runLater(() -> {
+            tutorialGraphicalPlayer.fillTutorialHandler(tutorialQueue::add);
+            tutorialGraphicalPlayer.closeTutorial();
+        });
     }
 
     public void removeCard(Card card) {

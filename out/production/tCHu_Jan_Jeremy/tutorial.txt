@@ -36,7 +36,7 @@ Maintenant réessayez et emparez-vous de la route Schwiz - Wassen avec 2 cartes 
 Bravo ! Emparez-vous maintenant de la route Wassen - Coire avec 5 cartes blanches.
 Le coût additionnel est de 3 cartes. Même si vous en capacité de jouer ce coût, vous pouvez décidez finalement de ne pas vous emparer de cette route. Pour ce faire, cliquez sur le bouton "Choisir" sans sélectionner un choix.
 Bravo ! Une partie de tCHu se termine lorsqu'un des deux joueurs n'a plus que 2 wagons.
-Regardez au-dessus de ce panel des informations concernant les deux joueurs sont affichées. Il ne vous reste plus que 11 wagons.
+Regardez en haut à gauche des informations concernant les deux joueurs sont affichées. Il ne vous reste plus que 11 wagons.
 Emparez-vous de la route Genève - Yverdon puis de la route rouge Lausanne - Fribourg. Notez dans les informations de partie que le dernier tour commence !
 Félicitations, vous pouvez maintenant librement jouer à tCHU.
 Bien évidemment, votre adversaire peut également s'emparer de routes.
