@@ -54,15 +54,15 @@ final class TutorialViewCreator {
 
         tutorialVBox.setPadding(new Insets(0, 0, 0, 200));
 
-        ImageView image = new ImageView("trainDriver.png");
-        image.setFitWidth(100);
-        image.setFitHeight(120);
+//        ImageView image = new ImageView("trainDriver.png");
+//        image.setFitWidth(100);
+//        image.setFitHeight(120);
 
-        tutorialView.getChildren().addAll(tutorialVBox, image);
+//        tutorialView.getChildren().addAll(tutorialVBox, image);
 
 
 
-        return tutorialView;
+        return tutorialVBox;
     }
 
 
