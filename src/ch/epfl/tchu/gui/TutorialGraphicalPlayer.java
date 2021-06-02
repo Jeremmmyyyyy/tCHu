@@ -41,7 +41,7 @@ public final class TutorialGraphicalPlayer {
     //TUTORIAL SPECIFIC
     //========================================================================================================
 
-    private ObjectProperty<TutorialHandler> tutorialHandlerProperty;
+    private final ObjectProperty<TutorialHandler> tutorialHandlerProperty;
 
     public void fillTutorialHandler(TutorialHandler tutorialHandler) {
         assert isFxApplicationThread();
@@ -105,6 +105,8 @@ public final class TutorialGraphicalPlayer {
                 observableGameState,
                 tutorialText,
                 tutorialHandlerProperty);
+
+        tutorialView.setTranslateX(450);
 
         mainStage = new Stage();
         mainStage.setScene(new Scene(new BorderPane(mapView, tutorialView, cardsView, handView, infoView)));

@@ -62,11 +62,12 @@ public final class TutorialGraphicalPlayerAdapter implements Player {
         try {
             runLater(() -> {
                     tutorialGraphicalPlayer.fillTutorialHandler(tutorialQueue::add);
-//                    tutorialGraphicalPlayer.clearHandlerProperty();
                 });
 
             runLater(tutorialQueue.take() ?
-                    () -> tutorialGraphicalPlayer.closeTutorial() :
+                    () -> {
+                        tutorialGraphicalPlayer.closeTutorial();
+                    } :
                     () -> tutorialGraphicalPlayer.updateTutorialText(nextMessage));
         } catch (InterruptedException e) {
             throw new Error();

@@ -1,17 +1,12 @@
-Un bouton "Continuer" UN BOUTON PRECEDENT ??
-mettre un delai par default entre les messages qui doivent s'afficher ensemble
-ecriture animée ??????
+
+IDEE :
 mettre une jauge pour savoir où on en est dans le tutoriel
 mettre un avatar de conducteur de train avec différent image : main levée, main non levée, main sur la bouche
-
-les messages du tutoriel sont ouverts dans une nouvelle fenetre qu'on ne peut pas quitter,
-fenetre en longueur ouverte juste au dessus de la main de jeu du joueur.
-Bouton continuer desactive tant que le joueur n'a pas effectué l'action demandée
-ajouter un bouton quitter le tutoriel pour revenir au menu du jeu
 demander a entrer le nom pour le tutoriel : voir javafx TextField
+ne pas desactiver le boutton Quitter le tutoriel
+remove les card sans prendre la route 43
 
 
 A FAIRE : GERER LE TEXT DU TUTORIEL DANS UN CADRE BLANC OU MIEUX ET QUE LA TAILLE NE CHANGE PAS, AJOUTEZ UNE IMAGE D'UN CONDUCTEUR DE TRAIN ANIME
 A FAIRE : Garder la taille du pane, pas que ca casse la map au fur et a mesure
-A FAIRE : update au drawCards et drawTickets casse
-A FARIRE : empecher de cumuler les cartes dans les demandes de claimRoute
+A FAIRE : empecher de cumuler les cartes dans les demandes de claimRoute

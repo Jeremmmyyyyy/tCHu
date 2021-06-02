@@ -6,8 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -20,11 +21,15 @@ final class TutorialViewCreator {
     public static Node createTutorialView(ObservableGameState observableGameState, ObservableList<Text> tutorialText,
                                           ObjectProperty<TutorialHandler> tutorialHandler) {
 
+        HBox tutorialView = new HBox();
 
-        VBox tutorialView = new VBox();
-        tutorialView.getStylesheets().add("tutorial-box.css");
+        VBox tutorialVBox = new VBox();
+        tutorialVBox.getStylesheets().add("tutorial-box.css");
 
-        tutorialView.setPadding(new Insets(0, 200, 0, 200));
+        tutorialVBox.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+
+
+
 
         Button nextButton = new Button("Continuer");
         Button leaveButton = new Button("Quitter le tutoriel");
@@ -32,16 +37,24 @@ final class TutorialViewCreator {
         nextButton.setOnAction(e -> tutorialHandler.get().onButtonClick(false));
         nextButton.disableProperty().bind(tutorialHandler.isNull());
         leaveButton.setOnAction(e -> tutorialHandler.get().onButtonClick(true));
-
-
+        leaveButton.disableProperty().bind(tutorialHandler.isNull());
 
         FlowPane buttons = new FlowPane(nextButton, leaveButton);
 
         TextFlow text = new TextFlow();
+        text.setMaxWidth(400);
+
+
+
 
         Bindings.bindContent(text.getChildren(), tutorialText);
 
-        tutorialView.getChildren().addAll(text, buttons);
+        tutorialVBox.getChildren().addAll(text, buttons);
+
+        tutorialVBox.setPadding(new Insets(0, 0, 0, 200));
+
+
+        tutorialView.getChildren().addAll(tutorialVBox, new ImageView("train-car.png"));
 
 
         return tutorialView;
