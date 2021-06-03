@@ -13,7 +13,7 @@ public class TutorialText {
     public static int index = -1;
 
     public TutorialText() {
-        try { //TODO changer le path
+        try {
             BufferedReader reader = new BufferedReader(new FileReader("./resources/tutorial.txt"));
             String readLine;
             while ((readLine = reader.readLine()) != null) {
