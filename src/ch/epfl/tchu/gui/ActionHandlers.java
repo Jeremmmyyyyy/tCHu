@@ -52,4 +52,9 @@ public interface ActionHandlers {
     interface ChooseCardsHandler {
         void onChooseCards(SortedBag<Card> cards);
     }
+
+    @FunctionalInterface
+    interface TutorialHandler {
+        void onButtonClick(boolean leaves);
+    }
 }

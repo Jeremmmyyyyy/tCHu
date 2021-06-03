@@ -6,6 +6,7 @@ import ch.epfl.tchu.game.*;
 import ch.epfl.tchu.gui.ActionHandlers.ClaimRouteHandler;
 import ch.epfl.tchu.gui.ActionHandlers.DrawCardHandler;
 import ch.epfl.tchu.gui.ActionHandlers.DrawTicketsHandler;
+import ch.epfl.tchu.gui.ActionHandlers.TutorialHandler;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -18,7 +19,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -39,6 +42,7 @@ import static javafx.application.Platform.isFxApplicationThread;
 public final class TutorialGraphicalPlayer {
 
     //TUTORIAL SPECIFIC
+    //Other methods changed : tutorialView in the class constructor
     //========================================================================================================
 
     private final ObjectProperty<TutorialHandler> tutorialHandlerProperty;
@@ -60,6 +64,7 @@ public final class TutorialGraphicalPlayer {
     }
 
     //SAME AS GRAPHICALPLAYER
+    //Other methods changed : startTurn(...), receiveInfo(...)
     //========================================================================================================
     private static final int NUMBER_OF_DISPLAYED_MESSAGES = 5;
 
@@ -93,22 +98,21 @@ public final class TutorialGraphicalPlayer {
         tutorialHandlerProperty = new SimpleObjectProperty<>();
 
         //Creates the different nodes of the gui
-        Node mapView = MapViewCreator
+        Pane mapView = (Pane) MapViewCreator
                 .createMapView(observableGameState, claimRouteHandlerProperty, this::chooseClaimCards);
-        Node cardsView = DecksViewCreator
+        Pane cardsView = (Pane) DecksViewCreator
                 .createCardsView(observableGameState, drawTicketsHandlerProperty, drawCardHandlerProperty);
         Node handView = DecksViewCreator
                 .createHandView(observableGameState);
         Node infoView = InfoViewCreator.createInfoView(playerNames, observableGameState, gameMessages);
 
-        Node tutorialView = TutorialViewCreator.createTutorialView(
-                observableGameState,
-                tutorialText,
-                tutorialHandlerProperty);
+        Node tutorialView = TutorialViewCreator.createTutorialView(tutorialText, tutorialHandlerProperty);
 
         tutorialView.setTranslateX(450);
 
         mainStage = new Stage();
+        BorderPane borderPane = new BorderPane(mapView, tutorialView, cardsView, handView, infoView);
+        Scene scene = new Scene(borderPane);
         mainStage.setScene(new Scene(new BorderPane(mapView, tutorialView, cardsView, handView, infoView)));
 
         mainStage.setTitle("tCHu \u2014 " + playerNames.get(playerId));
@@ -154,18 +158,6 @@ public final class TutorialGraphicalPlayer {
     public void startTurn(DrawTicketsHandler drawTicketsHandler, DrawCardHandler drawCardHandler,
                           ClaimRouteHandler claimRouteHandler) {
         assert isFxApplicationThread();
-
-        //TurnKind = DRAW_TICKETS
-//        drawTicketsHandlerProperty.set(observableGameState.canDrawTickets() ? () -> {
-//            drawTicketsHandler.onDrawTickets();
-//            clearHandlerProperties();
-//        } : null);
-
-        //TurnKind = DRAW_CARDS
-//        drawCardHandlerProperty.set(observableGameState.canDrawCards() ? drawSlot -> {
-//            drawCardHandler.onDrawCard(drawSlot);
-//            clearHandlerProperties();
-//        } : null);
 
         //TurnKind = CLAIM_ROUTE (always filled)
         claimRouteHandlerProperty.set((route, cards) -> {

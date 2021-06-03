@@ -12,15 +12,46 @@ import static javafx.application.Platform.runLater;
 
 public final class TutorialGraphicalPlayerAdapter implements Player {
 
+    //TUTORIAL SPECIFIC
     //=======================================================================================
 
     private final BlockingQueue<Boolean> tutorialQueue;
-
-
-
-
-    //=========================================================================================
     private TutorialGraphicalPlayer tutorialGraphicalPlayer;
+
+
+    public void next(String nextMessage) {
+
+        runLater(() -> {
+            tutorialGraphicalPlayer.fillTutorialHandler(tutorialQueue::add);
+            tutorialGraphicalPlayer.updateTutorialText(nextMessage);});
+    }
+
+    public void waitsForLeave() {
+        runLater(() -> {
+            tutorialGraphicalPlayer.fillTutorialHandler(tutorialQueue::add);
+            tutorialGraphicalPlayer.closeTutorial();
+        });
+    }
+
+    public void waitsForNext(String nextMessage) {
+        try {
+            runLater(() -> {
+                tutorialGraphicalPlayer.fillTutorialHandler(tutorialQueue::add);
+            });
+
+            runLater(tutorialQueue.take() ?
+                    () -> {
+                        tutorialGraphicalPlayer.closeTutorial();
+                    } :
+                    () -> tutorialGraphicalPlayer.updateTutorialText(nextMessage));
+        } catch (InterruptedException e) {
+            throw new Error();
+        }
+    }
+
+
+    //SAME AS GRAPHICALPLAYERADAPTER
+    //=========================================================================================
 
     //BlockingQueue to block the main thread waiting for the player's action
     private final BlockingQueue<SortedBag<Ticket>> ticketsQueue;
@@ -45,42 +76,6 @@ public final class TutorialGraphicalPlayerAdapter implements Player {
         tutorialQueue = new ArrayBlockingQueue<>(BLOCKING_CAPACITY);
     }
 
-    public void next(String nextMessage) {
-
-        runLater(() -> {
-            tutorialGraphicalPlayer.fillTutorialHandler(tutorialQueue::add);
-            tutorialGraphicalPlayer.updateTutorialText(nextMessage);
-        });
-
-    }
-
-    public void waitsForLeave() {
-        runLater(() -> {
-            tutorialGraphicalPlayer.fillTutorialHandler(tutorialQueue::add);
-            tutorialGraphicalPlayer.closeTutorial();
-        });
-    }
-
-    public void removeCard(Card card) {
-        cardsQueue.add(SortedBag.of(card));
-        initialClaimCards();
-    }
-
-    public void waitsForNext(String nextMessage) {
-        try {
-            runLater(() -> {
-                    tutorialGraphicalPlayer.fillTutorialHandler(tutorialQueue::add);
-                });
-
-            runLater(tutorialQueue.take() ?
-                    () -> {
-                        tutorialGraphicalPlayer.closeTutorial();
-                    } :
-                    () -> tutorialGraphicalPlayer.updateTutorialText(nextMessage));
-        } catch (InterruptedException e) {
-            throw new Error();
-        }
-    }
 
     /**
      * Initializes the GraphicalPlayer

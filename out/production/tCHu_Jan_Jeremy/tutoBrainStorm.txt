@@ -1,14 +1,12 @@
 
 IDEE :
 mettre une jauge pour savoir où on en est dans le tutoriel
-mettre un avatar de conducteur de train avec différent image : main levée, main non levée, main sur la bouche
 demander a entrer le nom pour le tutoriel : voir javafx TextField
 ne pas desactiver le boutton Quitter le tutoriel
-remove les card sans prendre la route 43
 
+A FAIRE : FIXER CETTE PUTAIN DE TAILLE DE HBOX
 
-A FAIRE : GERER LE TEXT DU TUTORIEL DANS UN CADRE BLANC OU MIEUX ET QUE LA TAILLE NE CHANGE PAS
-A FAIRE : Garder la taille du pane, pas que ca casse la map au fur et a mesure
-A FAIRE : empechesr de cumuler les cartes dans les demandes de claimRoute\
-
-A FAIRE : MODULARISER AVEC DES ATTRIBUTS
+A FAIRE : SUPPRIMER CE FICHIER
+A FAIRE : marquer les ajouts : dans ActionHandlers
+A FAIRE :
+A FAIRE :
