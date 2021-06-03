@@ -14,7 +14,7 @@ public class TutorialText {
 
     public TutorialText() {
         try { //TODO changer le path
-            BufferedReader reader = new BufferedReader(new FileReader("/home/yann/Documents/EPFL/BA2/POO/tCHu/resources/tutorial.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader("./resources/tutorial.txt"));
             String readLine;
             while ((readLine = reader.readLine()) != null) {
                 entireText.add(readLine);

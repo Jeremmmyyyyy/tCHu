@@ -69,16 +69,7 @@ final class DecksViewCreator {
             StackPane cardPane = stackPaneCreator(observableGameState.cardCountOnColor(card));
             cardPane.visibleProperty().bind(Bindings.greaterThan(observableGameState.cardCountOnColor(card), 0));
             cardStack.put(card, cardPane);
-            //todo ajouter le style
             cardPane.getStyleClass().add(getColorClass(card));
-
-//            observableGameState.cardCountOnColor(card).addListener((o, oV, nV)->{
-//                if(nV.intValue() > oV.intValue()){
-//                    cardPane.getStyleClass().add(getColorClass(card));
-//                }else{
-//                    cardPane.getStyleClass().remove(getColorClass(card));
-//                }
-//            });
         }
         hBoxTickets.getChildren().addAll(cardStack.values());
 

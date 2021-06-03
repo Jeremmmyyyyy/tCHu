@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Random;
 
 public final class TrainingPlayer implements Player{
-    private PlayerId ownId;
-    private Map<PlayerId, String> playerNames;
     private PlayerState ownState;
     private PublicGameState gameState;
     private SortedBag<Ticket> tickets;
@@ -31,8 +29,6 @@ public final class TrainingPlayer implements Player{
 
     @Override
     public void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
-        this.ownId = ownId;
-        this.playerNames = playerNames;
     }
 
     @Override
