@@ -1,0 +1,19 @@
+VBox {
+    -fx-spacing: 10;
+    -fx-alignment: center;
+    -fx-padding: 20;
+    -fx-max-width: 500;
+    -fx-max-height: 20;
+}
+
+TextFlow {
+    -fx-alignment: center;
+    -fx-pref-width: 200;
+    -fx-pref-height: 50;
+}
+
+FlowPane {
+    -fx-alignment: center;
+    -fx-hgap : 100;
+    -fx-max-width: 2000;
+}

@@ -7,6 +7,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -57,7 +58,7 @@ final class InfoViewCreator {
             playerVBox.setId("player-stats");
 
             Circle circle = new Circle(CIRCLE_RADIUS);
-            circle.getStyleClass().add("filled");
+            circle.getStyleClass().add("filled"); //TODO changer couleur ici
 
             Text text = new Text();
             text.textProperty().bind(Bindings.format(StringsFr.PLAYER_STATS,

@@ -22,6 +22,7 @@ public interface ActionHandlers {
 
     /**
      * Interface for the cards draw as onDrawCard(...) function
+     *
      */
     @FunctionalInterface
     interface DrawCardHandler {
@@ -50,5 +51,10 @@ public interface ActionHandlers {
     @FunctionalInterface
     interface ChooseCardsHandler {
         void onChooseCards(SortedBag<Card> cards);
+    }
+
+    @FunctionalInterface
+    interface TutorialHandler {
+        void onButtonClick(boolean leaves);
     }
 }

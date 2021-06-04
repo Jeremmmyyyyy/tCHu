@@ -69,14 +69,7 @@ final class DecksViewCreator {
             StackPane cardPane = stackPaneCreator(observableGameState.cardCountOnColor(card));
             cardPane.visibleProperty().bind(Bindings.greaterThan(observableGameState.cardCountOnColor(card), 0));
             cardStack.put(card, cardPane);
-
-            observableGameState.cardCountOnColor(card).addListener((o, oV, nV)->{
-                if(nV.intValue() > oV.intValue()){
-                    cardPane.getStyleClass().add(getColorClass(card));
-                }else{
-                    cardPane.getStyleClass().remove(getColorClass(card));
-                }
-            });
+            cardPane.getStyleClass().add(getColorClass(card));
         }
         hBoxTickets.getChildren().addAll(cardStack.values());
 
@@ -124,6 +117,7 @@ final class DecksViewCreator {
         cardsButton.disableProperty().bind(drawCardHandler.isNull());
 
         //Create the main ticket deck button
+
         Button ticketsButton = createButton(TICKETS, observableGameState.ticketPercentage());
         ticketsButton.setOnAction(e -> drawTicketHandler.get().onDrawTickets());
         ticketsButton.disableProperty().bind(drawTicketHandler.isNull());

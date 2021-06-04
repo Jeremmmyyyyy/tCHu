@@ -1,0 +1,55 @@
+Pour commencer le tutoriel, cliquer sur le bouton continuer ci-dessous. Vous pouvez quitter le tutoriel en cliquant sur l'autre bouton.
+Bienvenue sur le jeu tCHu, la version Suisse du célèbre jeu des aventuriers du rail !
+Les informations utiles aux joueurs sont affichées à gauche de la grande carte au cours d'une partie.
+Pour ce tutoriel, quelques informations seront affichées en vert à titre d'exemple (voir ci-dessous). N'hésitez pas à les lire pour mieux comprendre les mécanismes du jeu.
+Le jeu consiste dans la construction de chemins de fer sur la carte de la Suisse affichée au centre de l'écran.
+Le but de chaque joueur est d'accumuler des points en connectant des villes et des pays spécifiques à des missions données.
+En début de partie, chaque joueur choisit ses billets initiaux parmi un choix donné par le jeu.
+Allez-y, choisissez vos premiers billets en suivant les instructions de la fenêtre de sélection qui vient de s'ouvrir. (Maintenez la touche Ctrl pour effectuer une sélection multiple)
+Bravo ! Maintenant que la partie est lancée, voyons ensemble les actions dont vous disposez.
+Lorsque c'est votre tour, vous pouvez effectuer l'une des trois actions suivantes : tirage de billets, tirage de cartes et prise de route.
+Pour tirer des cartes, il suffit de cliquer sur la pioche "Cartes" ou sur l'une des 5 cartes visibles disposées au-dessus.
+Allez-y, essayez de tirer une carte de la pioche Cartes ou d'une des 5 cartes face visible !
+Bravo ! Dans le cas d'un tirage de cartes, vous pouvez et surtout devez tirer une deuxième carte, de la même manière que la première !
+Allez-y, essayez de tirer une deuxième carte de la pioche Cartes ou d'une des 5 cartes face visible !
+Bravo ! Notez que les cartes que vous avez tirées s'affichent en-dessous de la carte du jeu. Ceci est votre main de jeu.
+Pour tirer des billets, il suffit de cliquer sur la pioche Billets. Les trois billets du sommet sont affichés dans la fenêtre de sélection qui s'ouvre.
+Allez-y, suivez les instructions de cette fenêtre de sélection de billets. (Maintenez la touche Ctrl pour effectuer une sélection multiple)
+Bravo ! Notez que les billets choisis sont représentés à gauche de votre main de cartes.
+Pour prendre une route, il suffit de cliquer dessus sur la carte.
+Elle sera alors remplie par votre couleur de joueur sur la carte : comme par exemple sur la route France - La Chaux-de-Fonds.
+Allez-y, emparez-vous de la route Interlaken - Lucerne.
+Bravo ! Maintenant que vous maîtrisez les outils pour jouer, voici quelques spécificités à connaître.
+Remarquez qu'il y a différents types de routes sur la carte.
+Les routes en couleur ne peuvent être prises qu'avec des cartes de la même couleur.
+Voici maintenant 3 cartes bleues. Emparez-vous de la route Berne - Interlaken.
+Bravo ! Les routes grises sont de couleur neutre, c'est-à-dire qu'elles peuvent êtres prises avec n'importe quelle couleur.
+Allez-y, emparez-vous de la route Berne - Lucerne avec 4 cartes jaunes.
+Bravo ! Emparez-vous maintenant de la route Lausanne - Neuchâtel avec 4 cartes vertes.
+Bravo ! Les routes en pointillé représentent des tunnels.
+Pour s'emparer d'un tunnel vous pouvez jouer en plus des cartes de couleur correspondante, des cartes locomotives.
+Voici une carte locomotive et 3 cartes noires. Emparez-vous de la route Wassen - Bellizone avec 3 cartes noires et 1 carte locomotive.
+Bravo et voici 6 autres cartes locomotives. Emparez-vous maintenant de la route Brigue - Locarno avec ces cartes.
+En réalité, lorsque vous souhaitez vous emparer d'un tunnel, le jeu tire les trois cartes du sommet de la pioche et détermine un coût additionnel de cartes à jouer.
+Pour vous emparer du tunnel, vous devez alors fournir un nombre de cartes (de la même couleur que celles jouées initialement) ou de locomotives supplémentaires à hauteur de ce coût additionnel.
+Emparez-vous de la route Schwiz - Wassen avec 2 cartes jaunes.
+Le coût additionnel est de deux cartes. Malheureusement vous n'avez pas assez de cartes en main pour jouer ce coût.
+Maintenant réessayez et emparez-vous de la route Schwiz - Wassen avec 2 cartes jaunes. Le coût additionnel est de deux cartes. Jouez vos 2 cartes jaunes supplémentaires !
+Bravo ! Emparez-vous maintenant de la route Wassen - Coire avec 5 cartes blanches.
+Le coût additionnel est de 3 cartes. Même si vous en capacité de jouer ce coût, vous pouvez décidez finalement de ne pas vous emparer de cette route. Pour ce faire, cliquez sur le bouton "Choisir" sans sélectionner un choix.
+Bravo ! Une partie de tCHu se termine lorsqu'un des deux joueurs n'a plus que 2 wagons.
+Regardez en haut à gauche de la fenêtre principale, des informations concernant les deux joueurs sont affichées. Il ne vous reste plus que 11 wagons.
+Emparez-vous de la route Genève - Yverdon puis de la route rouge Lausanne - Fribourg.
+Notez dans les informations de partie que le dernier tour commence !
+Félicitations, vous pouvez maintenant librement jouer à tCHU.
+Bien évidemment, votre adversaire peut également s'emparer de routes.
+Le but du jeu est de remplir les missions de vos billets en connectant la station indiquée de départ à une (des) destination(s) indiquée(s). Les points entre parenthèses sont les points reçus lorsque les stations en question ont été connectées entre elles.
+Attention, les billets non effectués en fin de partie vous confèrent des points négatifs.
+Le jeu attribue également un bonus de 10 points pour le joueur qui construit le plus long trajet du jeu.
+Vous disposez désormais de tous les outils pour être un expert de tCHu. Bon jeu !
+
+
+
+
+
+

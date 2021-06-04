@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
@@ -67,13 +68,22 @@ final class MapViewCreator {
                             chosenCards -> claimRouteHandler.get().onClaimRoute(r, chosenCards));
                 }});
 
-            //When a player claims or attempts to claim a route
-            observableGameState.routes(r).addListener((o, oV, nV) -> route.getStyleClass().add(nV.name()));
+            observableGameState.routes(r).addListener((o, oV, nV) -> {
+//                route.setStyle("-fx-fill-color: #1fc41f;");
+//                ((Rectangle)((Group)((Group) route.getChildren().get(0)).getChildren().get(1)).getChildren().get(0)).setFill(Color.RED);
+//                Rectangle rectangle = new Rectangle();
+//                rectangle.setFill(Color.RED);
+//                route.getStyleClass().add("-fx-fill-color: #00ff00ff;");
+//                route.getStyleClass().get(0).
+//                System.out.println(nV.name());
+//                route.setStyle("-fx-fill: #00ff00ff");
+//                route.getStyleClass().add(nV.name().equals("PLAYER_1") ? Launcher.GameColor.COLOR_PLAYER1.getColor() : Launcher.GameColor.COLOR_PLAYER2.getColor());
+                route.getStyleClass().add(nV.name());
+            });
             route.disableProperty().bind(claimRouteHandler.isNull().or(observableGameState.claimableRoute(r).not()));
 
             mapView.getChildren().add(route);
         }
-
         return mapView;
 
     }
