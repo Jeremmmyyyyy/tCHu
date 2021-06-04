@@ -30,8 +30,6 @@ final class TutorialViewCreator {
 
         HBox tutorialView = new HBox();
 
-        tutorialView.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-        System.out.println(tutorialView.getWidth() + ' ' + tutorialView.getHeight());
 
         VBox tutorialVBox = new VBox();
         tutorialVBox.getStylesheets().add("tutorial-box.css");

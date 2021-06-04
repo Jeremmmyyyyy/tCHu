@@ -9,7 +9,7 @@ public final class TutorialTest extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        String playerName = "Kevin"; //TODO chopper son nom
+        String playerName = "Kevin";
         new Thread(() -> Tutorial.play(playerName)).start();
     }
 }
