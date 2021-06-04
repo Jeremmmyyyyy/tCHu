@@ -313,7 +313,7 @@ public final class Launcher {
 
         hBox1.getChildren().addAll(textField1, text, textField2, button);
         hBox3.getChildren().addAll(playerText);
-//        hBox4.getChildren().addAll(colorPicker1, colorPicker2); //TODO colorPicker
+        hBox4.getChildren().addAll(colorPicker1, colorPicker2);
         hBox2.getChildren().addAll(hBox3, hBox4);
 
 
@@ -491,11 +491,11 @@ public final class Launcher {
 
     }
     //TODO
-    public static void test(Color color1, Color color2) throws IOException {
-        PrintToTxt.deleteFile("./resources/launcher.css");
-        PrintToTxt.createFile("./resources/launcher.css");
-        PrintToTxt.writeToFile("./resources/launcher.css",
-                ".PLAYER_1 .filled { -fx-fill: #" + color1.toString().substring(2) + " ; }\n.PLAYER_2 .filled { -fx-fill: #" + color2.toString().substring(2) + "; }");
-
-    }
+//    public static void test(Color color1, Color color2) throws IOException {
+//        PrintToTxt.deleteFile("./resources/launcher.css");
+//        PrintToTxt.createFile("./resources/launcher.css");
+//        PrintToTxt.writeToFile("./resources/launcher.css",
+//                ".PLAYER_1 .filled { -fx-fill: #" + color1.toString().substring(2) + " ; }\n.PLAYER_2 .filled { -fx-fill: #" + color2.toString().substring(2) + "; }");
+//
+//    }
 }
