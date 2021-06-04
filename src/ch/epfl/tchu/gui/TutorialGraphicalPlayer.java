@@ -13,13 +13,13 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.cell.TextFieldListCell;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -108,7 +108,7 @@ public final class TutorialGraphicalPlayer {
 
         Node tutorialView = TutorialViewCreator.createTutorialView(tutorialText, tutorialHandlerProperty);
 
-        tutorialView.setTranslateX(450);
+        BorderPane.setAlignment(tutorialView, Pos.TOP_CENTER);
 
         mainStage = new Stage();
         BorderPane borderPane = new BorderPane(mapView, tutorialView, cardsView, handView, infoView);
