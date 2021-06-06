@@ -1,3 +1,8 @@
 Manifest-Version: 1.0
 Main-Class: Main
+Class-Path: javafx-swt.jar javafx.base.jar javafx.controls.jar javafx.fx
+ ml.jar javafx.graphics.jar javafx.media.jar javafx.swing.jar javafx.web
+ .jar src.zip javafx-swt.jar javafx.web.jar javafx.base.jar javafx.fxml.
+ jar javafx.media.jar javafx.swing.jar javafx.controls.jar javafx.graphi
+ cs.jar
 
