@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact name="renduFinal">
+    <output-path>$PROJECT_DIR$/out/artifacts/renduFinal</output-path>
+    <root id="root">
+      <element id="archive" name="ProjetFinal.zip">
+        <element id="directory" name="BarghornEnassih">
+          <element id="directory" name="src">
+            <element id="dir-copy" path="$PROJECT_DIR$/src" />
+            <element id="directory" name="resources">
+              <element id="dir-copy" path="$PROJECT_DIR$/resources" />
+            </element>
+          </element>
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
