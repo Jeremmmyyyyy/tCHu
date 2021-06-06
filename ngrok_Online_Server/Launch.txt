@@ -1,0 +1,5 @@
+Launch the .exe
+with command line go to the file (cd or dir)
+once there launch : ngrok authtoken 1spumeu1g1Wh4NDYm79Qkr9G5K5_24TyyNTJFQMWvkQ2xPR6o
+and then : ngrok tcp 5108 --region eu
+setup the client / server arguments
