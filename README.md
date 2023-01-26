@@ -34,3 +34,9 @@ In order to use the online mode you need to download [ngrok](https://ngrok.com/)
 ngrok authtoken [YOUR TOKEN]
 ngrok tcp 5108 --region eu
 ```
+
+## Here are some pictures of the game : 
+
+![image](https://user-images.githubusercontent.com/79469048/214848009-4ba65735-885e-4102-b40a-1f8400b90d45.png)
+<br>
+![image](https://user-images.githubusercontent.com/79469048/214848240-7981496d-3f91-417e-ab45-de13be3f827b.png)
